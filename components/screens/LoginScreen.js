@@ -77,7 +77,7 @@ const LoginScreen = () => {
             </View>
             <TextInput
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="Enter your email id" //change is happend here
               value={email}
               onChangeText={(text) => { setEmail(text); clearError('email'); }}
             />
