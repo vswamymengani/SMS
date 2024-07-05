@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
@@ -21,7 +23,8 @@ import Image22 from '../assets/studymaterial.png';
 import Image23 from '../assets/liveclasses.png';
 import LoginScreen from './LoginScreen';
 
-const Homescreen = ({ navigation}) => {
+const Homescreen = ({ navigation, route }) => {
+  const { email } = route.params; // Receive the email passed from LoginScreen
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -40,22 +43,22 @@ const Homescreen = ({ navigation}) => {
       </View>
 
       <View style={styles.squareRow}>
-        <TouchableOpacity style={styles.square1} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square1} onPress={() => navigation.navigate('Profile',{ email })}>
           <Image source={Image7} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('StudentNotifications',{ email })}>
           <Image source={Image8} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>notifications</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square3} onPress={() => navigation.navigate('StudentLeave')}>
+        <TouchableOpacity style={styles.square3} onPress={() => navigation.navigate('StudentLeave',{ email })}>
           <Image source={Image9} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Leave</Text>
         </TouchableOpacity>
        </View>
       
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image10} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Online Exam</Text>
         </TouchableOpacity>
@@ -63,7 +66,7 @@ const Homescreen = ({ navigation}) => {
           <Image source={Image11} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Fee News</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('Attendence')}>
+        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('StudentAttendence',{email})}>
           <Image source={Image12} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Attendence</Text>
         </TouchableOpacity>
@@ -72,52 +75,52 @@ const Homescreen = ({ navigation}) => {
       
       
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square7} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.square7} onPress={() => navigation.navigate('CalendarScreen',{ email })}>
           <Image source={Image14} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Calandar</Text>
+          <Text style={styles.loginButtonText}>Calendar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square8} onPress={() => navigation.navigate('Timetable')}>
+        <TouchableOpacity style={styles.square8} onPress={() => navigation.navigate('StudentTimetable' ,{ email })}>
           <Image source={Image15} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Time Table</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image16} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Gallary</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square10} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.square10} onPress={() => navigation.navigate('HomeworkScreen',{ email })}>
           <Image source={Image17} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Home Work</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square11} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square11} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image18} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Class Work</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square12} onPress={() => navigation.navigate('StudentComplaint')}>
+        <TouchableOpacity style={styles.square12} onPress={() => navigation.navigate('StudentComplaint',{ email })}>
           <Image source={Image19} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Complaint</Text>
         </TouchableOpacity>
       </View>
        
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image20} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Library</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Exams Results</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image22} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Study Material</Text>
         </TouchableOpacity>
       </View>
      
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square16} onPress={() => navigation.navigate('Profile')}>
+      <TouchableOpacity style={styles.square16} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
           <Image source={Image23} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Live Class</Text>
         </TouchableOpacity>

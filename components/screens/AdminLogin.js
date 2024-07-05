@@ -6,11 +6,12 @@ import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
 
-const LoginScreen = () => {
+const AdminLogin = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [loggedInEmail, setLoggedInEmail] = useState(null); 
 
   const validateForm = () => {
     const newErrors = {};
@@ -24,30 +25,27 @@ const LoginScreen = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  
   const handleLogin = () => {
     if (validateForm()) {
-      axios.post('http://10.0.2.2:3000/loginpage', {
+      axios.post('http://10.0.2.2:3000/adminlogin', {
         email,
         password,
       })
         .then(response => {
           if (response.status === 200) {
-            // Successfully logged in
-            navigation.push('Homescreen');
+            setLoggedInEmail(email);
+            navigation.push('AdminView', { email });
           } else {
-            // Handle error responses from the server
             console.error('Failed to login:', response.status);
+            alert('Login failed. Please try again.');
           }
         })
         .catch(error => {
-          // Handle network errors
-          console.error('Axios Error:', error);
+          // console.error('Axios Error:', error);
+          alert('Error logging in. Please try again later.');
         });
     }
   };
-
-
 
   const clearError = (field) => {
     setErrors((prevErrors) => {
@@ -90,13 +88,9 @@ const LoginScreen = () => {
         {errors.password && <Text style={styles.error}>{errors.password}</Text>}
       </View>
      
-      <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('AdminView')}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
-
-    
-        
-    
     </ScrollView>
   );
 };
@@ -173,9 +167,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     fontSize: 18,
     color: 'white',
-    
   },
- 
   error: {
     color: 'red',
     marginBottom: 5,
@@ -183,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default AdminLogin;

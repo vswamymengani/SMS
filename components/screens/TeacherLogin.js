@@ -11,6 +11,7 @@ const TeacherLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [loggedInEmail, setLoggedInEmail] = useState(null);
 
   const validateForm = () => {
     const newErrors = {};
@@ -33,8 +34,9 @@ const TeacherLogin = () => {
       })
         .then(response => {
           if (response.status === 200) {
-            // Successfully logged in
-            navigation.push('TeacherHomeScreen');
+            setLoggedInEmail(email); // Save the email to state
+            navigation.push('TeacherHomeScreen', { email }); // Pass the email to Homescreen
+
           } else {
             // Handle error responses from the server
             console.error('Failed to login:', response.status);

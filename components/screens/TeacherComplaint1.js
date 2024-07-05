@@ -1,32 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
-import Image1 from '../assets/Verified.png';
 import axios from 'axios';
+import Image1 from '../assets/Verified.png';
 
-const StudentComplaint = ({ route }) => {
+const TeacherComplaint1 = () => {
   const navigation = useNavigation();
-  const [leaveProfile, setLeaveProfile] = useState({});
-  const [fullname, setFullName] = useState('');
-  const [className, setClassName] = useState('');
-  const [section, setSection] = useState('');
-  const [errors, setErrors] = useState({});
-  const [recipient, setRecipient] = useState('');
+  const [employeeid, setEmployeeId] = useState('');
   const [typeOfComplaint, setTypeOfComplaint] = useState('');
   const [reason, setReason] = useState('');
   const [explanation, setExplanation] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const email = route.params.email;
+  const [errors, setErrors] = useState({});
 
-  const validate = () => {
+  const handleSend = () => {
     const newErrors = {};
-    if (!recipient) newErrors.recipient = 'Select the recipient';
-    if (!typeOfComplaint) newErrors.typeOfComplaint = 'Select the type of complaint';
-    if (!reason) newErrors.reason = 'Enter the reason';
-    if (!explanation) newErrors.explanation = 'Explain your reason';
-    setErrors(newErrors);
+    if (!employeeid) newErrors.employeeid = 'Employee ID is required';
+    if (!typeOfComplaint) newErrors.typeOfComplaint = 'Type of complaint is required';
+    if (!reason) newErrors.reason = 'Reason is required';
+    if (!explanation) newErrors.explanation = 'Explanation is required';
 
+    setErrors(newErrors);
+    
     if (Object.keys(newErrors).length === 0) {
       setIsModalVisible(true);
       return true;
@@ -34,51 +30,30 @@ const StudentComplaint = ({ route }) => {
     return false;
   };
 
-  useEffect(() => {
-    const fetchLeaveProfile = async () => {
-      try {
-        const response = await axios.get(`http://10.0.2.2:3000/leaveProfile?email=${email}`);
-        const profile = response.data;
-        setLeaveProfile(profile);
-        setFullName(profile.fullname);
-        setClassName(profile.className);
-        setSection(profile.section);
-      } catch (err) {
-        setErrors({ general: 'Failed to load profile data' });
-      }
-    };
-    if (email) {
-      fetchLeaveProfile();
-    } else {
-      setErrors({ general: 'No email provided' });
-    }
-  }, [email]);
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    navigation.navigate('TeacherHomeScreen');
+  };
 
-  const handleSendComplaint = async () => {
-    if (validate()) {
-      try {
-        const response = await axios.post('http://10.0.2.2:3000/studentComplaint', {
-          fullname,
-          className,
-          section,
-          recipient,
-          typeOfComplaint,
-          reason,
-          explanation,
-        });
+  const Complaint = async () => {
+    if (handleSend()) {
+      axios.post('http://10.0.2.2:3000/TeacherComplaints', {
+        employeeid,
+        typeOfComplaint,
+        reason,
+        explanation
+      })
+      .then(response => {
         if (response.status === 200) {
-          handleSend();
+          setIsModalVisible(true);
         } else {
           console.error('Failed to send', response.status);
         }
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Axios error', error);
-      }
+      });
     }
-  };
-
-  const handleSend = () => {
-    setIsModalVisible(true);
   };
 
   const clearError = (field) => {
@@ -87,20 +62,10 @@ const StudentComplaint = ({ route }) => {
       delete newErrors[field];
       return newErrors;
     });
-  };
-
-  const handleModalClose = () => {
-    setIsModalVisible(false);
-    navigation.navigate('Homescreen', { email });
-  };
-
-  const recipientData = [
-    { label: 'Principal', value: 'principal' },
-    { label: 'Teacher', value: 'teacher' },
-  ];
+  }
 
   const typeOfComplaintData = [
-    { label: 'School Related', value: 'School' },
+    { label: 'Management Related', value: 'Management' },
     { label: 'Teacher Related', value: 'Teacher' },
     { label: 'Student Related', value: 'Student' },
     { label: 'Others', value: 'others' },
@@ -108,35 +73,15 @@ const StudentComplaint = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.details}>
-          {fullname}
-        </Text>
-        <Text style={styles.details}>
-          Class: {className}
-        </Text>
-        <Text style={styles.details}>
-          Section: {section}
-        </Text>
-      </View>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={recipientData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Select Recipient"
-        value={recipient}
-        onChange={item => {
-          setRecipient(item.value);
-          clearError('recipient');
-        }}
+      <TextInput
+        style={styles.text}
+        placeholder="Enter Your Employee Id"
+        value={employeeid}
+        onChangeText={(text) => { setEmployeeId(text); clearError('employeeid'); }}
         accessible={true}
-        accessibilityLabel='Recipient'
+        accessibilityLabel="Enter Your Employee Id"
       />
-      {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
+      {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
@@ -147,12 +92,9 @@ const StudentComplaint = ({ route }) => {
         valueField="value"
         placeholder="Type of Complaint"
         value={typeOfComplaint}
-        onChange={item => {
-          setTypeOfComplaint(item.value);
-          clearError('typeOfComplaint');
-        }}
+        onChange={item => { setTypeOfComplaint(item.value); clearError('typeOfComplaint'); }}
         accessible={true}
-        accessibilityLabel='Type of Complaint'
+        accessibilityLabel="Type of Complaint"
       />
       {errors.typeOfComplaint && <Text style={styles.error}>{errors.typeOfComplaint}</Text>}
       <TextInput
@@ -160,6 +102,8 @@ const StudentComplaint = ({ route }) => {
         placeholder="Write the Complaint here"
         value={reason}
         onChangeText={(text) => { setReason(text); clearError('reason'); }}
+        accessible={true}
+        accessibilityLabel="Write the Complaint here"
       />
       {errors.reason && <Text style={styles.error}>{errors.reason}</Text>}
       <TextInput
@@ -169,13 +113,19 @@ const StudentComplaint = ({ route }) => {
         numberOfLines={18}
         value={explanation}
         onChangeText={(text) => { setExplanation(text); clearError('explanation'); }}
+        accessible={true}
+        accessibilityLabel="Explain your Complaint here"
       />
       {errors.explanation && <Text style={styles.error}>{errors.explanation}</Text>}
-
-      <TouchableOpacity style={styles.sendButton} onPress={handleSendComplaint}>
+      <TouchableOpacity
+        style={styles.sendButton}
+        onPress={Complaint}
+        accessible={true}
+        accessibilityLabel="Send Complaint Button"
+      >
         <Text style={styles.sendButtonText}>Send</Text>
       </TouchableOpacity>
-      <Modal visible={isModalVisible} transparent={true} animationType='fade'>
+      <Modal visible={isModalVisible} transparent={true} animationType="fade">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Image source={Image1} style={styles.successImage} />
@@ -195,25 +145,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
-  details: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-    borderColor: 'black',
-    backgroundColor: '#3F1175',
-    borderWidth: 2,
-    width: '33%',
-    height: 40,
-    top: 10,
-    borderRadius: 20,
-    textAlign: 'center',
-    padding: 5,
   },
   dropdown: {
     margin: 13,
@@ -278,7 +209,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
-    backgroundColor:'white',
   },
   successImage: {
     width: 100,
@@ -302,4 +232,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StudentComplaint;
+export default TeacherComplaint1;

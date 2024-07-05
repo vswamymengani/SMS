@@ -1,3 +1,4 @@
+//studentlogin.js
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -32,7 +33,7 @@ const LoginScreen = () => {
           console.log('Server response:', response.data);  // Add logging to check the response
           if (response.data.status === 'Success') {
             setLoggedInEmail(email); // Save the email to state
-            navigation.push('Homescreen');
+            navigation.push('Homescreen', { email }); // Pass the email to Homescreen
           } else {
             alert(response.data.message);
           }
@@ -120,13 +121,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
   },
-  logout:{
-    fontSize:18,
-    fontWeight:'bold',
-    color:'black',
-    borderColor:'blue',
-    margin:'auto',
-
+  logout: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+    borderColor: 'blue',
+    margin: 'auto',
   },
   image5: {
     width: 415,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     alignItems: 'flex-start',
-    marginTop: 160,
+    marginTop: 30,
     width: '80%',
   },
   labelContainer: {
