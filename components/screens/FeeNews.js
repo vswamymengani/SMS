@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet ,TouchableOpacity} from 'react-native';
+import { View, Text, Image, StyleSheet ,TouchableOpacity,alert} from 'react-native';
 import axios from 'axios';
 
-const FeeNews = ({ navigation }) => {
-  const [totalFees, setTotalFees] = useState(0);
-  const [paidAmount, setPaidAmount] = useState(0);
-  const [remainingAmount, setRemainingAmount] = useState(0);
+const FeeNews = ({ navigation,route }) => {
+  const [totalFees, setTotalFees] = useState('');
+  const [paidAmount, setPaidAmount] = useState('');
+  const [remainingAmount, setRemainingAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const email = route.params;
 
   // Fetch fee details from server
   useEffect(() => {
-    axios.get('http://10.0.2.2:3000/feenews/:id')
+    axios.get('http://10.0.2.2:3000/feedetails?email=${email}')
       .then(response => {
         const { totalFees, paidAmount, dueDate } = response.data;
-        setTotalFees(totalFees);
-        setPaidAmount(paidAmount);
-        setRemainingAmount(totalFees - paidAmount);
-        setDueDate(dueDate);
+        
       })
       .catch(error => {
-        console.error('Error fetching fee details:', error);
+        // console.error('Error fetching fee details:', error);
+        alert.alert('fee details not updated');
       });
   }, []);
 
@@ -28,7 +27,7 @@ const FeeNews = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         {/* Back arrow */}
-        <TouchableOpacity onPress={() => navigation.navigate('Homescreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email})}>
           <Image source={require('../assets/BackArrow.png')} style={styles.backArrow} />
         </TouchableOpacity>
         {/* Header text */}

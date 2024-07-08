@@ -3,6 +3,7 @@ import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, Scr
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Plus.png';
+import Image1 from '../assets/Verified.png';
 import axios from 'axios';
 import { launchImageLibrary } from 'react-native-image-picker';
 
@@ -83,7 +84,7 @@ const Form = ({ navigation }) => {
     if (validateForm()) {
       axios.post('http://10.0.2.2:3000/register', {
         fullname,
-        class: className, // class is a reserved keyword, so we alias it to className
+        className, 
         section,
         rollno,
         dateofbirth,
@@ -153,9 +154,6 @@ const Form = ({ navigation }) => {
             <Image source={Image3} style={styles.squareImage2} />
           </TouchableOpacity>
         )}
-      </View>
-      <View style={styles.header}>
-        <Text style={styles.headerText}></Text>
       </View>
       <View style={styles.formContainer}>
         <LabelWithStar label="Full Name" />
@@ -299,23 +297,26 @@ const Form = ({ navigation }) => {
 
       <Modal
         visible={showPopup}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         onRequestClose={() => {
           togglePopup();
         }}
       >
         <View style={styles.popup}>
-          <Text style={styles.popupText}>Registration successful!</Text>
-          <TouchableOpacity
-            onPress={() => {
-              togglePopup(); // Close the popup
-              navigation.navigate('LoginScreen'); // Navigate to the Login screen
-            }}
-            style={styles.closeButton}
-          >
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
+          <View style={styles.modalContainer} >
+            <Image source={Image1} style={styles.successImage} />
+            <Text style={styles.popupText}>Registration successful!</Text>
+            <TouchableOpacity
+              onPress={() => {
+                togglePopup(); // Close the popup
+                navigation.navigate('LoginScreen'); // Navigate to the Login screen
+              }}
+              style={styles.modalButton}
+            >
+               <Text style={styles.modalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </ScrollView>
@@ -371,6 +372,7 @@ const styles = StyleSheet.create({
   formContainer: {
     alignItems: 'flex-start',
     marginTop: 150,
+    top:40,
     width: '80%',
   },
   labelContainer: {
@@ -402,6 +404,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginBottom: 20,
+    top:50,
   },
   loginButtonText: {
     fontSize: 18,
@@ -411,10 +414,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    top:30,
   },
   signupText: {
     color: 'blue',
     marginBottom: 30,
+    top:20,
   },
   error: {
     color: 'red',
@@ -424,23 +429,45 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: '#fff',
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
   },
   popupText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: 'blue',
     marginBottom: 20,
   },
-  closeButton: {
-    backgroundColor: 'blue',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+  successImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    alignItems:'center',
+    left:80,
   },
-  closeButtonText: {
-    fontSize: 18,
-    color: 'white',
+  modalText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: 'black',
+  },
+  modalButton: {
+    backgroundColor: '#3F1175',
+    padding: 10,
+    borderRadius: 10,
+    width:100,
+    left:80,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign:'center'
   },
 });
 

@@ -3,6 +3,7 @@ import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView,
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Plus.png';
+import Image4 from '../assets/BackArrow.png';
 import axios from 'axios';
 
 const TeacherForm = ({ navigation }) => {
@@ -11,6 +12,7 @@ const TeacherForm = ({ navigation }) => {
   const [section, setSection] = useState('');
   const [dateofbirth, setDateofbirth] = useState('');
   const [email, setEmail] = useState('');
+  const [mobileNo ,setMobileNo] = useState('');
   const [employeeid, setEmployeeid] = useState('');
   const [experience, setExperience] = useState('');
   const [presentaddress, setPresentaddress] = useState('');
@@ -35,6 +37,9 @@ const TeacherForm = ({ navigation }) => {
     }
     if (!email.trim()) {
       newErrors.email = 'Email is required';
+    }
+    if(!mobileNo.trim()){
+      newErrors.mobileNo = 'Enter your Mobile number';
     }
     if (!employeeid.trim()) {
       newErrors.employeeid = 'Employee ID is required';
@@ -65,10 +70,11 @@ const TeacherForm = ({ navigation }) => {
     if (validateTeacherForm()) {
       axios.post('http://10.0.2.2:3000/teacherregister', {
         fullname,
-        class: className, // class is a reserved keyword, so we alias it to className
+        className,
         section,
         dateofbirth,
         email,
+        mobileNo,
         employeeid,
         experience,
         presentaddress,
@@ -159,7 +165,14 @@ const TeacherForm = ({ navigation }) => {
           onChangeText={(text) => { setEmail(text); clearError('email'); }}
         />
         {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-
+        <LabelWithStar label="Mobile Number" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your mobile nummber...."
+          value={mobileNo}
+          onChangeText={(text) => { setMobileNo(text); clearError('mobileNo'); }}
+        />
+        {errors.mobileNo && <Text style={styles.error}>{errors.mobileNo}</Text>}
         <LabelWithStar label="Employee Id" />
         <TextInput
           style={styles.input}
