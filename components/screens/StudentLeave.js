@@ -12,7 +12,7 @@ const StudentLeave = ({ route }) => {
   const [fullname, setFullname] = useState('');
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
-  const [recipient, setRecipient] = useState('');
+  const [recipient, setRecipient] = useState('Principal'); // Set recipient to "teacher" initially
   const [leavePurpose, setLeavePurpose] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -24,11 +24,11 @@ const StudentLeave = ({ route }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!recipient) newErrors.recipient = 'select the recipient';
-    if (!leavePurpose) newErrors.leavePurpose = 'enter the leave purpose';
-    if (!startDate) newErrors.startDate = 'enter the starting date';
-    if (!endDate) newErrors.endDate = 'enter the endDate';
-    if (!description) newErrors.description = 'explain your reason';
+    if (!recipient) newErrors.recipient = 'Select the recipient';
+    if (!leavePurpose) newErrors.leavePurpose = 'Enter the leave purpose';
+    if (!startDate) newErrors.startDate = 'Enter the starting date';
+    if (!endDate) newErrors.endDate = 'Enter the end date';
+    if (!description) newErrors.description = 'Explain your reason';
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
@@ -47,7 +47,7 @@ const StudentLeave = ({ route }) => {
         setFullname(profile.fullname);
         setClassName(profile.className);
         setSection(profile.section);
-        setYourEmail(profile.email)
+        setYourEmail(profile.email);
       } catch (err) {
         setErrors('Failed to load profile data');
       }
@@ -76,7 +76,7 @@ const StudentLeave = ({ route }) => {
         if (response.status === 200) {
           handleSend();
         } else {
-          console.error('failed to send', response.status);
+          console.error('Failed to send', response.status);
         }
       })
       .catch(error => {
@@ -102,11 +102,6 @@ const StudentLeave = ({ route }) => {
     navigation.navigate('Homescreen', { email });
   };
 
-  const recipientData = [
-    { label: 'Principal', value: 'principal' },
-    { label: 'Teacher', value: 'teacher' },
-  ];
-
   const leavePurposeData = [
     { label: 'Health Issue', value: 'health' },
     { label: 'Family-related Issue', value: 'family' },
@@ -121,38 +116,11 @@ const StudentLeave = ({ route }) => {
           <Image source={Image2} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Leave Letter</Text>
-        <TouchableOpacity onPress={() =>navigation.navigate('LeaveApproval',{email})}>
-           <Text style ={styles.button}>My Leaves</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('LeaveApproval', { email })}>
+          <Text style={styles.button}>My Leaves</Text>
         </TouchableOpacity>
-        </View>
-      <View style={styles.row}>
-        <Text style={styles.details}>
-          {fullname}
-        </Text>
-        <Text style={styles.details}>
-          Class:{className}
-        </Text>
-        <Text style={styles.details}>
-          Section:{section}
-        </Text>
       </View>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={recipientData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Select Recipient"
-        value={recipient}
-        onChange={item => {
-          setRecipient(item.value);
-          clearError('recipient');
-        }}
-        accessible={true}
-        accessibilityLabel="Type of recipient"
-      />
+      <Text style={styles.dateInput}>To {recipient}</Text>
       {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
       <Dropdown
         style={styles.dropdown}
@@ -237,12 +205,12 @@ const styles = StyleSheet.create({
   },
   heading: {
     flexDirection: 'row',
-    justifyContent:'space-between',
-    borderBottomWidth :2,
-    borderColor:'gray',
-    margin:10,
-    marginBottom:10,
-  },  
+    justifyContent: 'space-between',
+    borderBottomWidth: 2,
+    borderColor: 'gray',
+    margin: 10,
+    marginBottom: 10,
+  },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -262,27 +230,27 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
     textAlign: 'center',
-    left:10,
-    top:-5,
+    left: 10,
+    top: -5,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 30,
   },
-  details:{
-      fontSize:20,
-      fontWeight:'bold',
-      color:'white',
-      borderColor:'black',
-      backgroundColor:'#3F1175',
-      borderWidth:2,
-      width:'33%',
-      height:40,
-      top:10,
-      borderRadius:20,
-      textAlign:'center',
-      padding:5,
+  details: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    borderColor: 'black',
+    backgroundColor: '#3F1175',
+    borderWidth: 2,
+    width: '33%',
+    height: 40,
+    top: 10,
+    borderRadius: 20,
+    textAlign: 'center',
+    padding: 5,
   },
   dropdown: {
     margin: 13,
@@ -295,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    top:0,
+    top: 0,
   },
   placeholderStyle: {
     fontSize: 16,

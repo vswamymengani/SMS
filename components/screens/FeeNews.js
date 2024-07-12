@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const FeeNews = ({ navigation,route }) => {
   const [totalFees, setTotalFees] = useState('');
+  const [feeDetails , setFeeDetails] = useState([]);
   const [paidAmount, setPaidAmount] = useState('');
   const [remainingAmount, setRemainingAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -13,7 +14,7 @@ const FeeNews = ({ navigation,route }) => {
   useEffect(() => {
     axios.get('http://10.0.2.2:3000/feedetails?email=${email}')
       .then(response => {
-        const { totalFees, paidAmount, dueDate } = response.data;
+        setFeeDetails(response.data);
         
       })
       .catch(error => {
@@ -40,7 +41,7 @@ const FeeNews = ({ navigation,route }) => {
       {/* Total fees */}
       <View style={styles.totalFeesContainer}>
         <Text style={styles.totalFeesText}>Total Fees</Text>
-        <Text style={styles.totalFeesAmount}>{totalFees}</Text>
+        <Text style={styles.totalFeesAmount}>{feeDetails.totalFees}</Text>
       </View>
 
       {/* Paid and remaining amount bars */}
@@ -52,19 +53,19 @@ const FeeNews = ({ navigation,route }) => {
       {/* Amount paid */}
       <View style={styles.amountContainer}>
         <Text style={styles.amountLabel}>Amount Paid</Text>
-        <Text style={styles.amountValue}>{paidAmount}</Text>
+        <Text style={styles.amountValue}>{feeDetails.paidAmount}</Text>
       </View>
 
       {/* Remaining amount */}
       <View style={styles.amountContainer}>
         <Text style={styles.amountLabel}>Remaining Amount</Text>
-        <Text style={styles.amountValue}>{remainingAmount}</Text>
+        <Text style={styles.amountValue}>{feeDetails.remainingAmount}</Text>
       </View>
 
       {/* Due date */}
       <View style={styles.dueDateContainer}>
         <Text style={styles.dueDateLabel}>Due Date</Text>
-        <Text style={styles.dueDateValue}>{dueDate}</Text>
+        <Text style={styles.dueDateValue}>{feeDetails.dueDate}</Text>
       </View>
     </View>
   );

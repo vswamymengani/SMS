@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
     top: 0,
   },
   image3: {
-    width:150,
-    height: 200,
+    width:180,
+    height: 180,
     position: 'absolute',
     top: 90,
   },

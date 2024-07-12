@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
@@ -11,15 +11,18 @@ const AdminTimeTable = () => {
       day: '',
       period: '',
       subject: '',
-      employeeId: '', // Changed from 'teacher' to 'employeeId' for consistency
+      employeeid: '',
+      teacherName: '',
     },
   ]);
+  const [teachers, setTeachers] = useState([]);
+  const [errors, setErrors] = useState({});
 
-  const classes = ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10', 'Class 11', 'Class 12'];
+  const classes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   const sections = ['A', 'B', 'C'];
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const periods = ['Period 1 09:30 to 10:30', 'Period 2 10:30 to 11:30', 'Period 3 11:30 to 12:30', 'Period 4 01:30 to 02:30', 'Period 5 02:30 to 03:30', 'Period 6 03:30 to 04:30'];
-  const subjects = ['Math', 'English', 'Science', 'History', 'Geography'];
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const periods = ['First Period : 09:30 to 10:30', 'Second Period : 10:30 to 11:30', 'Third Period : 11:30 to 12:30', 'Fourth Period : 01:30 to 02:30', 'Fifth Period : 02:30 to 03:30', 'Sixth Period : 03:30 to 04:30'];
+  const subjects = ['Telugu', 'English', 'Hindi', 'Mathematics', 'Science', 'Social Studies', 'History', 'Computer Science', 'Biology', 'Sports'];
 
   const addEntry = () => {
     setTimetableEntries([
@@ -30,7 +33,8 @@ const AdminTimeTable = () => {
         day: '',
         period: '',
         subject: '',
-        employeeId: '', // Changed from 'teacher' to 'employeeId' for consistency
+        employeeid: '',
+        teacherName: '',
       },
     ]);
   };
@@ -38,6 +42,14 @@ const AdminTimeTable = () => {
   const handleChange = (index, field, value) => {
     const updatedEntries = [...timetableEntries];
     updatedEntries[index][field] = value;
+
+    if (field === 'employeeid') {
+      if (teachers && teachers.length > 0) {
+        const teacher = teachers.find(t => t.employeeid === value);
+        updatedEntries[index].teacherName = teacher ? teacher.fullname : '';
+      }
+    }
+
     setTimetableEntries(updatedEntries);
   };
 
@@ -52,7 +64,8 @@ const AdminTimeTable = () => {
           day: '',
           period: '',
           subject: '',
-          employeeId: '', 
+          employeeid: '',
+          teacherName: '',
         },
       ]);
       Alert.alert('Timetable added successfully');
@@ -61,6 +74,19 @@ const AdminTimeTable = () => {
       // Handle error state or alert the user
     }
   };
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await axios.get('http://10.0.2.2:3000/teacherName');
+        setTeachers(response.data);
+      } catch (error) {
+        console.error('Unable to fetch the data:', error);
+        setErrors({ general: 'Unable to fetch the data' });
+      }
+    };
+    fetchTeachers();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -156,9 +182,15 @@ const AdminTimeTable = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Enter Employee ID"
-                value={entry.employeeId}
-                onChangeText={(text) => handleChange(index, 'employeeId', text)} // Changed from 'teacher' to 'employeeId'
+                value={entry.employeeid}
+                onChangeText={(text) => handleChange(index, 'employeeid', text)}
               />
+            </View>
+          )}
+          {entry.employeeid && (
+            <View style={styles.inputGroup}>
+              <Text>Teacher Name:</Text>
+              <Text style={styles.teacherName}>{entry.teacherName}</Text>
             </View>
           )}
         </View>
@@ -218,13 +250,20 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     paddingHorizontal: 10,
+    marginLeft: 10,
+  },
+  teacherName: {
+    flex: 1,
+    fontSize: 16,
+    color: 'black',
+    marginLeft: 10,
   },
   addButton: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#4CAF50',
     padding: 10,
-    alignItems: 'center',
     borderRadius: 5,
-    marginTop: 20,
+    alignItems: 'center',
+    marginBottom: 20,
   },
   addButtonText: {
     color: '#fff',
@@ -232,11 +271,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#2196F3',
     padding: 10,
-    alignItems: 'center',
     borderRadius: 5,
-    marginTop: 10,
+    alignItems: 'center',
+    marginBottom: 20,
   },
   submitButtonText: {
     color: '#fff',

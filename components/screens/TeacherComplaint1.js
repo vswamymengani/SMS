@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import Image1 from '../assets/Verified.png';
 
-const TeacherComplaint1 = () => {
+const TeacherComplaint1 = ({route}) => {
   const navigation = useNavigation();
   const [employeeid, setEmployeeId] = useState('');
   const [typeOfComplaint, setTypeOfComplaint] = useState('');
+  const [teacher ,setTeacher] = useState([]);
   const [reason, setReason] = useState('');
   const [explanation, setExplanation] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [errors, setErrors] = useState({});
+  const email = route.params.email;
 
   const handleSend = () => {
     const newErrors = {};
@@ -30,9 +32,25 @@ const TeacherComplaint1 = () => {
     return false;
   };
 
+  useEffect(() =>{
+    const fetchTeacher = async () =>{
+        try{
+          const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+          setTeacher(response.data);
+          setEmployeeId(teacher.employeeid);
+        }
+        catch(error){
+          setErrors({general:"unable to get employeeid"});
+        }
+    };
+    if(email){
+      fetchTeacher();
+    }
+  },[email]);
+
   const handleModalClose = () => {
     setIsModalVisible(false);
-    navigation.navigate('TeacherHomeScreen');
+    navigation.navigate('TeacherHomeScreen',{ email });
   };
 
   const Complaint = async () => {
@@ -73,15 +91,7 @@ const TeacherComplaint1 = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <TextInput
-        style={styles.text}
-        placeholder="Enter Your Employee Id"
-        value={employeeid}
-        onChangeText={(text) => { setEmployeeId(text); clearError('employeeid'); }}
-        accessible={true}
-        accessibilityLabel="Enter Your Employee Id"
-      />
-      {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
+      <Text style={styles.text}>Employee ID:{teacher.employeeid}</Text>
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}

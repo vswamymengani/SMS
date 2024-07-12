@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import Image1 from "../assets/Verified.png";
+import Image2 from "../assets/BackArrow.png";
 
 const TeacherHomework = ({route}) => {
     const navigation = useNavigation();
@@ -111,10 +112,15 @@ const TeacherHomework = ({route}) => {
     return (
         <ScrollView style={styles.container}>
             <View style={styles.right}>
+                <TouchableOpacity onPress={() =>navigation.navigate('TeacherHomeScreen',{email})}>
+                    <Image source={Image2} style={styles.image} />
+                </TouchableOpacity>
+                <Text style={styles.head}>Homework</Text>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TeacherHomeWorkList',{ email })}>
-                     <Text style={styles.header}>Homework List</Text>
+                     <Text style={styles.header}>List</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.body}>
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
@@ -217,6 +223,7 @@ const TeacherHomework = ({route}) => {
                     </View>
                 </View>
             </Modal>
+            </View>
 
         </ScrollView>
     )
@@ -226,24 +233,34 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 20,
+    },
+    body:{
+        padding:15,
     },
     right: {
-        justifyContent: 'right',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        borderBottomWidth:2,
+    },
+    image:{
+        height:30,
+        width:30,
+    },
+    head:{
+        fontSize:20,
+        color:'black',
+        fontWeight:'bold',
     },
     button: {
         backgroundColor: '#3F1175',
-        padding: 5,
-        borderRadius: 10,
+        borderRadius: 30,
         alignItems: 'center',
-        marginVertical: 10,
-        justifyContent: 'flex-end',
-        width: '50%',
+        marginVertical: 5,
     },
     header: {
-        borderWidth: 3,
         color: 'white',
-        fontSize: 18,
+        fontSize: 16,
         borderRadius: 20,
         borderColor: '#3F1175',
         paddingHorizontal: 20,
@@ -323,7 +340,6 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 2,
         borderColor: '#3F1175',
-        // padding: 10,
         borderRadius: 5,
         backgroundColor: 'white',
         fontSize: 14,

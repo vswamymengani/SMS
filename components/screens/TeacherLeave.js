@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TextInput, StyleSheet, Modal, View,Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity } from 'react-native';
@@ -8,6 +8,7 @@ import Image1 from '../assets/BackArrow.png';
 const TeacherLeave = ({route}) => {
   const navigation = useNavigation();
   const [employeeid, setEmployeeId] = useState('');
+  const [profile, setProfile] = useState([]);
   const [purpose, setPurpose] = useState('');
   const [startdate, setStartDate] = useState('');
   const [enddate, setEndDate] = useState('');
@@ -37,6 +38,20 @@ const TeacherLeave = ({route}) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  useEffect(() =>{
+    const fetchLeaves = async() =>{
+      try{
+        const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+        setProfile(response.data);
+        setEmployeeId(profile.employeeid);
+      }
+      catch(error){
+        setErrors({general:"unable to provide employee id"});
+      }
+    };
+    fetchLeaves();
+  },[email]);
+
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
@@ -44,7 +59,7 @@ const TeacherLeave = ({route}) => {
   const Leave = async () => {
     if (validate()) {
       axios.post('http://10.0.2.2:3000/leave', {
-        employeeid,
+        employeeid:profile.employeeid,
         email,
         purpose,
         startdate,
@@ -85,13 +100,7 @@ const TeacherLeave = ({route}) => {
       </View>
       <View style={styles.container1}>
       <Text style={styles.headding}>Employee Id</Text>
-      <TextInput
-        style={styles.text}
-        value={employeeid}
-        placeholder="Enter your employee ID here"
-        onChangeText={(text) => { setEmployeeId(text); clearError('employeeid'); }}
-      />
-      {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
+      <Text style={styles.text}>{profile.employeeid}</Text>
       <Text style={styles.headding}>Purpose</Text>
       <TextInput
         style={styles.text}

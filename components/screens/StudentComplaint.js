@@ -108,17 +108,6 @@ const StudentComplaint = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.details}>
-          {fullname}
-        </Text>
-        <Text style={styles.details}>
-          Class: {className}
-        </Text>
-        <Text style={styles.details}>
-          Section: {section}
-        </Text>
-      </View>
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}

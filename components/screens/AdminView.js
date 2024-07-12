@@ -10,6 +10,7 @@ import Image8 from '../assets/Teacher1.png';
 import Image9 from '../assets/Admin.png';
 import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
+import Image4 from '../assets/timetable1.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -74,6 +75,15 @@ const AdminView = ({ navigation }) => {
         <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('ClassesTable')}>
           <Image source={Image9} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Parent Details</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.squareRow}>
+        <TouchableOpacity onPress={() => navigation.navigate('AdminTimeTable')}>
+            <View style={styles.square}>
+              <Image source={Image4} style={styles.squareImage} />
+              <Text>Timetable</Text>
+            </View>
         </TouchableOpacity>
       </View>
       

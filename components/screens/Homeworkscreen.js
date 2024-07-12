@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {ScrollView, View, Text, Image, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Image1 from '../assets/BackArrow.png';
 import axios from 'axios';
 
@@ -34,6 +34,7 @@ const HomeworkScreen = ({ navigation, route }) => {
       try {
         const response = await axios.get(`http://10.0.2.2:3000/homework/${classname}/${section}`);
         setHomeworkList(response.data.reverse()); // Assuming API returns an array of homework objects
+        console.log("Homework data:", response.data); // Log the homework data for debugging
       } catch (error) {
         console.error('Error fetching homework data:', error);
       }
@@ -43,25 +44,33 @@ const HomeworkScreen = ({ navigation, route }) => {
     }
   }, [classname, section]);
 
+  const formatDate = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Image1} style={styles.backArrow} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Homework</Text>
       </View>
-      {/* <View style={styles.classname}>
-        <Text style={styles.classText}>Class: {classname}</Text>
-        <Text style={styles.sectionText}>Section: {section}</Text>
-      </View> */}
       {homeworkList.map((homework) => (
         <View key={homework.id} style={styles.homeworkContainer}>
           <Text style={styles.subjectText}>{homework.subject}</Text>
-          <Text>Type of Homework: {homework.typeOfHomework}</Text>
-          <Text>Title: {homework.title}</Text>
-          <Text>Duration: {homework.duration}</Text>
-          <Text>Homework: {homework.homework}</Text>
+          {homework.created_at && (
+            <Text style={styles.text}>Given Date: {formatDate(homework.created_at)}</Text>
+          )}
+          <Text style={styles.text}>Type of Homework: {homework.typeOfHomework}</Text>
+          <Text style={styles.text}>Title: {homework.title}</Text>
+          <Text style={styles.text}>Duration: {homework.duration}</Text>
+          <Text style={styles.text}>Homework: {homework.homework}</Text>
         </View>
       ))}
     </ScrollView>
@@ -69,11 +78,11 @@ const HomeworkScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollViewContainer: {
+    flexGrow: 1,
+    padding: 10,
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingTop: 10,
+    backgroundColor: "#3F1175",
   },
   header: {
     flexDirection: 'row',
@@ -84,48 +93,34 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginRight: 10,
-    left:-130,
+    left: -130,
+  },
+  text: {
+    fontSize: 14,
+    color: 'black',
   },
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color:'black',
-    left:-10,
-  },
-  classname: {
-    flexDirection: 'row',
-    alignItems: 'space-between',
-    marginBottom: 20,
-    color:'black',
-    
-  },
-  classText: {
-    fontSize: 18,
-    marginBottom: 20,
-    marginRight:20,
-    color:'black',
-  },
-  sectionText: {
-    fontSize: 18,
-    marginBottom: 20,
-    alignItems:'center',
-    color:'black',
+    color: 'white',
+    left: -10,
   },
   homeworkContainer: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
     marginBottom: 10,
-    borderRadius:20,
+    borderRadius: 20,
     width: '100%',
-    borderColor:'black',
+    borderColor: 'black',
+    backgroundColor:'white',
   },
   subjectText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
-    textAlign:'center',
-    color:'black',
+    textAlign: 'center',
+    color: 'blue',
   },
 });
 

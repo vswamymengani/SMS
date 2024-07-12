@@ -111,6 +111,10 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ClassWork',{ email })}>
+          <Image source={Image20} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>Libery</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -130,8 +134,8 @@ const styles = StyleSheet.create({
     top: 0,
   },
   image3: {
-    width:150,
-    height: 200,
+    width:180,
+    height: 180,
     position: 'absolute',
     top: 90,
   },

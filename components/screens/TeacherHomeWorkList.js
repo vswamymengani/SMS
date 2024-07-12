@@ -30,10 +30,10 @@ const TeacherHomeWorkList = ({ route }) => {
                 {homeworkList.map((homework) => (
                     <View key={homework.id} style={styles.homeworkContainer}>
                         <Text style={styles.text}>Class: {homework.classname} Section: {homework.section}</Text>
-                        <Text>Type of Homework: {homework.typeOfHomework}</Text>
-                        <Text>Title: {homework.title}</Text>
-                        <Text>Duration: {homework.duration}</Text>
-                        <Text>Homework: {homework.homework}</Text>
+                        <Text style={styles.text1}>Type of Homework: {homework.typeOfHomework}</Text>
+                        <Text style={styles.text1}>Title: {homework.title}</Text>
+                        <Text style={styles.text1}>Duration: {homework.duration}</Text>
+                        <Text style={styles.text1}>Homework: {homework.homework}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -46,19 +46,27 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems:'center',
         top:10,
+        backgroundColor:'#3F1175',
     },
     homeworkContainer: {
         borderWidth: 1,
         borderColor: '#ccc',
-        marginBottom: 10,
+        margin: 10,
         borderRadius: 20,
-        paddingHorizontal:70,
-        paddingTop:10,
+        paddingVertical:10,
+        paddingHorizontal:60,
         borderColor: 'black',
+        backgroundColor:'white',
     },
     text: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
+        marginBottom: 5,
+        textAlign: 'center',
+        color: 'blue',
+    },
+    text1: {
+        fontSize: 16,
         marginBottom: 5,
         textAlign: 'center',
         color: 'black',

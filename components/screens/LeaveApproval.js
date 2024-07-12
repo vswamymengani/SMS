@@ -28,10 +28,18 @@ const LeaveApproval = ({ route }) => {
         }
     }, [email]);
 
+    const formatDate = (timestamp) => {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        return date.toLocaleDateString(); // Format date as per your requirement
+    };
 
     const renderItem = ({ item }) => (
         <View style={styles.leaves}>
             <Text style={styles.purpose}>Purpose: {item.leavePurpose}</Text>
+            {item.created_at && (
+                <Text style={styles.date}>Applied Date:{formatDate(item.created_at)}</Text>
+            )}
             <Text style={styles.text}>Duration: {item.startDate} to {item.endDate}</Text>
             <Text style={styles.text}>Description: {item.description}</Text>
             <Text style={styles.button}>{item.approval !== null ? item.approval : 'Pending'}</Text>
@@ -86,6 +94,12 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         alignItems: 'center',
         padding: 20,
+    },
+    date: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+        margin: 10,
     },
     purpose: {
         alignItems: 'center',

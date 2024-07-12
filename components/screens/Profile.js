@@ -33,45 +33,47 @@ const Profile = ({ navigation, route }) => {
         <Image source={Image1} style={styles.profileImage} />
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
-      <View style={styles.infoTitle}>
-          <Text style={styles.infoTitle}>Your  Information</Text>
+      
+    
+      <View style={styles.info}>
+        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.details}>Class: {profile.className}</Text>
+        <Text style={styles.details}>Section: {profile.section}</Text>
+        <Text style={styles.details}>D.O.B: {profile.dateofbirth}</Text>
+        <Text style={styles.details}>Roll Number: {profile.rollno}</Text>
+        <Text style={styles.details}>Admission Number: {profile.admissionid}</Text>
       </View>
-      <View style={styles.box}>
-      <View style={styles.infoBox}>
+      <View style={styles.info}>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>Father Name:</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>{profile.fathername}</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>Father mobile:</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>{profile.fatherno}</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>Mother Name:</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>{profile.mothername}</Text>
+        </View>
+        <View style={styles.parentsBox}>
         
-        <Text style={styles.infoText}>Full Name:</Text>
-        <Text style={styles.infoText}>Email</Text>
-        <Text style={styles.infoText}>Class: </Text>
-        <Text style={styles.infoText}>Section:</Text>
-        <Text style={styles.infoText}>Roll No:</Text>
-        <Text style={styles.infoText}>Date of Birth: </Text>
-        <Text style={styles.infoText}>Father's Name: </Text>
-        <Text style={styles.infoText}>Father's Number:</Text>
-        <Text style={styles.infoText}>Mother's Name:</Text>
-        <Text style={styles.infoText}>Mother's Number:</Text>
-        <Text style={styles.infoText}>Admission ID:</Text>
-        <Text style={styles.infoText2}>Present Address:</Text>
+        <Text style={styles.parentsName}>Mother mobile:</Text>
+        </View>
+        <View style={styles.parentsBox}>
+        <Text style={styles.parentsName}>{profile.motherno}</Text>
+        </View>
       </View>
-      <View style={styles.infoBox}>
-      <Text style={styles.infoText1}>{profile.fullname}</Text>
-        <Text style={styles.infoText1}>{profile.email}</Text>
-        <Text style={styles.infoText1}>{profile.className}</Text>
-        <Text style={styles.infoText1}>{profile.section}</Text>
-        <Text style={styles.infoText1}>{profile.rollno}</Text>
-        <Text style={styles.infoText1}>{profile.dateofbirth}</Text>
-        <Text style={styles.infoText1}>{profile.fathername}</Text>
-        <Text style={styles.infoText1}>{profile.fatherno}</Text>
-        <Text style={styles.infoText1}>{profile.mothername}</Text>
-        <Text style={styles.infoText1}>{profile.motherno}</Text>
-        <Text style={styles.infoText1}>{profile.admissionid}</Text>
-        <Text style={styles.infoText2}>{profile.presentaddress}</Text>
-
+      <View style={styles.address}>
+        <Text style={styles.addressTitle}>Present Address:</Text>
+        <Text style={styles.addressName}>{profile.presentaddress}</Text>
       </View>
-      </View>
-
-      <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate('ModifyInfo',{ email })}>
-        <Text style={styles.homeButtonText}>Modify Info</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
     padding: 20,
   },
   profileBox: {
@@ -88,62 +89,60 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 150,
+    height: 150,
+    borderRadius: 70,
     marginBottom: 10,
+  }, 
+  info:{
+    width:'90%',
+    backgroundColor:'white',
+    alignItems:'center',
+    borderRadius:30,
+    padding:20,
+    marginBottom:20,
   },
-  box:{
+  name:{
+    fontSize:30,
+    color:'blue',
+    fontWeight:'bold',
+  },
+  details:{
+    fontSize:18,
+    color:'orange',
+    margin:5,
+  },
+  parentsBox:{
+    justifyContent:'space-between',
     flexDirection:'row',
-    
   },
-  infoBox: {
-    width: '50%',
-    marginTop: 10,
-    borderWidth:2,
+  parents:{
+    backgroundColor:'red',
+    borderRadius:20,
+    padding:15,
+    margin:10,
+    marginBottom:20,
+    alignItems:'center',
   },
-  infoTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  parentsName:{
+    fontSize:20,
     color:'black',
-    marginBottom: 10,
+    margin:5,
   },
-  infoText: {
-    fontSize: 20,
-    marginBottom: 2,
-    color:'black',
-    borderBottomWidth:1,
-    margin:1,
-    textAlign:'center',
+  address:{
+    width:"100%",
+    backgroundColor:'yellow',
+    alignItems:'center',
+    borderRadius:20,
+    padding:20,
   },
-  infoText1: {
-    fontSize: 20,
-    marginBottom: 2,
-    color:'black',
-    borderBottomWidth:1,
-    margin:1,
-    textAlign:'center',
+  addressTitle:{
+    fontSize:20,
+    color:'blue',
   },
-  infoText2: {
-    fontSize: 20,
-    marginBottom: 2,
-    color:'black',
-    margin:1,
-    textAlign:'center',
-  },
-  homeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#1DBBFF',
-    borderRadius: 5,
-  },
-  homeButtonText: {
-    fontSize: 18,
-    color: 'white',
-  },
-  error: {
-    color: 'red',
-    marginTop: 10,
+  addressName:{
+    fontSize:20,
+    color:'blue',
   },
 });
 

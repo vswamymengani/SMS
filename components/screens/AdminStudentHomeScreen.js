@@ -28,34 +28,30 @@ const AdminStudentHomeScreen = ({ navigation }) => {
               <Text>Student Details</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('AdminTimeTable')}>
-            <View style={styles.square}>
-              <Image source={Image4} style={styles.squareImage} />
-              <Text>Student Timetable</Text>
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() =>navigation.navigate('AdminStudentComplaints')} >
             <View style={styles.square}>
               <Image source={Image8} style={styles.squareImage} />
               <Text>Student Complaints</Text>
             </View>
           </TouchableOpacity>
-        </View>
-        <View style={styles.squareRow1}>
-          <View style={styles.square}>
-            <Image source={Image9} style={styles.squareImage} />
-            <Text>Student Fee </Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate('StudentAnnouncements')} >
-            <View style={styles.square}>
-              <Image source={Image7} style={styles.squareImage} />
-              <Text>Student Annuncments</Text>
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() =>navigation.navigate('AdminStudentLeave')}>
             <View style={styles.square}>
               <Image source={Image11} style={styles.squareImage} />
               <Text >Student Leave</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.squareRow1}>
+          <TouchableOpacity onPress={() => navigation.navigate('AdminFeeDetails')} >
+            <View style={styles.square}>
+              <Image source={Image9} style={styles.squareImage} />
+              <Text>Student Fee </Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('StudentAnnouncements')} >
+            <View style={styles.square}>
+              <Image source={Image7} style={styles.squareImage} />
+              <Text>Student Annuncments</Text>
             </View>
           </TouchableOpacity>
         </View>
