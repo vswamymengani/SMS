@@ -54,6 +54,8 @@ import WorkInProgress from './components/screens/WorkInProgress';
 import TeacherHomeWorkList from './components/screens/TeacherHomeWorkList';
 import TeacherLeaveApproval from './components/screens/TeacherLeaveApproval';
 import TeacherExamResults from './components/screens/TeacherExamResults';
+import PieChartComponent  from './components/screens/PieChartComponent';
+import ExamResults from './components/screens/ExamResults';
 
 const Stack = createNativeStackNavigator();
 
@@ -113,6 +115,8 @@ function App() {
         <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{title: "List Of Home Works"}} />
         <Stack.Screen name="TeacherLeaveApproval" component={TeacherLeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="TeacherExamResults" component={TeacherExamResults} options={{title:"Exam results"}} />
+         <Stack.Screen name="PieChartComponent" component={PieChartComponent} options={{title:"PieChartComponent"}} />
+         <Stack.Screen name="ExamResults" component={ExamResults} options={{title:"ExamResults"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

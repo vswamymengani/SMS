@@ -66,7 +66,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image11} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Fee News</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('StudentAttendence',{email})}>
+        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('PieChartComponent',{email})}>
           <Image source={Image12} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Attendence</Text>
         </TouchableOpacity>
@@ -109,7 +109,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image20} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Library</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ExamResults',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Exams Results</Text>
         </TouchableOpacity>
