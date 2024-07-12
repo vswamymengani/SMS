@@ -54,6 +54,10 @@ import WorkInProgress from './components/screens/WorkInProgress';
 import TeacherHomeWorkList from './components/screens/TeacherHomeWorkList';
 import TeacherLeaveApproval from './components/screens/TeacherLeaveApproval';
 import TeacherExamResults from './components/screens/TeacherExamResults';
+import StudentVerification from './components/screens/StudentVerification';
+import AdminStudentForm from './components/screens/AdminStudentForm';
+import StudentRegistration from './components/screens/StudentRegistration';
+import AdminFeeDetails from './components/screens/AdminFeeDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -89,7 +93,7 @@ function App() {
         <Stack.Screen name="TeacherLeave" component={TeacherLeave} options={{headerShown: false}} />
         <Stack.Screen name="TeacherComplaints" component={TeacherComplaints} options={{title:"Teacher Complaints"}} />
         <Stack.Screen name="TeacherComplaint1" component={TeacherComplaint1}options={{title: "Teacher Complaint"}} />
-        <Stack.Screen name="TeacherHomework" component={TeacherHomework}options={{title: "Homework"}} />
+        <Stack.Screen name="TeacherHomework" component={TeacherHomework}options={{headerShown: false}} />
         <Stack.Screen name="TeacherAttendance" component={TeacherAttendance}options={{title: "Attendance"}} />
         <Stack.Screen name="TeacherTimetable" component={TeacherTimetable} options={{ headerShown: false }} />
         <Stack.Screen name="RequestEdit" component={RequestEdit} options={{headerShown: false}} />
@@ -113,6 +117,10 @@ function App() {
         <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{title: "List Of Home Works"}} />
         <Stack.Screen name="TeacherLeaveApproval" component={TeacherLeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="TeacherExamResults" component={TeacherExamResults} options={{title:"Exam results"}} />
+        <Stack.Screen name="StudentVerification" component={StudentVerification} options={{headerShown: false}} />
+        <Stack.Screen name="AdminStudentForm" component={AdminStudentForm} options={{headerShown: false}} />
+        <Stack.Screen name="StudentRegistration" component={StudentRegistration} options={{headerShown: false}} />
+        <Stack.Screen name="AdminFeeDetails" children={AdminFeeDetails} options={{title : "Student Fee Details"}} />
 
       </Stack.Navigator>
     </NavigationContainer>
