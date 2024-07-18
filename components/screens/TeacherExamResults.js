@@ -128,6 +128,11 @@ const TeacherExamResults = ({ route }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.head}>
+                <TouchableOpacity onPress={() =>navigation.navigate('PrevResults')}>
+                    <Text style={styles.headText}>Prev</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.dropdownRow2}>
                 <Dropdown
                     style={styles.dropdown2}
@@ -244,6 +249,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         width: '50%',
+    },
+    head: {
+        backgroundColor: '#3F1175',
+        padding: 5,
+        borderRadius: 10,
+        height:40,
+        width: '20%',
+        left:300,
+        marginBottom:10,
+    },
+    headText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign:'center',
     },
     header: {
         borderWidth: 3,

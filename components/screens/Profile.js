@@ -46,28 +46,19 @@ const Profile = ({ navigation, route }) => {
       <View style={styles.info}>
         <View style={styles.parentsBox}>
         <Text style={styles.parentsName}>Father Name:</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>{profile.fathername}</Text>
+        <Text style={styles.parentsName1}>{profile.fathername}</Text>
         </View>
         <View style={styles.parentsBox}>
         <Text style={styles.parentsName}>Father mobile:</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>{profile.fatherno}</Text>
+        <Text style={styles.parentsName1}>{profile.fatherno}</Text>
         </View>
         <View style={styles.parentsBox}>
         <Text style={styles.parentsName}>Mother Name:</Text>
+        <Text style={styles.parentsName1}>{profile.mothername}</Text>
         </View>
         <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>{profile.mothername}</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        
         <Text style={styles.parentsName}>Mother mobile:</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>{profile.motherno}</Text>
+        <Text style={styles.parentsName1}>{profile.motherno}</Text>
         </View>
       </View>
       <View style={styles.address}>
@@ -113,8 +104,10 @@ const styles = StyleSheet.create({
     margin:5,
   },
   parentsBox:{
-    justifyContent:'space-between',
+    justifyContent:'flex-start',
     flexDirection:'row',
+    width:'80%',
+    right:40,
   },
   parents:{
     backgroundColor:'red',
@@ -126,8 +119,13 @@ const styles = StyleSheet.create({
   },
   parentsName:{
     fontSize:20,
-    color:'black',
-    margin:5,
+    color:'red',
+    margin:5, 
+  },
+  parentsName1:{
+    fontSize:20,
+    color:'blue',
+    margin:5, 
   },
   address:{
     width:"100%",

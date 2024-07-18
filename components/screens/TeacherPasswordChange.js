@@ -14,9 +14,9 @@ import axios from "axios";
 import Image1 from '../assets/BackArrow.png';
 import Image2 from '../assets/Verified.png'; // Assuming Verified.png is imported correctly
 
-const VerificationCode = ({ route }) => {
+const TeacherPasswordChange = ({ route }) => {
   const navigation = useNavigation();
-  const admissionid = route.params.admissionid;
+  const employeeid = route.params.employeeid;
   const [errors, setErrors] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [password, setPassword] = useState('');
@@ -39,7 +39,7 @@ const VerificationCode = ({ route }) => {
   const handleSend = async () => {
     if (validate()) {
       axios
-        .post(`http://10.0.2.2:3000/changePassword?admissionid=${admissionid}`, {
+        .post(`http://10.0.2.2:3000/teacherChangePassword?employeeid=${employeeid}`, {
           password,
           confirmPassword,
         })
@@ -67,7 +67,7 @@ const VerificationCode = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() =>navigation.navigate('ForgotPassword')} >
+        <TouchableOpacity onPress={() =>navigation.navigate('TeacherForgotPassword')} >
             <Image source={Image1} style={styles.headerImage} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Forgot Password</Text>
@@ -120,7 +120,7 @@ const VerificationCode = ({ route }) => {
           <TouchableOpacity
             onPress={() => {
               togglePopup(); // Close the popup
-              navigation.navigate("LoginScreen"); // Navigate to the Login screen
+              navigation.navigate("TeacherLogin"); // Navigate to the Login screen
             }}
             style={styles.modalButton}
           >
@@ -222,4 +222,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VerificationCode;
+export default TeacherPasswordChange;

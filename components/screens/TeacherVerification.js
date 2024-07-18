@@ -4,33 +4,29 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import Image1 from '../assets/BackArrow.png';
 
-const ForgotPassword = () => {
+const TeacherVerification = () => {
   const navigation = useNavigation();
-  const [fullname, setfullname] = useState('');
-  const [admissionid, setadmissionid] = useState('');
+  const [fullname, setFullname] = useState('');
+  const [employeeid, setEmployeeId] = useState('');
   const [dateofbirth, setDateofbirth] = useState('');
-  const [email,setEmail]= useState('');
   const [errors, setErrors] = useState({});
-  const [admissionId, setAdmissionId] = useState(null);
 
   const validate = () => {
     const newErrors = {};
     if (!fullname) newErrors.fullname = "Enter the Full Name";
-    if (!admissionid) newErrors.admissionid = "Enter the correct Admission number";
+    if (!employeeid) newErrors.employeeid = "Enter the correct Employee Id";
     if (!dateofbirth) newErrors.dateofbirth = "Enter your date of birth";
-    if(!email) newErrors.email = "Enter Your Email Id";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSend = () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/studentForgotPassword', { admissionid, fullname , dateofbirth, email })
+      axios.post('http://10.0.2.2:3000/teacherVerification', { employeeid, fullname, dateofbirth })
         .then(response => {
           console.log('Server response: ', response.data);
           if (response.data.status === 'Success') {
-            setAdmissionId(admissionid);
-            navigation.push('VerificationCode', { admissionid });
+            navigation.push('TeacherRegistration', { employeeid });
           } else {
             Alert.alert('Error', response.data.message);
           }
@@ -53,7 +49,7 @@ const ForgotPassword = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('TeacherLogin')}>
           <Image source={Image1} style={styles.image1} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Verification</Text>
@@ -66,7 +62,7 @@ const ForgotPassword = () => {
           style={styles.input}
           placeholder="Enter your Full Name"
           value={fullname}
-          onChangeText={(text) => { setfullname(text); clearError('fullname'); }}
+          onChangeText={(text) => { setFullname(text); clearError('fullname'); }}
         />
         {errors.fullname && <Text style={styles.error}>{errors.fullname}</Text>}
         <View style={styles.labelContainer}>
@@ -79,28 +75,16 @@ const ForgotPassword = () => {
           onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
-
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Admission Number</Text>
+          <Text style={styles.label}>Employee Id</Text>
         </View>
         <TextInput
           style={styles.input}
-          placeholder="Enter your Admission Number"
-          value={admissionid}
-          onChangeText={(text) => { setadmissionid(text); clearError('admissionid'); }}
+          placeholder="Enter your Employee Id"
+          value={employeeid}
+          onChangeText={(text) => { setEmployeeId(text); clearError('employeeid'); }}
         />
-        {errors.admissionid && <Text style={styles.error}>{errors.admissionid}</Text>}
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Email</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your Email Id"
-          value={email}
-          onChangeText={(text) => { setEmail(text); clearError('email'); }}
-        />
-        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-        
+        {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
         <TouchableOpacity style={styles.loginButton} onPress={handleSend}>
           <Text style={styles.loginButtonText}>Next</Text>
         </TouchableOpacity>
@@ -119,12 +103,12 @@ const styles = StyleSheet.create({
   image1: {
     height: 30,
     width: 30,
-    right:50,
+    right: 50,
     position: 'absolute',
   },
   header: {
     flexDirection: 'row',
-    justifyContent:'space-evenly',
+    justifyContent: 'space-evenly',
     width: '100%',
     marginBottom: 20,
   },
@@ -132,14 +116,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    right:30,
+    right: 30,
   },
   formContainer: {
     width: '90%',
     backgroundColor: 'white',
     borderRadius: 30,
     padding: 30,
-    top:100,
+    top: 50,
   },
   labelContainer: {
     flexDirection: 'row',
@@ -179,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+export default TeacherVerification;

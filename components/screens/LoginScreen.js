@@ -56,16 +56,6 @@ const LoginScreen = () => {
   // Render different content based on whether user is logged in or not
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {loggedInEmail ? ( // If logged in, show different content
-        <View>
-          <Text style={styles.logout}>Are you sure want to Logout,</Text>
-          <Text style={styles.logout}>{loggedInEmail}!</Text>
-          <TouchableOpacity onPress={() => setLoggedInEmail(null)}>
-            <Text style={styles.logout}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-      ) : ( // If not logged in, show login form
-        <>
           <Image source={Image5} style={styles.image5} />
           <Image source={Image6} style={styles.image6} />
           <Image source={Image3} style={styles.image3} />
@@ -110,8 +100,6 @@ const LoginScreen = () => {
             </Text>
           </TouchableOpacity>
           </View>
-        </>
-      )}
     </ScrollView>
   );
 };

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TextInput, Button } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
-const ComplaintItem = ({ item, onResolve }) => {
+const SingleComplaintItem = ({ item, onResolve }) => {
   const [comments, setComments] = useState(item.comments || '');
   const [isResolved, setIsResolved] = useState(item.is_resolved || 0);
 
@@ -18,7 +18,7 @@ const ComplaintItem = ({ item, onResolve }) => {
       <Text style={styles.text}>Type: {item.typeOfComplaint}</Text>
       <Text style={styles.text}>Reason: {item.reason}</Text>
       <Text style={styles.text}>Explanation: {item.explanation}</Text>
-      {isResolved !== 1 ? (
+      {isResolved === 0 ? (
         <>
           <TextInput
             style={styles.input}
@@ -35,17 +35,21 @@ const ComplaintItem = ({ item, onResolve }) => {
   );
 };
 
-const ReciveComplaint = ({ route }) => {
+const SingleStudentComplaint = ({ route }) => {
   const navigation = useNavigation();
   const [complaints, setComplaints] = useState([]);
   const [filteredComplaints, setFilteredComplaints] = useState([]);
   const [errors, setErrors] = useState({});
   const email = route.params.email;
+  const fullname = route.params.fullname;
+  const section = route.params.section;
+  const className = route.params.className;
+  const [recipient, setRecipient] = useState('Teacher');
 
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/complaints?recipient=teacher');
+        const response = await axios.get('http://10.0.2.2:3000/singleStudentComplaint', { params: { fullname, className, section, recipient } });
         setComplaints(response.data);
         setFilteredComplaints(response.data.filter(item => item.is_resolved !== 1));
       } catch (err) {
@@ -53,7 +57,7 @@ const ReciveComplaint = ({ route }) => {
       }
     };
     fetchComplaints();
-  }, []);
+  }, [fullname, className, section, recipient]);
 
   const resolveComplaint = async (id, isResolved, comments) => {
     try {
@@ -74,7 +78,7 @@ const ReciveComplaint = ({ route }) => {
   };
 
   const renderComplaint = ({ item }) => (
-    <ComplaintItem item={item} onResolve={resolveComplaint} />
+    <SingleComplaintItem item={item} onResolve={resolveComplaint} />
   );
 
   return (
@@ -127,4 +131,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReciveComplaint;
+export default SingleStudentComplaint;

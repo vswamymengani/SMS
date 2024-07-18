@@ -58,6 +58,20 @@ import StudentVerification from './components/screens/StudentVerification';
 import AdminStudentForm from './components/screens/AdminStudentForm';
 import StudentRegistration from './components/screens/StudentRegistration';
 import AdminFeeDetails from './components/screens/AdminFeeDetails';
+import StudentComplaintList from './components/screens/StudentComplaintList';
+import TeacherComplaintList from './components/screens/TeacherComplaintList';
+import PrevAttendance from './components/screens/PrevAttendance';
+import StudentModify from './components/screens/StudentModify';
+import TeacherVerification from './components/screens/TeacherVerification';
+import TeacherRegistration from './components/screens/TeacherRegistration';
+import TeacherForgotPassword from './components/screens/TeacherForgotPassword';
+import TeacherPasswordChange from './components/screens/TeacherPasswordChange';
+import TeacherStudyMaterial from './components/screens/TeacherStudyMaterial';
+import StudentStudyMaterial from './components/screens/StudentStudyMaterial';
+import PrevResults from './components/screens/PrevResults';
+import SingleSyudentComplaint from './components/screens/SingleStudentComplaint';
+import SingleStudentComplaint from './components/screens/SingleStudentComplaint';
+import StudentExamResults from './components/screens/StudentExamResults';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,15 +100,15 @@ function App() {
         <Stack.Screen name="StudentTimetable" component={StudentTimetable} options={{ headerShown: false }} />
         <Stack.Screen name="TeacherHomeScreen" component={TeacherHomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
-        <Stack.Screen name="StudentComplaint" component={StudentComplaint} options={{ title: 'Student Complaint' }} />
+        <Stack.Screen name="StudentComplaint" component={StudentComplaint} options={{headerShown: false }} />
         <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{headerShown: false }} />
         <Stack.Screen name="FeeNews" component={FeeNews} options={{headerShown: false}} />
         <Stack.Screen name="ClassWork" component={ClassWork} options={{headerShown: false}} />
         <Stack.Screen name="TeacherLeave" component={TeacherLeave} options={{headerShown: false}} />
         <Stack.Screen name="TeacherComplaints" component={TeacherComplaints} options={{title:"Teacher Complaints"}} />
-        <Stack.Screen name="TeacherComplaint1" component={TeacherComplaint1}options={{title: "Teacher Complaint"}} />
-        <Stack.Screen name="TeacherHomework" component={TeacherHomework}options={{headerShown: false}} />
-        <Stack.Screen name="TeacherAttendance" component={TeacherAttendance}options={{title: "Attendance"}} />
+        <Stack.Screen name="TeacherComplaint1" component={TeacherComplaint1}options={{headerShown: false}} />
+        <Stack.Screen name="TeacherHomework" component={TeacherHomework} options={{headerShown: false}} />
+        <Stack.Screen name="TeacherAttendance" component={TeacherAttendance} options={{title: "Attendance"}} />
         <Stack.Screen name="TeacherTimetable" component={TeacherTimetable} options={{ headerShown: false }} />
         <Stack.Screen name="RequestEdit" component={RequestEdit} options={{headerShown: false}} />
         <Stack.Screen name="ReciveComplaint" component={ReciveComplaint} options={{title:"Student Complaint"}} />
@@ -120,8 +134,20 @@ function App() {
         <Stack.Screen name="StudentVerification" component={StudentVerification} options={{headerShown: false}} />
         <Stack.Screen name="AdminStudentForm" component={AdminStudentForm} options={{headerShown: false}} />
         <Stack.Screen name="StudentRegistration" component={StudentRegistration} options={{headerShown: false}} />
-        <Stack.Screen name="AdminFeeDetails" children={AdminFeeDetails} options={{title : "Student Fee Details"}} />
-
+        <Stack.Screen name="AdminFeeDetails" component={AdminFeeDetails} options={{title : "Student Fee Details"}} />
+        <Stack.Screen name="StudentComplaintList" component={StudentComplaintList} options={{headerShown:false}} />
+        <Stack.Screen name="TeacherComplaintList" component={TeacherComplaintList} options={{headerShown:false}} />
+        <Stack.Screen name="PrevAttendance" component={PrevAttendance} options={{title: "Previous Attendance"}} />
+        <Stack.Screen name="StudentModify" component={StudentModify} options={{title: "Student Modification"}} />
+        <Stack.Screen name="TeacherVerification" component={TeacherVerification} options={{headerShown: false}} />
+        <Stack.Screen name="TeacherRegistration" component={TeacherRegistration} options={{headerShown: false}} />
+        <Stack.Screen name="TeacherForgotPassword" component={TeacherForgotPassword} options={{headerShown: false}} />
+        <Stack.Screen name="TeacherPasswordChange" component={TeacherPasswordChange} options={{headerShown: false}} />
+        <Stack.Screen name="TeacherStudyMaterial" component={TeacherStudyMaterial} options={{title: "Study Material"}} />
+        <Stack.Screen name="StudentStudyMaterial" component={StudentStudyMaterial} options={{headerShown: false}} />
+        <Stack.Screen name="PrevResults" component={PrevResults} options={{title: "Previous Results"}} />
+        <Stack.Screen name="SingleStudentComplaint" component={SingleStudentComplaint} options={{title: "Student Complaint"}} />
+        <Stack.Screen name="StudentExamResults" component={StudentExamResults} options={{title: "Exam Results"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

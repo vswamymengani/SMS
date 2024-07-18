@@ -14,20 +14,21 @@ import axios from "axios";
 import Image1 from '../assets/BackArrow.png';
 import Image2 from '../assets/Verified.png'; // Assuming Verified.png is imported correctly
 
-const VerificationCode = ({ route }) => {
+const TeacherRegistration = ({ route }) => {
   const navigation = useNavigation();
-  const admissionid = route.params.admissionid;
+  const  employeeid  = route.params.employeeid;
   const [errors, setErrors] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const validate = () => {
     const newErrors = {};
+    if (!email) newErrors.email = "Enter the Email Id";
     if (!password) newErrors.password = "Enter the Password";
     if (!confirmPassword) newErrors.confirmPassword = "Repeat the password";
-    if (password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -38,16 +39,16 @@ const VerificationCode = ({ route }) => {
 
   const handleSend = async () => {
     if (validate()) {
-      axios
-        .post(`http://10.0.2.2:3000/changePassword?admissionid=${admissionid}`, {
-          password,
-          confirmPassword,
-        })
+      axios.post(`http://10.0.2.2:3000/teachersRegister?employeeid=${employeeid}`, {
+        email,
+        password,
+        confirmPassword,
+      })
         .then((response) => {
           if (response.status === 200) {
             togglePopup();
           } else {
-            console.error("Failed to Change the Password:", response.status);
+            console.error("Failed to register:", response.status);
           }
         })
         .catch((error) => {
@@ -67,12 +68,23 @@ const VerificationCode = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() =>navigation.navigate('ForgotPassword')} >
-            <Image source={Image1} style={styles.headerImage} />
+        <TouchableOpacity onPress={() => navigation.navigate('TeacherVerification')}>
+          <Image source={Image1} style={styles.headerImage} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Forgot Password</Text>
+        <Text style={styles.headerText}>Teacher Registration</Text>
       </View>
       <View style={styles.formContainer}>
+        <Text style={styles.text}>Email Id</Text>
+        <TextInput
+          placeholder="Enter Your Email Id"
+          value={email}
+          style={styles.input}
+          onChangeText={(text) => {
+            setEmail(text);
+            clearError("email");
+          }}
+        />
+        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
         <Text style={styles.text}>Password</Text>
         <TextInput
           placeholder="Enter Your Password"
@@ -96,16 +108,13 @@ const VerificationCode = ({ route }) => {
           }}
           secureTextEntry={true}
         />
-        {errors.confirmPassword && (
-          <Text style={styles.error}>{errors.confirmPassword}</Text>
-        )}
+        {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
         <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handleSend} style={styles.button}>
-                <Text style={styles.buttonText}>Modify</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={handleSend} style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
         </View>
       </View>
-
       <Modal
         visible={isModalVisible}
         animationType="fade"
@@ -116,11 +125,11 @@ const VerificationCode = ({ route }) => {
       >
         <View style={styles.modalContainer}>
           <Image source={Image2} style={styles.successImage} />
-          <Text style={styles.modalText}>Password Change successful!</Text>
+          <Text style={styles.modalText}>Registration successful!</Text>
           <TouchableOpacity
             onPress={() => {
               togglePopup(); // Close the popup
-              navigation.navigate("LoginScreen"); // Navigate to the Login screen
+              navigation.navigate("TeacherLogin"); // Navigate to the Login screen
             }}
             style={styles.modalButton}
           >
@@ -141,7 +150,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    top:20,
+    top: 20,
     marginBottom: 40,
   },
   headerImage: {
@@ -152,22 +161,22 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 25,
     fontWeight: "bold",
-    color:'white',
+    color: 'white',
   },
   formContainer: {
     marginBottom: 20,
-    justifyContent:'center',
-    backgroundColor:'white',
-    padding:30,
-    borderRadius:30,
-    top:100,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 30,
+    borderRadius: 30,
+    top: 50,
   },
-  text:{
-    fontSize:16,
-    color:'black',
-    fontWeight:'bold',
-    margin:15,
-    right:20,
+  text: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight: 'bold',
+    margin: 15,
+    right: 20,
   },
   input: {
     borderWidth: 1,
@@ -222,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VerificationCode;
+export default TeacherRegistration;

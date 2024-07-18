@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, Scro
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Image1 from '../assets/Verified.png';
+import Image2 from '../assets/BackArrow.png';
 import axios from 'axios';
 
 const StudentComplaint = ({ route }) => {
@@ -108,6 +109,16 @@ const StudentComplaint = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() =>navigation.navigate('Homescreen', { email })}>
+          <Image source={Image2} style={styles.image} />
+        </TouchableOpacity>
+        <Text style={styles.header}>Complaints</Text>
+        <TouchableOpacity onPress={() =>navigation.navigate('StudentComplaintList',{ email })}>
+          <Text style={styles.list}>Prev</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.body}>
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
@@ -175,6 +186,7 @@ const StudentComplaint = ({ route }) => {
           </View>
         </View>
       </Modal>
+      </View>
     </ScrollView>
   );
 };
@@ -183,12 +195,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
+  },
+  header:{
+    fontSize:20,
+    color:'black',
+    fontWeight:'bold',
+  },
+  image:{
+    height:30,
+    width:30,
+  },
+  list:{
+    color:'white',
+    backgroundColor:'#3F1175',
+    padding:10,
+    borderRadius:20,
+    fontSize:16,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 30,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+    marginBottom: 10,
+    borderBottomWidth:2,
+    padding:5,
+  },
+  body:{
+    paddingHorizontal:20,
   },
   details: {
     fontSize: 20,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
@@ -47,13 +47,14 @@ const AdminFeeDetails = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Student Fee Details</Text>
+      <Text style={styles.label}>Admission No</Text>
       <TextInput
         style={styles.input}
         placeholder="Admission ID"
         value={admissionId}
         onChangeText={setAdmissionId}
       />
+      <Text style={styles.label}>Toatl Fee</Text>
       <TextInput
         style={styles.input}
         placeholder="Total Fees"
@@ -61,6 +62,7 @@ const AdminFeeDetails = () => {
         value={totalFees}
         onChangeText={setTotalFees}
       />
+      <Text style={styles.label}>Paid Amount</Text>
       <TextInput
         style={styles.input}
         placeholder="Paid Amount"
@@ -68,6 +70,7 @@ const AdminFeeDetails = () => {
         value={paidAmount}
         onChangeText={setPaidAmount}
       />
+      <Text style={styles.label}>Remaining Amount</Text>
       <TextInput
         style={styles.input}
         placeholder="Remaining Amount"
@@ -75,13 +78,18 @@ const AdminFeeDetails = () => {
         value={remainingAmount}
         onChangeText={setRemainingAmount}
       />
+      <Text style={styles.label}>Due date</Text>
       <TextInput
         style={styles.input}
         placeholder="Due Date (YYYY-MM-DD)"
         value={dueDate}
         onChangeText={setDueDate}
       />
-      <Button title="Submit" onPress={handleSubmit} />
+      <View style={styles.buttonbox}>
+      <TouchableOpacity onPress={handleSubmit}>
+        <Text style={styles.button}>Submit</Text>
+      </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -90,15 +98,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    height: 50,
+    borderColor: '#3F1175',
+    borderWidth: 2,
+    fontSize:16,
     marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius:20,
   },
+  label:{
+    fontSize:18,
+    color:'black',
+    fontWeight:'bold',
+    margin:5,
+  },
+  button:{
+    backgroundColor:'#3F1175',
+    width:100,
+    padding:10,
+    margin:20,
+    color:'white',
+    textAlign:'center',
+    fontSize:16,
+    borderRadius:20,
+  },
+  buttonbox:{
+    
+    alignItems:'center',
+  }
 });
 
 export default AdminFeeDetails;

@@ -7,7 +7,7 @@ import Image1 from '../assets/Verified.png';
 import axios from 'axios';
 
 const AdminStudentForm = ({ navigation }) => {
-  const [fullName, setFullName] = useState('');
+  const [fullname, setfullname] = useState('');
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
   const [rollNo, setRollNo] = useState('');
@@ -16,14 +16,14 @@ const AdminStudentForm = ({ navigation }) => {
   const [fatherNo, setFatherNo] = useState('');
   const [motherName, setMotherName] = useState('');
   const [motherNo, setMotherNo] = useState('');
-  const [admissionNo, setAdmissionNo] = useState('');
+  const [admissionid, setAdmissionid] = useState('');
   const [presentAddress, setPresentAddress] = useState('');
   const [errors, setErrors] = useState({});
   const [showPopup, setShowPopup] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
-    if (!fullName.trim()) newErrors.fullName = 'Full Name is required';
+    if (!fullname.trim()) newErrors.fullname = 'Full Name is required';
     if (!className.trim()) newErrors.className = 'Class is required';
     if (!section.trim()) newErrors.section = 'Section is required';
     if (!rollNo.trim()) newErrors.rollNo = 'Roll No is required';
@@ -45,7 +45,7 @@ const AdminStudentForm = ({ navigation }) => {
     if (validateForm()) {
       try {
         const response = await axios.post('http://10.0.2.2:3000/adminStudentRegister', {
-          fullName,
+          fullname,
           className,
           section,
           rollNo,
@@ -54,7 +54,7 @@ const AdminStudentForm = ({ navigation }) => {
           fatherNo,
           motherName,
           motherNo,
-          admissionNo,
+          admissionid,
           presentAddress,
         });
         if (response.status === 200) {
@@ -96,10 +96,10 @@ const AdminStudentForm = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter your fullname...."
-          value={fullName}
-          onChangeText={(text) => { setFullName(text); clearError('fullName'); }}
+          value={fullname}
+          onChangeText={(text) => { setfullname(text); clearError('fullname'); }}
         />
-        {errors.fullName && <Text style={styles.error}>{errors.fullName}</Text>}
+        {errors.fullname && <Text style={styles.error}>{errors.fullname}</Text>}
 
         <LabelWithStar label="Class" />
         <TextInput
@@ -177,10 +177,10 @@ const AdminStudentForm = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="0123456"
-          value={admissionNo}
-          onChangeText={(text) => { setAdmissionNo(text); clearError('admissionNo'); }}
+          value={admissionid}
+          onChangeText={(text) => { setAdmissionid(text); clearError('admissionid'); }}
         />
-        {errors.admissionNo && <Text style={styles.error}>{errors.admissionNo}</Text>}
+        {errors.admissionid && <Text style={styles.error}>{errors.admissionid}</Text>}
 
         <LabelWithStar label="Present Address" />
         <TextInput

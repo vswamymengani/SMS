@@ -14,7 +14,7 @@ const TeacherNotifications = ({ route }) => {
       try {
         const [complaintsResponse, announcementsResponse, leaveResponse] = await Promise.all([
           axios.get('http://10.0.2.2:3000/complaints?recipient=teacher'),
-          axios.get('http://10.0.2.2:3000/reciveAnnouncements'),
+          axios.get('http://10.0.2.2:3000/reciveAnnouncements?reciver=Teacher'),
           axios.get(`http://10.0.2.2:3000/leaveNotification?email=${email}`)
         ]);
 
@@ -40,7 +40,12 @@ const TeacherNotifications = ({ route }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => {
       if (item.type === 'complaint') {
-        navigation.navigate('ReciveComplaint', { email });
+        navigation.navigate('SingleStudentComplaint', {
+          email,
+          fullname: item.fullname,
+          className: item.className,
+          section: item.section
+        });
       } else if (item.type === 'announcement') {
         // Handle announcement navigation if necessary
       } else if (item.type === 'leave') {

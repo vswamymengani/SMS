@@ -13,6 +13,7 @@ const AdminTimeTable = () => {
       subject: '',
       employeeid: '',
       teacherName: '',
+      link: '',
     },
   ]);
   const [teachers, setTeachers] = useState([]);
@@ -35,6 +36,7 @@ const AdminTimeTable = () => {
         subject: '',
         employeeid: '',
         teacherName: '',
+        link: '',
       },
     ]);
   };
@@ -66,6 +68,7 @@ const AdminTimeTable = () => {
           subject: '',
           employeeid: '',
           teacherName: '',
+          link: '',
         },
       ]);
       Alert.alert('Timetable added successfully');
@@ -191,6 +194,17 @@ const AdminTimeTable = () => {
             <View style={styles.inputGroup}>
               <Text>Teacher Name:</Text>
               <Text style={styles.teacherName}>{entry.teacherName}</Text>
+            </View>
+          )}
+          {entry.employeeid && (
+            <View style={styles.inputGroup}>
+              <Text>Link:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Live Class Link"
+                value={entry.link}
+                onChangeText={(text) => handleChange(index, 'link', text)}
+              />
             </View>
           )}
         </View>

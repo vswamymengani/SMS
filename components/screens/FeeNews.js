@@ -1,34 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet ,TouchableOpacity,alert} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 
-const FeeNews = ({ navigation,route }) => {
+const FeeNews = ({ navigation, route }) => {
   const [totalFees, setTotalFees] = useState('');
-  const [feeDetails , setFeeDetails] = useState([]);
+  const [feeDetails, setFeeDetails] = useState([]);
   const [paidAmount, setPaidAmount] = useState('');
   const [remainingAmount, setRemainingAmount] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const email = route.params;
+  const email = route.params.email;
+  const [admissionid, setAdmissionid] = useState('');
+  const [profile, setProfile] = useState([]);
+  const [errors, setErrors] = useState({});
 
   // Fetch fee details from server
   useEffect(() => {
-    axios.get('http://10.0.2.2:3000/feedetails?email=${email}')
-      .then(response => {
-        setFeeDetails(response.data);
-        
-      })
-      .catch(error => {
-        // console.error('Error fetching fee details:', error);
-        alert.alert('fee details not updated');
-      });
-  }, []);
+    if (admissionid) {
+      axios.get(`http://10.0.2.2:3000/feedetails?admissionid=${admissionid}`)
+        .then(response => {
+          const data = response.data;
+          setFeeDetails(data);
+          setTotalFees(data.totalFees);
+          setPaidAmount(data.paidAmount);
+          setRemainingAmount(data.remainingAmount);
+          setDueDate(data.dueDate);
+        })
+        .catch(error => {
+          Alert.alert('Error', 'Fee details not updated');
+        });
+    }
+  }, [admissionid]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const profileData = response.data;
+        setProfile(profileData);
+        setAdmissionid(profileData.admissionid);
+      } catch (err) {
+        setErrors(prevErrors => ({ ...prevErrors, profile: 'Failed to load profile data' }));
+      }
+    };
+    if (email) {
+      fetchProfile();
+    } else {
+      setErrors(prevErrors => ({ ...prevErrors, email: 'No email provided' }));
+    }
+  }, [email]);
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         {/* Back arrow */}
-        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email})}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })}>
           <Image source={require('../assets/BackArrow.png')} style={styles.backArrow} />
         </TouchableOpacity>
         {/* Header text */}
@@ -41,7 +67,7 @@ const FeeNews = ({ navigation,route }) => {
       {/* Total fees */}
       <View style={styles.totalFeesContainer}>
         <Text style={styles.totalFeesText}>Total Fees</Text>
-        <Text style={styles.totalFeesAmount}>{feeDetails.totalFees}</Text>
+        <Text style={styles.totalFeesAmount}>{totalFees}</Text>
       </View>
 
       {/* Paid and remaining amount bars */}
@@ -53,19 +79,19 @@ const FeeNews = ({ navigation,route }) => {
       {/* Amount paid */}
       <View style={styles.amountContainer}>
         <Text style={styles.amountLabel}>Amount Paid</Text>
-        <Text style={styles.amountValue}>{feeDetails.paidAmount}</Text>
+        <Text style={styles.amountValue}>{paidAmount}</Text>
       </View>
 
       {/* Remaining amount */}
       <View style={styles.amountContainer}>
         <Text style={styles.amountLabel}>Remaining Amount</Text>
-        <Text style={styles.amountValue}>{feeDetails.remainingAmount}</Text>
+        <Text style={styles.amountValue}>{remainingAmount}</Text>
       </View>
 
       {/* Due date */}
       <View style={styles.dueDateContainer}>
         <Text style={styles.dueDateLabel}>Due Date</Text>
-        <Text style={styles.dueDateValue}>{feeDetails.dueDate}</Text>
+        <Text style={styles.dueDateValue}>{dueDate}</Text>
       </View>
     </View>
   );
@@ -89,9 +115,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
-    width:'auto',
     fontWeight: 'bold',
-    color:'black',
+    color: 'black',
   },
   feeImage: {
     width: '100%',
@@ -106,7 +131,7 @@ const styles = StyleSheet.create({
   totalFeesText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black',
+    color: 'black',
   },
   totalFeesAmount: {
     fontSize: 16,
@@ -117,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     marginTop: 20,
-    marginBottom:20,
+    marginBottom: 20,
   },
   bar: {
     height: '100%',
@@ -127,11 +152,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    color:'black',
+    color: 'black',
   },
   amountLabel: {
     fontSize: 16,
-    color:'black',
+    color: 'black',
   },
   amountValue: {
     fontSize: 16,
@@ -141,11 +166,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 20,
     marginBottom: 20,
-    color:'black',
+    color: 'black',
   },
   dueDateLabel: {
     fontSize: 16,
-    color:'black',
+    color: 'black',
   },
   dueDateValue: {
     fontSize: 16,

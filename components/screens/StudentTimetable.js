@@ -71,6 +71,7 @@ const StudentTimetable = ({ route }) => {
       person: entry.teacherName,
       employeeid: entry.employeeid,
       timeText: entry.period,
+      link: entry.link,
       backgroundColor: colors[index % colors.length],
     }));
   };
@@ -116,6 +117,9 @@ const StudentTimetable = ({ route }) => {
                 <TouchableOpacity key={index} onPress={() => showTeacherDetails(box.employeeid)}>
                   <Text style={styles.personText}>Teacher Name: {box.person}</Text>
                 </TouchableOpacity>
+              </View>
+              <View style={box.link !== null? styles.personContainer: null}>
+                <Text style={styles.link}>Link:{box.link}</Text>
               </View>
             </View>
         ))}
@@ -245,6 +249,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '400',
     color: 'black',
+  },
+  link: {
+    fontSize: 17,
+    fontWeight: '400',
+    color: 'white',
   },
   modalContainer: {
     flex: 1,

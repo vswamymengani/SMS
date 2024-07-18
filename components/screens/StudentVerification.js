@@ -6,16 +6,15 @@ import Image1 from '../assets/BackArrow.png';
 
 const StudentVerification = () => {
   const navigation = useNavigation();
-  const [fullName, setFullName] = useState('');
-  const [admissionNo, setAdmissionNo] = useState('');
+  const [fullname, setFullname] = useState('');
+  const [admissionid, setAdmissionid] = useState('');
   const [dateofbirth, setDateofbirth] = useState('');
   const [errors, setErrors] = useState({});
-  const [admissionId, setAdmissionId] = useState(null);
 
   const validate = () => {
     const newErrors = {};
-    if (!fullName) newErrors.fullName = "Enter the Full Name";
-    if (!admissionNo) newErrors.admissionNo = "Enter the correct Admission number";
+    if (!fullname) newErrors.fullname = "Enter the Full Name";
+    if (!admissionid) newErrors.admissionid = "Enter the correct Admission number";
     if (!dateofbirth) newErrors.dateofbirth = "Enter your date of birth";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -23,12 +22,11 @@ const StudentVerification = () => {
 
   const handleSend = () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/studentVerification', { admissionNo, fullName , dateofbirth })
+      axios.post('http://10.0.2.2:3000/studentVerification', { admissionid, fullname, dateofbirth })
         .then(response => {
           console.log('Server response: ', response.data);
           if (response.data.status === 'Success') {
-            setAdmissionId(admissionNo);
-            navigation.push('StudentRegistration', { admissionNo });
+            navigation.push('StudentRegistration', { admissionid });
           } else {
             Alert.alert('Error', response.data.message);
           }
@@ -63,10 +61,10 @@ const StudentVerification = () => {
         <TextInput
           style={styles.input}
           placeholder="Enter your Full Name"
-          value={fullName}
-          onChangeText={(text) => { setFullName(text); clearError('fullName'); }}
+          value={fullname}
+          onChangeText={(text) => { setFullname(text); clearError('fullname'); }}
         />
-        {errors.fullName && <Text style={styles.error}>{errors.fullName}</Text>}
+        {errors.fullname && <Text style={styles.error}>{errors.fullname}</Text>}
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Date Of Birth</Text>
         </View>
@@ -77,17 +75,16 @@ const StudentVerification = () => {
           onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
-
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Admission Number</Text>
         </View>
         <TextInput
           style={styles.input}
           placeholder="Enter your Admission Number"
-          value={admissionNo}
-          onChangeText={(text) => { setAdmissionNo(text); clearError('admissionNo'); }}
+          value={admissionid}
+          onChangeText={(text) => { setAdmissionid(text); clearError('admissionid'); }}
         />
-        {errors.admissionNo && <Text style={styles.error}>{errors.admissionNo}</Text>}
+        {errors.admissionid && <Text style={styles.error}>{errors.admissionid}</Text>}
         <TouchableOpacity style={styles.loginButton} onPress={handleSend}>
           <Text style={styles.loginButtonText}>Next</Text>
         </TouchableOpacity>
@@ -106,12 +103,12 @@ const styles = StyleSheet.create({
   image1: {
     height: 30,
     width: 30,
-    right:50,
+    right: 50,
     position: 'absolute',
   },
   header: {
     flexDirection: 'row',
-    justifyContent:'space-evenly',
+    justifyContent: 'space-evenly',
     width: '100%',
     marginBottom: 20,
   },
@@ -119,14 +116,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-    right:30,
+    right: 30,
   },
   formContainer: {
     width: '90%',
     backgroundColor: 'white',
     borderRadius: 30,
     padding: 30,
-    top:100,
+    top: 50,
   },
   labelContainer: {
     flexDirection: 'row',

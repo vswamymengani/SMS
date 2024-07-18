@@ -1,63 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
-import Image3 from '../assets/Plus.png';
-import Image4 from '../assets/BackArrow.png';
+import Image3 from '../assets/Subtract.png';
+import Image1 from '../assets/Verified.png';
 import axios from 'axios';
 
 const TeacherForm = ({ navigation }) => {
   const [fullname, setFullname] = useState('');
-  const [className, setClassName] = useState('');
-  const [section, setSection] = useState('');
-  const [dateofbirth, setDateofbirth] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobileNo ,setMobileNo] = useState('');
-  const [employeeid, setEmployeeid] = useState('');
+  const [subject, setSubject] = useState('');
+  const [qualification, setQualification] = useState('');
   const [experience, setExperience] = useState('');
-  const [presentaddress, setPresentaddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmpassword] = useState('');
+  const [dateofbirth, setDateOfBirth] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [employeeid, setemployeeid] = useState('');
+  const [presentAddress, setPresentAddress] = useState('');
   const [errors, setErrors] = useState({});
   const [showPopup, setShowPopup] = useState(false);
 
-  const validateTeacherForm = () => {
+  const validateForm = () => {
     const newErrors = {};
-    if (!fullname.trim()) {
-      newErrors.fullname = 'Full Name is required';
-    }
-    if (!className.trim()) {
-      newErrors.className = 'Class is required';
-    }
-    if (!section.trim()) {
-      newErrors.section = 'Section is required';
-    }
-    if (!dateofbirth.trim()) {
-      newErrors.dateofbirth = 'Date of Birth is required';
-    }
-    if (!email.trim()) {
-      newErrors.email = 'Email is required';
-    }
-    if(!mobileNo.trim()){
-      newErrors.mobileNo = 'Enter your Mobile number';
-    }
-    if (!employeeid.trim()) {
-      newErrors.employeeid = 'Employee ID is required';
-    }
-    if (!experience.trim()) {
-        newErrors.experience = 'Experience ID is required';
-      }
-    if (!presentaddress.trim()) {
-      newErrors.presentaddress = 'Present Address is required';
-    }
-    if (!password.trim()) {
-      newErrors.password = 'Password is required';
-    }
-    if (!confirmpassword.trim()) {
-      newErrors.confirmpassword = 'Confirm Password is required';
-    } else if (password !== confirmpassword) {
-      newErrors.confirmpassword = 'Passwords do not match';
-    }
+    if (!fullname.trim()) newErrors.fullname = 'Full Name is required';
+    if (!subject.trim()) newErrors.subject = 'Subject is required';
+    if (!qualification.trim()) newErrors.qualification = 'Qualification is required';
+    if (!experience.trim()) newErrors.experience = 'Experience is required';
+    if (!dateofbirth.trim()) newErrors.dateofbirth = 'Date of Birth is required';
+    if (!mobileNo.trim()) newErrors.mobileNo = 'Mobile Number is required';
+    if (!employeeid.trim()) newErrors.employeeid = 'Employee ID is required';
+    if (!presentAddress.trim()) newErrors.presentAddress = 'Present Address is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -66,35 +36,27 @@ const TeacherForm = ({ navigation }) => {
     setShowPopup(!showPopup);
   };
 
-  const handleTeacherRegister = async () => {
-    if (validateTeacherForm()) {
-      axios.post('http://10.0.2.2:3000/teacherregister', {
-        fullname,
-        className,
-        section,
-        dateofbirth,
-        email,
-        mobileNo,
-        employeeid,
-        experience,
-        presentaddress,
-        password,
-        confirmpassword
-      })
-        .then(response => {
-          if (response.status === 200) {
-            // Successfully registered
-            togglePopup(); // Show the popup
-            // navigation.push('LoginScreen'); // Uncomment this line if you also want to navigate to LoginScreen
-          } else {
-            // Handle error responses from the server
-            console.error('Failed to register:', response.status);
-          }
-        })
-        .catch(error => {
-          // Handle network errors
-          console.error('Axios Error:', error);
+  const handleRegister = async () => {
+    if (validateForm()) {
+      try {
+        const response = await axios.post('http://10.0.2.2:3000/AdminTeacherRegister', {
+          fullname,
+          subject,
+          qualification,
+          experience,
+          dateofbirth,
+          mobileNo,
+          employeeid,
+          presentAddress,
         });
+        if (response.status === 200) {
+          togglePopup(); // Show the popup
+        } else {
+          console.error('Failed to register:', response.status);
+        }
+      } catch (error) {
+        console.error('Axios Error:', error);
+      }
     }
   };
 
@@ -114,11 +76,12 @@ const TeacherForm = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={Image5} style={styles.image5} />
-      <Image source={Image6} style={styles.image6} />
-      <Image source={Image3} style={styles.image3} />
-      <View style={styles.header}>
-        <Text style={styles.headerText}></Text>
+      <View style={styles.imageContainer}>
+        <Image source={Image5} style={styles.image5} />
+        <View style={styles.overlayImages}>
+          <Image source={Image6} style={styles.image6} />
+          <Image source={Image3} style={styles.image3} />
+        </View>
       </View>
       <View style={styles.formContainer}>
         <LabelWithStar label="Full Name" />
@@ -130,128 +93,98 @@ const TeacherForm = ({ navigation }) => {
         />
         {errors.fullname && <Text style={styles.error}>{errors.fullname}</Text>}
 
-        <LabelWithStar label="Class" />
+        <LabelWithStar label="Subject" />
         <TextInput
           style={styles.input}
-          placeholder="Enter your class...."
-          value={className}
-          onChangeText={(text) => { setClassName(text); clearError('className'); }}
+          placeholder="Enter your subject...."
+          value={subject}
+          onChangeText={(text) => { setSubject(text); clearError('subject'); }}
         />
-        {errors.className && <Text style={styles.error}>{errors.className}</Text>}
+        {errors.subject && <Text style={styles.error}>{errors.subject}</Text>}
 
-        <LabelWithStar label="Section" />
+        <LabelWithStar label="Qualification" />
         <TextInput
           style={styles.input}
-          placeholder="Enter your section...."
-          value={section}
-          onChangeText={(text) => { setSection(text); clearError('section'); }}
+          placeholder="Enter your qualification...."
+          value={qualification}
+          onChangeText={(text) => { setQualification(text); clearError('qualification'); }}
         />
-        {errors.section && <Text style={styles.error}>{errors.section}</Text>}
+        {errors.qualification && <Text style={styles.error}>{errors.qualification}</Text>}
+
+        <LabelWithStar label="Experience" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your experience in years...."
+          value={experience}
+          onChangeText={(text) => { setExperience(text); clearError('experience'); }}
+        />
+        {errors.experience && <Text style={styles.error}>{errors.experience}</Text>}
 
         <LabelWithStar label="Date of Birth" />
         <TextInput
           style={styles.input}
           placeholder="dd/mm/yyyy"
           value={dateofbirth}
-          onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
+          onChangeText={(text) => { setDateOfBirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
 
-        <LabelWithStar label="Email" />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email...."
-          value={email}
-          onChangeText={(text) => { setEmail(text); clearError('email'); }}
-        />
-        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
         <LabelWithStar label="Mobile Number" />
         <TextInput
           style={styles.input}
-          placeholder="Enter your mobile nummber...."
+          placeholder="Enter your mobile number...."
           value={mobileNo}
           onChangeText={(text) => { setMobileNo(text); clearError('mobileNo'); }}
         />
         {errors.mobileNo && <Text style={styles.error}>{errors.mobileNo}</Text>}
-        <LabelWithStar label="Employee Id" />
+
+        <LabelWithStar label="Employee ID" />
         <TextInput
           style={styles.input}
-          placeholder="0123456"
+          placeholder="Enter your employee ID...."
           value={employeeid}
-          onChangeText={(text) => { setEmployeeid(text); clearError('employeeid'); }}
+          onChangeText={(text) => { setemployeeid(text); clearError('employeeid'); }}
         />
         {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
-
-        <LabelWithStar label="Experience" />
-        <TextInput
-          style={styles.input}
-          placeholder="If One Year Type 1"
-          value={experience}
-          onChangeText={(text) => { setExperience(text); clearError('experience'); }}
-        />
-        {errors.experience && <Text style={styles.error}>{errors.experience}</Text>}
 
         <LabelWithStar label="Present Address" />
         <TextInput
           style={styles.input}
-          placeholder="H.No-12, Hyderabad"
-          value={presentaddress}
-          onChangeText={(text) => { setPresentaddress(text); clearError('presentaddress'); }}
+          placeholder="Enter your present address...."
+          value={presentAddress}
+          onChangeText={(text) => { setPresentAddress(text); clearError('presentAddress'); }}
         />
-        {errors.presentaddress && <Text style={styles.error}>{errors.presentaddress}</Text>}
+        {errors.presentAddress && <Text style={styles.error}>{errors.presentAddress}</Text>}
 
-        <LabelWithStar label="Password" />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your password...."
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => { setPassword(text); clearError('password'); }}
-        />
-        {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+        <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
+          <Text style={styles.loginButtonText}>Register</Text>
+        </TouchableOpacity>
 
-        <LabelWithStar label="Confirm Password" />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your password...."
-          secureTextEntry
-          value={confirmpassword}
-          onChangeText={(text) => { setConfirmpassword(text); clearError('confirmpassword'); }}
-        />
-        {errors.confirmpassword && <Text style={styles.error}>{errors.confirmpassword}</Text>}
+        <Modal
+          visible={showPopup}
+          animationType="fade"
+          transparent={true}
+          onRequestClose={() => {
+            togglePopup();
+          }}
+        >
+          <View style={styles.popup}>
+            <View style={styles.modalContainer} >
+              <Image source={Image1} style={styles.successImage} />
+              <Text style={styles.popupText}>Registration successful!</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  togglePopup(); // Close the popup
+                  navigation.navigate('TeacherDetails'); // Navigate to the Login screen
+                }}
+                style={styles.modalButton}
+              >
+                <Text style={styles.modalButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
-
-      <TouchableOpacity style={styles.loginButton} onPress={handleTeacherRegister}>
-        <Text style={styles.loginButtonText}>Register</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.orText}>OR</Text>
-
-      <TouchableOpacity onPress={() => navigation.navigate('TeacherLogin')}>
-        <Text style={styles.signupText}>Already have an account? Login</Text>
-      </TouchableOpacity>
-
-      <Modal
-        visible={showPopup}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          togglePopup();
-        }}
-      >
-        <View style={styles.popup}>
-          <Text style={styles.popupText}>Registration successful!</Text>
-          <TouchableOpacity
-            onPress={() => {
-              togglePopup(); // Close the popup
-              navigation.navigate('TeacherLogin'); // Navigate to the Login screen
-            }}
-            style={styles.closeButton}
-          >
-            <Text style={styles.closeButtonText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </ScrollView>
   );
 };
@@ -259,118 +192,113 @@ const TeacherForm = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
   },
-  image5: {
-    width: 415,
-    height: 250,
-    position: 'absolute',
-    top: 0,
-  },
-  image3: {
-    width: 100,
-    height: 110,
-    position: 'absolute',
-    top: 140,
-  },
-  image6: {
-    width: 200,
-    height: 200,
-    position: 'absolute',
-    top: 90,
-  },
-  plus: {
-    width: 100,
-    height: 50,
-    fontSize: 17,
-    position: 'center',
-    textAlign: 'center', // Center text
-    color: '#28C2A0',
-    top: 170,
-  },
-  header: {
-    marginTop: 150,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  formContainer: {
-    alignItems: 'flex-start', // Align content to the left
-    marginTop: 150,
-    width: '80%', // Set the width to control the form's width
-  },
-  labelContainer: {
-    width: '100%',
-  },
-  label: {
-    textAlign: 'left', // Adjusted to align text to the left
-    marginBottom: 5,
-    fontSize: 16,
-    color: 'black',
-  },
-  star: {
-    color: 'red', // Star color red
-  },
-  input: {
-    width: '100%',
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#6C7278',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  loginButton: {
-    width: '80%', // Adjusted to span full width
-    height: 40,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
+  imageContainer: {
     alignItems: 'center',
-    borderRadius: 5,
     marginBottom: 20,
   },
-  loginButtonText: {
-    fontSize: 18,
-    color: 'white',
+  image5: {
+    width: "100%",
+    height: 200,
   },
-  orText: {
-    fontSize: 16,
+  overlayImages: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    top: 70,
+  },
+  image6: {
+    width: 150,
+    height: 150,
+    left:75,
+  },
+  image3: {
+    width: 130,
+    height: 150,
+    right:65,
+  },
+  formContainer: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    top: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
+  label: {
+    fontSize: 14,
+    color: '#666666',
     fontWeight: 'bold',
-    marginBottom: 10,
   },
-  signupText: {
-    color: 'blue',
-    marginBottom: 30,
+  star: {
+    color: 'red',
+    fontSize: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: '#D3D3D3',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
   error: {
     color: 'red',
-    marginBottom: 5,
+    marginBottom: 10,
+    marginTop: -5,
+  },
+  loginButton: {
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   popup: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  successImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
   },
   popupText: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
     marginBottom: 20,
   },
-  closeButton: {
-    backgroundColor: 'blue',
+  modalButton: {
+    backgroundColor: '#6200ee',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
-  closeButtonText: {
-    fontSize: 18,
+  modalButtonText: {
     color: 'white',
+    fontSize: 16,
   },
 });
 

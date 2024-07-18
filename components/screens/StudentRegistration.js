@@ -16,7 +16,7 @@ import Image2 from '../assets/Verified.png'; // Assuming Verified.png is importe
 
 const StudentRegistration = ({ route }) => {
   const navigation = useNavigation();
-  const admissionNo = route.params.admissionNo;
+  const admissionid = route.params.admissionid;
   const [errors, setErrors] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [email, setEmail] = useState('');
@@ -28,8 +28,7 @@ const StudentRegistration = ({ route }) => {
     if (!email) newErrors.email = "Enter the Email Id";
     if (!password) newErrors.password = "Enter the Password";
     if (!confirmPassword) newErrors.confirmPassword = "Repeat the password";
-    if (password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -40,12 +39,11 @@ const StudentRegistration = ({ route }) => {
 
   const handleSend = async () => {
     if (validate()) {
-      axios
-        .post(`http://10.0.2.2:3000/studentRegister?admissionNo=${admissionNo}`, {
-          email,
-          password,
-          confirmPassword,
-        })
+      axios.post(`http://10.0.2.2:3000/studentRegister?admissionid=${admissionid}`, {
+        email,
+        password,
+        confirmPassword,
+      })
         .then((response) => {
           if (response.status === 200) {
             togglePopup();
@@ -70,8 +68,8 @@ const StudentRegistration = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() =>navigation.navigate('StudentVerification')} >
-            <Image source={Image1} style={styles.headerImage} />
+        <TouchableOpacity onPress={() => navigation.navigate('StudentVerification')}>
+          <Image source={Image1} style={styles.headerImage} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Student Registration</Text>
       </View>
@@ -110,16 +108,13 @@ const StudentRegistration = ({ route }) => {
           }}
           secureTextEntry={true}
         />
-        {errors.confirmPassword && (
-          <Text style={styles.error}>{errors.confirmPassword}</Text>
-        )}
+        {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
         <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handleSend} style={styles.button}>
-                <Text style={styles.buttonText}>Register</Text>
-            </TouchableOpacity>
+          <TouchableOpacity onPress={handleSend} style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
         </View>
       </View>
-
       <Modal
         visible={isModalVisible}
         animationType="fade"
@@ -155,7 +150,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    top:20,
+    top: 20,
     marginBottom: 40,
   },
   headerImage: {
@@ -166,22 +161,22 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 25,
     fontWeight: "bold",
-    color:'white',
+    color: 'white',
   },
   formContainer: {
     marginBottom: 20,
-    justifyContent:'center',
-    backgroundColor:'white',
-    padding:30,
-    borderRadius:30,
-    top:100,
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 30,
+    borderRadius: 30,
+    top: 50,
   },
-  text:{
-    fontSize:16,
-    color:'black',
-    fontWeight:'bold',
-    margin:15,
-    right:20,
+  text: {
+    fontSize: 16,
+    color: 'black',
+    fontWeight: 'bold',
+    margin: 15,
+    right: 20,
   },
   input: {
     borderWidth: 1,

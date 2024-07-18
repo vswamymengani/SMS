@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const StudentAttendance = ({route}) => {
   const navigation = useNavigation();
-  const email = route.params;
+  const {email} = route.params;
 
   const handleBack = () => {
     navigation.navigate('Homescreen',{ email });

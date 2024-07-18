@@ -13,7 +13,7 @@ const TeacherAttendance = ({ navigation, route }) => {
   const [attendance, setAttendance] = useState([]);
   const [errors, setErrors] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const email = route.params;
+  const { email } = route.params;  // Correctly destructuring email from route.params
 
   const fetchStudents = () => {
     axios.get('http://10.0.2.2:3000/studentResults', { params: { className, section } })
@@ -129,6 +129,14 @@ const TeacherAttendance = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.prevButton}
+          onPress={() => navigation.navigate('PrevAttendance')}
+        >
+          <Text style={styles.prevButtonText}>Prev</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.dropdownRow2}>
         <Dropdown
           style={styles.dropdown2}
@@ -226,82 +234,94 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
-  dropdownRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 25,
+  header: {
+    
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  prevButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+  },
+  prevButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
   dropdownRow2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 25,
-    width: '60%',
+    marginBottom: 10,
   },
   dropdown2: {
-    borderColor: '#3F1175',
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingHorizontal: 8,
-    marginBottom: 10,
-    width: '75%',
-    height: 50,
-    marginRight: 30,
+    width: '48%',
+    borderWidth:2,
+    color:'black',
+    padding:8,
+    borderRadius:10,
+  },
+  dropdownRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  dropdown: {
+    width: '48%',
+    borderWidth:2,
+    padding:8,
+    borderRadius:10,
+  },
+  placeholderStyle2: {
+    fontSize: 16,
+    color: '#8a8a8a',
+  },
+  selectedTextStyle2: {
+    fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: '#8a8a8a',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
   },
   textInput: {
+    borderColor: 'black',
     borderWidth: 2,
-    borderColor: '#3F1175',
-    borderRadius: 5,
-    backgroundColor: 'white',
-    fontSize: 16,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    height: 50,
+    borderRadius: 10,
+    padding: 10,
+    width: '48%',
+    height:60,
   },
   boldText: {
     fontWeight: 'bold',
-    marginVertical: 16,
-    fontSize: 25,
-    color: 'black',
-    textAlign: 'center',
+    marginBottom: 10,
+    justifyContent:'center',
+    color:'black',
+    fontSize:18,
+    left:100,
   },
   studentRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-    borderWidth: 2,
-    padding: 10,
+    marginBottom: 10,
+    borderWidth:2,
   },
   studentText: {
-    flex: 1,
-    marginHorizontal: 8,
-    fontSize: 20,
-    color: 'black',
+    fontSize: 16,
   },
   attendanceInput: {
-    borderColor: '#3F1175',
-    borderWidth: 2,
+    borderColor: '#ddd',
+    borderWidth: 1,
     borderRadius: 5,
-    paddingHorizontal: 8,
-    width: '30%',
-    height: 40,
-  },
-  dropdown: {
-    borderColor: '#3F1175',
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingHorizontal: 8,
-    marginBottom: 10,
-    right: 8,
-    height: 50,
-    width: '45%',
-  },
-  sendButton: {
-    backgroundColor: '#3F1175',
     padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginVertical: 10,
+    width: '15%',
+    textAlign: 'center',
   },
   error: {
     color: 'red',
@@ -314,33 +334,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: '#fff',
     padding: 20,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  modalButton: {
-    backgroundColor: '#3F1175',
-    padding: 10,
     borderRadius: 10,
     alignItems: 'center',
-    marginVertical: 10,
-    width: '100%',
-  },
-  modalButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    width: '80%',
   },
   successImage: {
     width: 100,
     height: 100,
+    marginBottom: 20,
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#2196F3',
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
