@@ -127,6 +127,13 @@ const TeacherAttendance = ({ navigation, route }) => {
     { label: 'Biology', value: 'Biology' },
   ];
 
+  const attendanceStatusData = [
+    { label: 'Present', value: 'Present' },
+    { label: 'Absent', value: 'Absent' },
+    { label: 'Leave', value: 'Leave' },
+    { label: 'Holiday', value: 'Holiday' }
+  ];
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.dropdownRow2}>
@@ -192,11 +199,17 @@ const TeacherAttendance = ({ navigation, route }) => {
             <View key={student.rollno} style={styles.studentRow}>
               <Text style={styles.studentText}>{student.fullname}</Text>
               <Text style={styles.studentText}>{student.rollno}</Text>
-              <TextInput
-                style={styles.attendanceInput}
+              <Dropdown
+                style={styles.attendanceDropdown}
+                placeholderStyle={styles.attendancePlaceholderStyle}
+                selectedTextStyle={styles.attendanceSelectedTextStyle}
+                data={attendanceStatusData}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Status"
                 value={attendance.find(att => att.rollno === student.rollno)?.status}
-                onChangeText={text => handleAttendanceChange(student.rollno, text.toUpperCase())}
-                placeholder='P'
+                onChange={item => handleAttendanceChange(student.rollno, item.value)}
                 accessible={true}
                 accessibilityLabel={`attendance-${student.rollno}`}
               />
@@ -278,13 +291,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
   },
-  attendanceInput: {
+  attendanceDropdown: {
     borderColor: '#3F1175',
     borderWidth: 2,
     borderRadius: 5,
     paddingHorizontal: 8,
     width: '30%',
     height: 40,
+  },
+  attendancePlaceholderStyle: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  attendanceSelectedTextStyle: {
+    fontSize: 16,
+    color: 'black',
   },
   dropdown: {
     borderColor: '#3F1175',

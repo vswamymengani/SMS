@@ -66,7 +66,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image11} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Fee News</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('PieChartComponent',{email})}>
+        <TouchableOpacity style={styles.square6} onPress={() => navigation.navigate('StudentAttendence',{email})}>
           <Image source={Image12} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Attendence</Text>
         </TouchableOpacity>

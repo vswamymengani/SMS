@@ -54,7 +54,7 @@ import WorkInProgress from './components/screens/WorkInProgress';
 import TeacherHomeWorkList from './components/screens/TeacherHomeWorkList';
 import TeacherLeaveApproval from './components/screens/TeacherLeaveApproval';
 import TeacherExamResults from './components/screens/TeacherExamResults';
-import PieChartComponent  from './components/screens/PieChartComponent';
+
 import ExamResults from './components/screens/ExamResults';
 
 const Stack = createNativeStackNavigator();
@@ -85,7 +85,7 @@ function App() {
         <Stack.Screen name="TeacherHomeScreen" component={TeacherHomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
         <Stack.Screen name="StudentComplaint" component={StudentComplaint} options={{ title: 'Student Complaint' }} />
-        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{headerShown: false }} />
+        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{title: 'StudentAttendence'}} />
         <Stack.Screen name="FeeNews" component={FeeNews} options={{headerShown: false}} />
         <Stack.Screen name="ClassWork" component={ClassWork} options={{headerShown: false}} />
         <Stack.Screen name="TeacherLeave" component={TeacherLeave} options={{headerShown: false}} />
@@ -115,7 +115,7 @@ function App() {
         <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{title: "List Of Home Works"}} />
         <Stack.Screen name="TeacherLeaveApproval" component={TeacherLeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="TeacherExamResults" component={TeacherExamResults} options={{title:"Exam results"}} />
-         <Stack.Screen name="PieChartComponent" component={PieChartComponent} options={{title:"PieChartComponent"}} />
+       
          <Stack.Screen name="ExamResults" component={ExamResults} options={{title:"ExamResults"}} />
       </Stack.Navigator>
     </NavigationContainer>
