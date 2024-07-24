@@ -54,8 +54,11 @@ import WorkInProgress from './components/screens/WorkInProgress';
 import TeacherHomeWorkList from './components/screens/TeacherHomeWorkList';
 import TeacherLeaveApproval from './components/screens/TeacherLeaveApproval';
 import TeacherExamResults from './components/screens/TeacherExamResults';
-
+import OnlineExamination from './components/screens/OnlineExamination';
 import ExamResults from './components/screens/ExamResults';
+import StudentOnlineExam from './components/screens/StudentOnlineExam';
+import AdminLibrary from './components/screens/AdminLibrary';
+import StudentLibrary from './components/screens/StudentLibrary';
 
 const Stack = createNativeStackNavigator();
 
@@ -115,8 +118,11 @@ function App() {
         <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{title: "List Of Home Works"}} />
         <Stack.Screen name="TeacherLeaveApproval" component={TeacherLeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="TeacherExamResults" component={TeacherExamResults} options={{title:"Exam results"}} />
-       
+        <Stack.Screen name="StudentOnlineExam" component={StudentOnlineExam} options={{title:"StudentOnlineExam"}} />
          <Stack.Screen name="ExamResults" component={ExamResults} options={{title:"ExamResults"}} />
+         <Stack.Screen name="AdminLibrary" component={AdminLibrary} options={{title:"AdminLibrary"}} />
+         <Stack.Screen name="StudentLibrary" component={StudentLibrary} options={{title:"StudentLibrary"}} />
+         <Stack.Screen name="OnlineExamination" component={OnlineExamination} options={{title:"OnlineExamination"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

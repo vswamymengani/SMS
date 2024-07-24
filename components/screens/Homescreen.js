@@ -58,7 +58,7 @@ const Homescreen = ({ navigation, route }) => {
        </View>
       
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('StudentOnlineExam',{ email })}>
           <Image source={Image10} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Online Exam</Text>
         </TouchableOpacity>
@@ -71,9 +71,6 @@ const Homescreen = ({ navigation, route }) => {
           <Text style={styles.loginButtonText}>Student Attendence</Text>
         </TouchableOpacity>
       </View>
-
-      
-      
       <View style={styles.squareRow}>
       <TouchableOpacity style={styles.square7} onPress={() => navigation.navigate('CalendarScreen',{ email })}>
           <Image source={Image14} style={styles.squareImage} />
@@ -105,7 +102,7 @@ const Homescreen = ({ navigation, route }) => {
       </View>
        
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('StudentLibrary',{ email })}>
           <Image source={Image20} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Library</Text>
         </TouchableOpacity>

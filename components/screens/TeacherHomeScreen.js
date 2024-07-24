@@ -107,6 +107,10 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image10} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Examination</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('OnlineExamination',{ email })}>
+          <Image source={Image10} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>OnlineExamination</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ClassWork',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal,ScrollView } from 'react-native';
 import axios from 'axios';
 import Image5 from '../assets/Component1.png';
 import Image2 from '../assets/Menu.png';
@@ -10,6 +10,8 @@ import Image8 from '../assets/Teacher1.png';
 import Image9 from '../assets/Admin.png';
 import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
+import Image20 from '../assets/library.png';
+
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,6 +50,7 @@ const AdminView = ({ navigation }) => {
   }, []);
 
   return (
+    <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
       {profileVisible && (
         <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
@@ -75,6 +78,15 @@ const AdminView = ({ navigation }) => {
           <Image source={Image9} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Parent Details</Text>
         </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminLibrary')}>
+          <Image source={Image20} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>Library</Text>
+        </TouchableOpacity>
+
+        
+       
+       
       </View>
       
       <Modal
@@ -102,6 +114,7 @@ const AdminView = ({ navigation }) => {
         </View>
       </Modal>
     </View>
+    </ScrollView>
   );
 };
 
