@@ -11,6 +11,7 @@ const StudentExamScreen = () => {
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  //this is online exam screen
 
   useEffect(() => {
     // Fetch questions from the backend
