@@ -83,7 +83,7 @@ function App() {
         <Stack.Screen name="SelectUser" component={SelectUser} options={{ headerShown: false }} />
         <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="AdminView" component={AdminView} options={{ headerShown: false }} />
-        <Stack.Screen name="Profile" component={Profile} options={{title: "Profile"}} />
+        <Stack.Screen name="Profile" component={Profile} options={{headerShown: false}} />
         <Stack.Screen name="AdminProfile" component={AdminProfile} options={{ headerShown: false }} />
         <Stack.Screen name="AdminLogin" component={AdminLogin} options={{ headerShown: false }} />
         <Stack.Screen name="AdminStudentHomeScreen" component={AdminStudentHomeScreen} options={{ headerShown: false }} />
@@ -110,7 +110,7 @@ function App() {
         <Stack.Screen name="TeacherHomework" component={TeacherHomework} options={{headerShown: false}} />
         <Stack.Screen name="TeacherAttendance" component={TeacherAttendance} options={{title: "Attendance"}} />
         <Stack.Screen name="TeacherTimetable" component={TeacherTimetable} options={{ headerShown: false }} />
-        <Stack.Screen name="RequestEdit" component={RequestEdit} options={{headerShown: false}} />
+        <Stack.Screen name="RequestEdit" component={RequestEdit} options={{title: "Update Details"}} />
         <Stack.Screen name="ReciveComplaint" component={ReciveComplaint} options={{title:"Student Complaint"}} />
         <Stack.Screen name="TeacherNotifications" component={TeacherNotifications} options={{title :"Notificatios"}} />
         <Stack.Screen name="TeacherDetails" component={TeacherDetails} options={{title: "Teacher Details"}} />

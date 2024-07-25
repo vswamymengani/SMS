@@ -17,7 +17,7 @@ const RequestEdit = () => {
       try {
         const response = await axios.get(`http://10.0.2.2:3000/teacherprofile?email=${email}`);
         if (response.data) {
-          const { id, created_at, ...rest } = response.data;
+          const { id, created_at,employeeid,confirmPassword, ...rest } = response.data;
           setProfile(rest);
         }
       } catch (err) {
@@ -92,13 +92,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    color:'black',
   },
   input: {
     height: 40,
     width: '100%',
-    borderColor: 'gray',
+    color:'black',
+    borderColor: 'black',
     borderWidth: 1,
     marginBottom: 10,
+    borderRadius:10,
     paddingHorizontal: 10,
   },
   updateButton: {

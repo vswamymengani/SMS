@@ -124,6 +124,7 @@ const AdminStudentForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your roll no...."
           value={rollNo}
+          keyboardType='numeric'
           onChangeText={(text) => { setRollNo(text); clearError('rollNo'); }}
         />
         {errors.rollNo && <Text style={styles.error}>{errors.rollNo}</Text>}
@@ -131,8 +132,9 @@ const AdminStudentForm = ({ navigation }) => {
         <LabelWithStar label="Date of Birth" />
         <TextInput
           style={styles.input}
-          placeholder="dd/mm/yyyy"
+          placeholder="DD-MM-YYYY"
           value={dateofbirth}
+          keyboardType='numeric'
           onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
@@ -151,6 +153,7 @@ const AdminStudentForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your father's mobile number...."
           value={fatherNo}
+          keyboardType='numeric'
           onChangeText={(text) => { setFatherNo(text); clearError('fatherNo'); }}
         />
         {errors.fatherNo && <Text style={styles.error}>{errors.fatherNo}</Text>}
@@ -169,6 +172,7 @@ const AdminStudentForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your mother's mobile number...."
           value={motherNo}
+          keyboardType='numeric'
           onChangeText={(text) => { setMotherNo(text); clearError('motherNo'); }}
         />
         {errors.motherNo && <Text style={styles.error}>{errors.motherNo}</Text>}
@@ -178,6 +182,7 @@ const AdminStudentForm = ({ navigation }) => {
           style={styles.input}
           placeholder="0123456"
           value={admissionid}
+          keyboardType='numeric'
           onChangeText={(text) => { setAdmissionid(text); clearError('admissionid'); }}
         />
         {errors.admissionid && <Text style={styles.error}>{errors.admissionid}</Text>}
@@ -211,7 +216,7 @@ const AdminStudentForm = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   togglePopup(); // Close the popup
-                  navigation.navigate('LoginScreen'); // Navigate to the Login screen
+                  navigation.navigate('AdminStudentForm'); // Navigate to the Login screen
                 }}
                 style={styles.modalButton}
               >

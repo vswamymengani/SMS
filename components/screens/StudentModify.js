@@ -9,7 +9,7 @@ const StudentModify = ({ navigation }) => {
 
   const fetchStudentData = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:3000/student/${admissionid}`);
+      const response = await axios.get(`http://10.0.2.2:3000/studentModify/${admissionid}`);
       if (response.status === 200) {
         console.log(response.data); // Log the response data for debugging
         // Ensure rollNo is a string for TextInput
@@ -29,10 +29,12 @@ const StudentModify = ({ navigation }) => {
     if (!studentData.className.trim()) newErrors.className = 'Class is required';
     if (!studentData.section.trim()) newErrors.section = 'Section is required';
     if (!studentData.rollNo.trim()) newErrors.rollNo = 'Roll No is required';
+    if (!studentData.dateofbirth.trim()) newErrors.dateofbirth ='Date of Birth is required';
     if (!studentData.fatherName.trim()) newErrors.fatherName = 'Father\'s Name is required';
     if (!studentData.fatherNo.trim()) newErrors.fatherNo = 'Father\'s Mobile Number is required';
     if (!studentData.motherName.trim()) newErrors.motherName = 'Mother\'s Name is required';
     if (!studentData.motherNo.trim()) newErrors.motherNo = 'Mother\'s Mobile Number is required';
+    if (!studentData.email.trim()) newErrors.email ='email is required';
     if (!studentData.presentAddress.trim()) newErrors.presentAddress = 'Present Address is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -43,11 +45,11 @@ const StudentModify = ({ navigation }) => {
       try {
         // Ensure rollNo is converted back to an integer before sending to the server
         const dataToSend = { ...studentData, rollNo: parseInt(studentData.rollNo, 10) };
-        const response = await axios.put(`http://10.0.2.2:3000/student/${admissionid}`, dataToSend);
+        const response = await axios.put(`http://10.0.2.2:3000/studentModify/${admissionid}`, dataToSend);
         if (response.status === 200) {
           console.log('Data modified successfully');
           navigation.navigate('StudentDetails');
-          Alert.alert("detais is Modified Succesfully");
+          Alert.alert("details is Modified Succesfully");
         } else {
           console.error('Failed to modify data:', response.status);
         }
@@ -107,6 +109,13 @@ const StudentModify = ({ navigation }) => {
               onChangeText={(text) => handleChange('rollNo', text)}
             />
             {errors.rollNo && <Text style={styles.error}>{errors.rollNo}</Text>}
+            <TextInput
+              style={styles.input}
+              placeholder="Date Of Birth"
+              value={studentData.dateofbirth}
+              onChangeText={(text) => handleChange('dateofbirth', text)}
+            />
+            {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
 
             <TextInput
               style={styles.input}
@@ -139,6 +148,14 @@ const StudentModify = ({ navigation }) => {
               onChangeText={(text) => handleChange('motherNo', text)}
             />
             {errors.motherNo && <Text style={styles.error}>{errors.motherNo}</Text>}
+
+            <TextInput
+              style={styles.input}
+              placeholder="Email id"
+              value={studentData.email}
+              onChangeText={(text) => handleChange('email', text)}
+            />
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
             <TextInput
               style={styles.input}

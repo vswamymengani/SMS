@@ -70,8 +70,9 @@ const TeacherVerification = () => {
         </View>
         <TextInput
           style={styles.input}
-          placeholder="DD/MM/YYYY"
+          placeholder="DD-MM-YYYY"
           value={dateofbirth}
+          keyboardType="numeric"
           onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}

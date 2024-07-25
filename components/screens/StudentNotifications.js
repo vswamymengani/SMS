@@ -8,21 +8,19 @@ const StudentNotifications = ({ route }) => {
   const email = route.params.email;
   const [notifications, setNotifications] = useState([]);
   const [profile, setProfile] = useState({});
-  const [classname, setClassname] = useState('');
   const [errors, setErrors] = useState({});
   const [fullname, setFullName] = useState('');
   const [section, setSection] = useState('');
-  const [className, setClassName] = useState('');
+  const [className, setclassName] = useState('');
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         setFullName(response.data.fullname);
-        setClassName(response.data.className);
+        setclassName(response.data.className);
         setSection(response.data.section);
-        setClassname(response.data.className);
       } catch (error) {
         console.error('Error fetching profile:', error);
         setErrors({ general: 'Unable to fetch profile data' });
@@ -36,7 +34,7 @@ const StudentNotifications = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const [homeworkResponse, announcementsResponse, leaveResponse, complaintsResponse] = await Promise.all([
-          axios.get(`http://10.0.2.2:3000/studentHomework`, { params: { classname, section } }),
+          axios.get(`http://10.0.2.2:3000/studentHomeworkNotification`, { params: { className, section } }),
           axios.get(`http://10.0.2.2:3000/reciveAnnouncements`, { params: { reciver: 'Student' } }),
           axios.get(`http://10.0.2.2:3000/studentLeaveNotification`, { params: { email } }),
           axios.get(`http://10.0.2.2:3000/complaintResponse`, { params: { fullname, className, section } }),
@@ -60,7 +58,7 @@ const StudentNotifications = ({ route }) => {
     };
   
     fetchNotifications();
-  }, [fullname, className, classname, section, email]);
+  }, [fullname, className, section, email]);
   
 
   const renderItem = ({ item }) => (
@@ -72,14 +70,14 @@ const StudentNotifications = ({ route }) => {
       } else if (item.type === 'leave') {
         navigation.navigate('LeaveApproval', { email });
       } else if (item.type === 'complaint') {
-        // Handle complaint navigation if necessary
+        navigation.navigate('StudentComplaintList',{ email })
       }
     }}>
       <View key={item.id} style={styles.notificationItem}>
         {item.type === 'homework' ? (
           <>
             <Text style={styles.text1}>New Homework</Text>
-            <Text style={styles.text}>Class: {item.classname} Section: {item.section}</Text>
+            <Text style={styles.text}>Class: {item.className} Section: {item.section}</Text>
             <Text style={styles.text}>Subject: {item.subject}</Text>
             <Text style={styles.text}>Homework: {item.title}</Text>
           </>

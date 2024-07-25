@@ -9,7 +9,7 @@ import Image2 from "../assets/BackArrow.png";
 
 const TeacherHomework = ({route}) => {
     const navigation = useNavigation();
-    const [classname, setClassName] = useState('');
+    const [className, setclassName] = useState('');
     const [section, setSection] = useState('');
     const [subject, setSubject] = useState('');
     const [typeOfHomework, setTypeOfHomework] = useState('');
@@ -23,7 +23,7 @@ const TeacherHomework = ({route}) => {
 
     const validate = () => {
         const newErrors = {};
-        if (!classname) newErrors.classname = "Select the class name";
+        if (!className) newErrors.className = "Select the class name";
         if (!section) newErrors.section = "Select the Section";
         if (!subject) newErrors.subject = "Name of the subject";
         if (!typeOfHomework) newErrors.typeOfHomework = "Enter the type of homework";
@@ -48,7 +48,7 @@ const TeacherHomework = ({route}) => {
     const TeacherHomework = async () => {
         if (validate()) {
             axios.post("http://10.0.2.2:3000/teacherHomework", {
-                classname,
+                className,
                 section,
                 subject,
                 typeOfHomework,
@@ -130,12 +130,12 @@ const TeacherHomework = ({route}) => {
                 labelField="label"
                 valueField="value"
                 placeholder="Class"
-                value={classname}
-                onChange={item => { setClassName(item.value); clearError('classname'); }}
+                value={className}
+                onChange={item => { setclassName(item.value); clearError('className'); }}
                 accessible={true}
                 accessibilityLabel="Class"
             />
-            {errors.classname && <Text style={styles.error}>{errors.classname}</Text>}
+            {errors.className && <Text style={styles.error}>{errors.className}</Text>}
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
         borderColor: '#3F1175',
         borderRadius: 5,
         backgroundColor: 'white',
-        fontSize: 14,
+        fontSize: 16,
         marginBottom:10,
         marginTop:10,
     },
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderTopEndRadius:20,
         backgroundColor: 'white',
-        fontSize: 14,
+        fontSize: 16,
         textAlignVertical: 'top',
         // marginVertical: 10,
     },

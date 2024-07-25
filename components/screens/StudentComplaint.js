@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, Scro
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Image1 from '../assets/Verified.png';
-import Image2 from '../assets/BackArrow.png';
+import Image2 from '../assets/Back_Arrow.png';
+import Image3 from '../assets/BackImage.png';
 import axios from 'axios';
 
 const StudentComplaint = ({ route }) => {
@@ -38,7 +39,7 @@ const StudentComplaint = ({ route }) => {
   useEffect(() => {
     const fetchLeaveProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/leaveProfile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         const profile = response.data;
         setLeaveProfile(profile);
         setFullName(profile.fullname);
@@ -109,72 +110,74 @@ const StudentComplaint = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() =>navigation.navigate('Homescreen', { email })}>
+      <Image source={Image3} style={styles.bc} />
+      <View style={styles.heading}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Image2} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Complaints</Text>
-        <TouchableOpacity onPress={() =>navigation.navigate('StudentComplaintList',{ email })}>
-          <Text style={styles.list}>Prev</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('StudentComplaintList', { email })}>
+          <Text style={styles.button}>Prev</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={recipientData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Select Recipient"
-        value={recipient}
-        onChange={item => {
-          setRecipient(item.value);
-          clearError('recipient');
-        }}
-        accessible={true}
-        accessibilityLabel='Recipient'
-      />
-      {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={typeOfComplaintData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Type of Complaint"
-        value={typeOfComplaint}
-        onChange={item => {
-          setTypeOfComplaint(item.value);
-          clearError('typeOfComplaint');
-        }}
-        accessible={true}
-        accessibilityLabel='Type of Complaint'
-      />
-      {errors.typeOfComplaint && <Text style={styles.error}>{errors.typeOfComplaint}</Text>}
-      <TextInput
-        style={styles.text}
-        placeholder="Write the Complaint here"
-        value={reason}
-        onChangeText={(text) => { setReason(text); clearError('reason'); }}
-      />
-      {errors.reason && <Text style={styles.error}>{errors.reason}</Text>}
-      <TextInput
-        style={styles.descriptionInput}
-        placeholder="Explain your Complaint here"
-        multiline
-        numberOfLines={18}
-        value={explanation}
-        onChangeText={(text) => { setExplanation(text); clearError('explanation'); }}
-      />
-      {errors.explanation && <Text style={styles.error}>{errors.explanation}</Text>}
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={recipientData}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Recipient"
+          value={recipient}
+          onChange={item => {
+            setRecipient(item.value);
+            clearError('recipient');
+          }}
+          accessible={true}
+          accessibilityLabel='Recipient'
+        />
+        {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={typeOfComplaintData}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Type of Complaint"
+          value={typeOfComplaint}
+          onChange={item => {
+            setTypeOfComplaint(item.value);
+            clearError('typeOfComplaint');
+          }}
+          accessible={true}
+          accessibilityLabel='Type of Complaint'
+        />
+        {errors.typeOfComplaint && <Text style={styles.error}>{errors.typeOfComplaint}</Text>}
+        <TextInput
+          style={styles.dateInput}
+          placeholder="Write the Complaint here"
+          value={reason}
+          onChangeText={(text) => { setReason(text); clearError('reason'); }}
+        />
+        {errors.reason && <Text style={styles.error}>{errors.reason}</Text>}
+        <TextInput
+          style={styles.descriptionInput}
+          placeholder="Explain your Complaint here"
+          multiline
+          numberOfLines={18}
+          value={explanation}
+          onChangeText={(text) => { setExplanation(text); clearError('explanation'); }}
+        />
+        {errors.explanation && <Text style={styles.error}>{errors.explanation}</Text>}
 
-      <TouchableOpacity style={styles.sendButton} onPress={handleSendComplaint}>
-        <Text style={styles.sendButtonText}>Send</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.sendButton} onPress={handleSendComplaint}>
+          <Text style={styles.sendButtonText}>Send</Text>
+        </TouchableOpacity>
+      </View>
       <Modal visible={isModalVisible} transparent={true} animationType='fade'>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -186,7 +189,6 @@ const StudentComplaint = ({ route }) => {
           </View>
         </View>
       </Modal>
-      </View>
     </ScrollView>
   );
 };
@@ -196,51 +198,45 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  header:{
-    fontSize:20,
-    color:'black',
-    fontWeight:'bold',
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
   },
-  image:{
-    height:30,
-    width:30,
-  },
-  list:{
-    color:'white',
-    backgroundColor:'#3F1175',
-    padding:10,
-    borderRadius:20,
-    fontSize:16,
-  },
-  row: {
+  heading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30,
+    margin: 10,
+    marginBottom: 40,
   },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems:'center',
-    marginBottom: 10,
-    borderBottomWidth:2,
-    padding:5,
-  },
-  body:{
-    paddingHorizontal:20,
-  },
-  details: {
+  header: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    borderColor: 'black',
-    backgroundColor: '#3F1175',
-    borderWidth: 2,
-    width: '33%',
-    height: 40,
-    top: 10,
-    borderRadius: 20,
     textAlign: 'center',
+  },
+  body: {
+    backgroundColor: 'white',
+    borderRadius: 30,
+    height: '110%',
+    padding: 10,
+  },
+  image: {
+    height: 23,
+    width: 20,
+  },
+  button: {
+    alignItems: 'center',
+    color: "white",
+    backgroundColor: "#3F1175",
+    fontSize: 18,
+    fontWeight: 'bold',
+    borderRadius: 15,
+    borderColor: 'white',
     padding: 5,
+    textAlign: 'center',
+    left: 10,
+    top: -5,
   },
   dropdown: {
     margin: 13,
@@ -248,11 +244,11 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginLeft: 0,
     padding: 20,
-    borderWidth: 3,
-    borderColor: '#3F1175',
-    borderRadius: 30,
+    borderRadius: 10,
+    borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
+    top: 0,
   },
   placeholderStyle: {
     fontSize: 16,
@@ -262,14 +258,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-  text: {
-    borderWidth: 3,
-    color: 'black',
-    fontSize: 15,
-    borderRadius: 30,
-    borderColor: '#3F1175',
-    textAlign: 'auto',
+  dateInput: {
+    borderBottomWidth: 1,
+    borderRadius: 10,
     padding: 15,
+    fontSize: 16,
+    color: 'black',
     marginVertical: 10,
   },
   descriptionInput: {
@@ -278,9 +272,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 15,
     fontSize: 16,
+    color: 'black',
     textAlignVertical: 'top',
     marginVertical: 10,
-    color: 'black',
   },
   sendButton: {
     backgroundColor: '#3F1175',
@@ -290,8 +284,14 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   sendButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  error: {
+    color: 'red',
+    fontSize: 14,
+    marginLeft: 10,
   },
   modalContainer: {
     flex: 1,
@@ -300,31 +300,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    width: '70%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: 'white',
     padding: 20,
+    borderRadius: 20,
     alignItems: 'center',
-    backgroundColor:'white',
   },
   successImage: {
-    width: 100,
     height: 100,
+    width: 100,
     marginBottom: 20,
   },
   modalText: {
     fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontWeight: 'bold',
     color: 'black',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   modalButton: {
     backgroundColor: '#3F1175',
     padding: 10,
     borderRadius: 10,
+    width: 100,
+    alignItems: 'center',
   },
   modalButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
   },
 });

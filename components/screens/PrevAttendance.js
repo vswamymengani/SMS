@@ -124,7 +124,7 @@ const PrevAttendance = () => {
           {attendanceData.length > 0 ? (
             attendanceData.map((attendance, index) => (
               <View key={index} style={styles.attendanceRow}>
-                <Text style={styles.attendanceText}>{attendance.rollno}</Text>
+                <Text style={styles.attendanceText}>{attendance.rollNo}</Text>
                 <Text style={styles.attendanceText}>{attendance.status}</Text>
               </View>
             ))

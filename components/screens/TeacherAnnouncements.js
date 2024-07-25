@@ -9,6 +9,7 @@ const TeacherAnnouncements = ({route}) =>{
     const [errors, setErrors] = useState({});
     const [subject, setSubject] = useState('');
     const [explanation, setExplanation] = useState('');
+    const [employeeid,setEmployeeid] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const validate =() =>{
@@ -34,6 +35,7 @@ const TeacherAnnouncements = ({route}) =>{
                     subject,
                     explanation,
                     reciver: "Teacher",
+                    employeeid,
                 });
                 if(response.status ===200){
                    handleSend(); 

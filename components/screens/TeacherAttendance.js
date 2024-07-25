@@ -19,7 +19,7 @@ const TeacherAttendance = ({ navigation, route }) => {
     axios.get('http://10.0.2.2:3000/studentResults', { params: { className, section } })
       .then(response => {
         const initialAttendance = response.data.map(student => ({
-          rollno: student.rollno,
+          rollNo: student.rollNo,
           fullname: student.fullname,
           status: 'P', // default to 'P' for present
         }));
@@ -56,18 +56,18 @@ const TeacherAttendance = ({ navigation, route }) => {
     navigation.navigate('TeacherHomeScreen', { email });
   };
 
-  const handleAttendanceChange = (rollno, status) => {
+  const handleAttendanceChange = (rollNo, status) => {
     setAttendance(prevAttendance =>
       prevAttendance.map(student =>
-        student.rollno === rollno ? { ...student, status } : student
+        student.rollNo === rollNo ? { ...student, status } : student
       )
     );
   };
 
   const handleSubmit = () => {
     if (validate()) {
-      const attendanceData = attendance.map(({ rollno, status }) => ({
-        rollno,
+      const attendanceData = attendance.map(({ rollNo, status }) => ({
+        rollNo,
         date,
         subject,
         status,
@@ -147,6 +147,7 @@ const TeacherAttendance = ({ navigation, route }) => {
           labelField="label"
           valueField="value"
           placeholder="Class"
+          
           value={className}
           onChange={item => { setClassName(item.value); clearError('className'); }}
           accessible={true}
@@ -197,16 +198,16 @@ const TeacherAttendance = ({ navigation, route }) => {
         <View>
           <Text style={styles.boldText}>Student Attendance</Text>
           {students.map(student => (
-            <View key={student.rollno} style={styles.studentRow}>
+            <View key={student.rollNo} style={styles.studentRow}>
               <Text style={styles.studentText}>{student.fullname}</Text>
-              <Text style={styles.studentText}>{student.rollno}</Text>
+              <Text style={styles.studentText}>{student.rollNo}</Text>
               <TextInput
                 style={styles.attendanceInput}
-                value={attendance.find(att => att.rollno === student.rollno)?.status}
-                onChangeText={text => handleAttendanceChange(student.rollno, text.toUpperCase())}
+                value={attendance.find(att => att.rollNo === student.rollNo)?.status}
+                onChangeText={text => handleAttendanceChange(student.rollNo, text.toUpperCase())}
                 placeholder='P'
                 accessible={true}
-                accessibilityLabel={`attendance-${student.rollno}`}
+                accessibilityLabel={`attendance-${student.rollNo}`}
               />
             </View>
           ))}

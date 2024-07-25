@@ -18,7 +18,7 @@ const StudentTimetable = ({ route }) => {
   useEffect(() => {
     const fetchTimetableEntries = async () => {
       try {
-        const profileResponse = await axios.get(`http://10.0.2.2:3000/leaveProfile?email=${email}`);
+        const profileResponse = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         const profile = profileResponse.data;
         setClassName(profile.className);
         setSection(profile.section);
@@ -80,29 +80,33 @@ const StudentTimetable = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Image source={require('../assets/BackImage.png')} style={styles.bc} />
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Image source={require('../assets/arrow-left.png')} style={styles.backImage} />
+          <Image source={require('../assets/Back_Arrow.png')} style={styles.backImage} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Time Table</Text>
       </View>
-      <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
-        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => handleDayClick(day)}
-            style={[
-              styles.dayButton,
-              { backgroundColor: selectedDay === day ? 'red' : 'blue' }
-            ]}
-          >
-            <Text style={styles.dayButtonText}>{day}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <ScrollView style={styles.timetableContainer}>
-        {boxes.map((box, index) => (
-            <View style={[styles.box, { backgroundColor: box.backgroundColor }]}>
+      <View style={styles.body}>
+        <View style={styles.dayContainer}>
+          <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
+            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleDayClick(day)}
+                style={[
+                  styles.dayButton,
+                  { backgroundColor: selectedDay === day ? 'blue' : 'white' }
+                ]}
+              >
+                <Text style={styles.dayButtonText}>{day}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+        <ScrollView contentContainerStyle={styles.timetableContainer}>
+          {boxes.map((box, index) => (
+            <View key={index} style={styles.box}>
               <Text style={styles.boxText}>{box.text}</Text>
               <View style={styles.locationContainer}>
                 <Text style={styles.locationText}>{box.locationText}</Text>
@@ -114,16 +118,19 @@ const StudentTimetable = ({ route }) => {
               <View style={styles.separator} />
               <View style={styles.personContainer}>
                 <Image source={require('../assets/Person.png')} style={styles.personImage} />
-                <TouchableOpacity key={index} onPress={() => showTeacherDetails(box.employeeid)}>
+                <TouchableOpacity onPress={() => showTeacherDetails(box.employeeid)}>
                   <Text style={styles.personText}>Teacher Name: {box.person}</Text>
                 </TouchableOpacity>
               </View>
-              <View style={box.link !== null? styles.personContainer: null}>
-                <Text style={styles.link}>Link:{box.link}</Text>
-              </View>
+              {/* {box.link !== null && (
+                <View style={styles.personContainer}>
+                  <Text style={styles.link}>Link: {box.link}</Text>
+                </View>
+              )} */}
             </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -135,9 +142,11 @@ const StudentTimetable = ({ route }) => {
             {teacherDetails ? (
               <>
                 <Text>Teacher Details</Text>
-                <Text>Name: {teacherDetails.fullname}</Text>
-                <Text>Employee ID: {teacherDetails.employeeid}</Text>
+                <Text>Teacher Name: {teacherDetails.fullname}</Text>
+                <Text>Subject: {teacherDetails.subject}</Text>
+                <Text>Qualification: {teacherDetails.qualification}</Text>
                 <Text>Experience: {teacherDetails.experience}</Text>
+                <Text>Employee ID: {teacherDetails.employeeid}</Text> 
               </>
             ) : (
               <Text>Loading...</Text>
@@ -158,30 +167,46 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 90,
-    backgroundColor: '#3F1175',
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 65,
+    top: 10,
+    marginBottom: 15,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
   },
-  backButton: {
+  bc: {
+    height: '110%',
+    width: '110%',
     position: 'absolute',
-    top: 20,
-    left: 12,
+  },
+  body: {
+    backgroundColor: 'white',
+    height: "110%",
+    borderRadius: 30,
+    padding: 20,
   },
   backImage: {
-    width: 26,
+    width: 20,
     height: 23,
-    tintColor: '#ffffff',
+    top: 5,
+    marginHorizontal: 10,
   },
   headerText: {
     fontFamily: 'Open Sans',
     fontSize: 24,
     fontWeight: '400',
-    color: '#ffffff',
+    marginLeft: 10,
+    color: 'white',
+  },
+  dayContainer: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 0,
+    height:34,
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   scrollContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
   },
   dayButton: {
     width: 96,
@@ -190,13 +215,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 5,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   dayButtonText: {
     color: 'black',
   },
   timetableContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 0,
+    alignItems: 'flex-start',
   },
   box: {
     width: '100%',
@@ -206,13 +232,22 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     marginVertical: 5,
     padding: 10,
-    justifyContent: 'center',
   },
   boxText: {
     fontFamily: 'Inria Serif',
     fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
+    color: 'black',
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  locationText: {
+    fontFamily: 'Inria Serif',
+    fontSize: 17,
+    fontWeight: '400',
     color: 'black',
   },
   timeContainer: {
@@ -253,7 +288,7 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 17,
     fontWeight: '400',
-    color: 'white',
+    color: 'black',
   },
   modalContainer: {
     flex: 1,

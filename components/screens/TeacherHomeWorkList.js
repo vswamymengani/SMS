@@ -16,7 +16,7 @@ const TeacherHomeWorkList = ({ route }) => {
                 const response = await axios.get(`http://10.0.2.2:3000/teacherHomeworkList?email=${email}`);
                 setHomeworkList(response.data.reverse());
             } catch (error) {
-                setErrors({ general: "Unable to get data" });
+                console.error("axios error",error);
             }
         };
         if (email) {
@@ -29,7 +29,7 @@ const TeacherHomeWorkList = ({ route }) => {
             <ScrollView>
                 {homeworkList.map((homework) => (
                     <View key={homework.id} style={styles.homeworkContainer}>
-                        <Text style={styles.text}>Class: {homework.classname} Section: {homework.section}</Text>
+                        <Text style={styles.text}>Class: {homework.className} Section: {homework.section}</Text>
                         <Text style={styles.text1}>Type of Homework: {homework.typeOfHomework}</Text>
                         <Text style={styles.text1}>Title: {homework.title}</Text>
                         <Text style={styles.text1}>Duration: {homework.duration}</Text>

@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, Scro
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Image1 from '../assets/Verified.png';
-import Image2 from '../assets/BackArrow.png';
+import Image2 from '../assets/Back_Arrow.png';
+import Image3 from '../assets/BackImage.png';
 import axios from 'axios';
 
 const StudentLeave = ({ route }) => {
@@ -111,6 +112,7 @@ const StudentLeave = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <Image source={Image3} style={styles.bc} />
       <View style={styles.heading}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Image2} style={styles.image} />
@@ -120,6 +122,7 @@ const StudentLeave = ({ route }) => {
           <Text style={styles.button}>My Leaves</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.body}>
       <Text style={styles.dateInput}>To {recipient}</Text>
       {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
       <Dropdown
@@ -145,6 +148,7 @@ const StudentLeave = ({ route }) => {
         placeholder="Enter Start Date (DD-MM-YYYY)"
         value={startDate}
         accessible={true}
+        keyboardType='numeric'
         accessibilityLabel="starting date"
         onChangeText={(text) => {
           setStartDate(text);
@@ -157,6 +161,7 @@ const StudentLeave = ({ route }) => {
         placeholder="Enter End Date (DD-MM-YYYY)"
         value={endDate}
         accessible={true}
+        keyboardType='numeric'
         accessibilityLabel="ending date"
         onChangeText={(text) => {
           setEndDate(text);
@@ -182,6 +187,7 @@ const StudentLeave = ({ route }) => {
       <TouchableOpacity style={styles.sendButton} onPress={handleSendLeaveRequest}>
         <Text style={styles.sendButtonText}>Send</Text>
       </TouchableOpacity>
+      </View>
       <Modal visible={isModalVisible} transparent={true} animationType='fade'>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -201,25 +207,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 10,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
   },
   heading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 2,
-    borderColor: 'gray',
     margin: 10,
-    marginBottom: 10,
+    marginBottom: 40,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
   },
+  body:{
+    backgroundColor:'white',
+    borderRadius:30,
+    height:'110%',
+    padding:10,
+  },
   image: {
-    height: 30,
-    width: 30,
+    height: 23,
+    width: 20,
   },
   button: {
     alignItems: 'center',
@@ -228,6 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     borderRadius: 15,
+    borderColor:'white',
     padding: 5,
     textAlign: 'center',
     left: 10,
@@ -238,29 +253,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 30,
   },
-  details: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-    borderColor: 'black',
-    backgroundColor: '#3F1175',
-    borderWidth: 2,
-    width: '33%',
-    height: 40,
-    top: 10,
-    borderRadius: 20,
-    textAlign: 'center',
-    padding: 5,
-  },
   dropdown: {
     margin: 13,
     width: '100%',
     alignContent: 'center',
     marginLeft: 0,
     padding: 20,
-    borderWidth: 3,
-    borderColor: '#3F1175',
-    borderRadius: 30,
+    borderRadius: 10,
+    borderBottomWidth:1,
     paddingHorizontal: 15,
     paddingVertical: 10,
     top: 0,
@@ -274,9 +274,8 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dateInput: {
-    borderWidth: 3,
-    borderColor: '#3F1175',
-    borderRadius: 30,
+    borderBottomWidth:1,
+    borderRadius: 10,
     padding: 15,
     fontSize: 16,
     color: 'black',

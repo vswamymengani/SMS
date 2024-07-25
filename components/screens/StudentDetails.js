@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -23,7 +23,6 @@ const StudentDetails = () => {
     const renderStudentDetails = ({ item }) => {
         return (
             <View style={styles.details}>
-                {/* <Text style={styles.text1}>{item.rollno}</Text> */}
                 <Text style={styles.text1}>{item.fullname}</Text>
                 <Text style={styles.text4}>{item.dateofbirth}</Text>
                 <Text style={styles.text5}>{item.className}</Text>
@@ -44,7 +43,6 @@ const StudentDetails = () => {
                 </TouchableOpacity> 
             </View>
             <View style={styles.heading}>
-                {/* <Text style={styles.text}>Roll No</Text> */}
                 <Text style={styles.text}>Name</Text>
                 <Text style={styles.text2}>D.O.B</Text>
                 <Text style={styles.text7}>Class</Text>

@@ -37,7 +37,7 @@ const Homescreen = ({ navigation, route }) => {
   useEffect(() =>{
     const fetchProfile = async () =>{
       try{
-      const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+      const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
       setProfile(response.data);
       }
       catch(error){
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   modalText1: {
-    fontSize: 20,
+    fontSize: 25,
     color: 'blue',
     fontWeight:'bold',
     marginVertical: 10,

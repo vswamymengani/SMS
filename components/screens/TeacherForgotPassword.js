@@ -74,8 +74,9 @@ const TeacherForgotPassword = () => {
         </View>
         <TextInput
           style={styles.input}
-          placeholder="DD/MM/YYYY"
+          placeholder="DD-MM-YYYY"
           value={dateofbirth}
+          keyboardType="numeric"
           onChangeText={(text) => { setDateofbirth(text); clearError('dateofbirth'); }}
         />
         {errors.dateofbirth && <Text style={styles.error}>{errors.dateofbirth}</Text>}
@@ -87,6 +88,7 @@ const TeacherForgotPassword = () => {
           style={styles.input}
           placeholder="Enter your Employee Id"
           value={employeeid}
+          keyboardType="numeric"
           onChangeText={(text) => { setemployeeid(text); clearError('employeeid'); }}
         />
         {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}

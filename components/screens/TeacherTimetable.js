@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   box: {
-    width: '90%',
-    padding: 15,
+    width: '95%',
+    padding: 20,
     margin: 10,
     borderRadius: 10,
   },

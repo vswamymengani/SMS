@@ -34,7 +34,7 @@ const FeeNews = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         const profileData = response.data;
         setProfile(profileData);
         setAdmissionid(profileData.admissionid);
@@ -52,15 +52,17 @@ const FeeNews = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
+      <Image source={require('../assets/BackImage.png')} style={styles.bc} />
       <View style={styles.header}>
         {/* Back arrow */}
         <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })}>
-          <Image source={require('../assets/BackArrow.png')} style={styles.backArrow} />
+          <Image source={require('../assets/Back_Arrow.png')} style={styles.backArrow} />
         </TouchableOpacity>
         {/* Header text */}
         <Text style={styles.headerText}>FeeNews</Text>
       </View>
 
+      <View style={styles.body}>
       {/* Fee image */}
       <Image source={require('../assets/Fee.png')} style={styles.feeImage} />
 
@@ -93,6 +95,7 @@ const FeeNews = ({ navigation, route }) => {
         <Text style={styles.dueDateLabel}>Due Date</Text>
         <Text style={styles.dueDateValue}>{dueDate}</Text>
       </View>
+      </View>
     </View>
   );
 };
@@ -101,22 +104,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
+  },
+  body:{
+    backgroundColor:'white',
+    height:"110%",
+    borderRadius:30,
+    padding:20,
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent:'flex-start',
+    marginBottom:40,
+    marginTop:20,
+    marginLeft:10,
   },
   backArrow: {
     width: 20,
-    height: 20,
-    marginRight: 10,
+    height: 23,
+    marginRight: 20,
   },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
   },
   feeImage: {
     width: '100%',

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Image1 from '../assets/BackArrow.png';
+import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const StudentStudyMaterial = ({ navigation, route }) => {
   const [className, setClassName] = useState('');
@@ -9,12 +11,14 @@ const StudentStudyMaterial = ({ navigation, route }) => {
   const [profile, setProfile] = useState({});
   const [errors, setErrors] = useState({});
   const [studyMaterialList, setStudyMaterialList] = useState([]);
+  const [filteredMaterialList, setFilteredMaterialList] = useState([]);
+  const [subject, setSubject] = useState(null);
   const email = route.params.email;
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         setClassName(response.data.className);
         setSection(response.data.section);
@@ -32,9 +36,8 @@ const StudentStudyMaterial = ({ navigation, route }) => {
   useEffect(() => {
     const fetchStudyMaterial = async (classname, section) => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studyMaterial/${className}/${section}`);
-        setStudyMaterialList(response.data.reverse()); // Assuming API returns an array of homework objects
-        
+        const response = await axios.get(`http://10.0.2.2:3000/studentStudyMaterial/${classname}/${section}`);
+        setStudyMaterialList(response.data.reverse());
       } catch (error) {
         console.error('Error fetching Study material data:', error);
       }
@@ -43,6 +46,22 @@ const StudentStudyMaterial = ({ navigation, route }) => {
       fetchStudyMaterial(className, section);
     }
   }, [className, section]);
+
+  useEffect(() => {
+    if (subject) {
+      const filteredData = studyMaterialList.filter(material => material.subject === subject);
+      setFilteredMaterialList(filteredData);
+    } else {
+      setFilteredMaterialList(studyMaterialList);
+    }
+  }, [subject, studyMaterialList]);
+
+  const subjectOptions = [
+    { label: 'Math', value: 'Math' },
+    { label: 'Science', value: 'Science' },
+    { label: 'English', value: 'English' },
+    // Add other subjects here
+  ];
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -55,22 +74,34 @@ const StudentStudyMaterial = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <Image source={Image2} style={styles.bc} />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate("Homescreen", { email })}>
           <Image source={Image1} style={styles.backArrow} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Study Material</Text>
       </View>
-      {studyMaterialList.map((material) => (
-        <View key={material.id} style={styles.homeworkContainer}>
-          <Text style={styles.subjectText}>{material.subject}</Text>
-          {material.created_at && (
-            <Text style={styles.text}>Given Date: {formatDate(material.created_at)}</Text>
-          )}
-          <Text style={styles.text}>Topic: {material.topic}</Text>
-          <Text style={styles.text}>Explanation: {material.explanation}</Text>
-        </View>
-      ))}
+      <View style={styles.body}>
+        <Dropdown
+          style={styles.dropdown}
+          data={subjectOptions}
+          labelField="label"
+          valueField="value"
+          placeholder="Select subject"
+          value={subject}
+          onChange={item => setSubject(item.value)}
+        />
+        {filteredMaterialList.map((material) => (
+          <View key={material.id} style={styles.homeworkContainer}>
+            <Text style={styles.subjectText}>{material.subject}</Text>
+            {material.created_at && (
+              <Text style={styles.text}>Given Date: {formatDate(material.created_at)}</Text>
+            )}
+            <Text style={styles.text}>Topic: {material.topic}</Text>
+            <Text style={styles.text}>Explanation: {material.explanation}</Text>
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -78,20 +109,29 @@ const StudentStudyMaterial = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
-    padding: 10,
-    alignItems: 'center',
-    backgroundColor: "#3F1175",
+    backgroundColor: 'white',
+  },
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
+    alignItems: 'flex-start',
+    marginBottom: 70,
+    marginTop: 20,
+  },
+  body: {
+    backgroundColor: 'white',
+    height: '100%',
+    borderRadius: 80,
+    padding: 20,
   },
   backArrow: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    left: -110,
+    width: 15,
+    height: 25,
+    marginLeft: 20,
   },
   text: {
     fontSize: 14,
@@ -101,24 +141,30 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    left: -10,
+    marginLeft: 30,
   },
   homeworkContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 20,
-    width: '100%',
+    borderBottomWidth: 1,
     borderColor: 'black',
-    backgroundColor:'white',
+    borderRadius: 40,
+    padding: 10,
+    width: '100%',
+    marginBottom: 10,
+    backgroundColor: 'white',
   },
   subjectText: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
     textAlign: 'center',
     color: 'blue',
+  },
+  dropdown: {
+    margin: 16,
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
   },
 });
 

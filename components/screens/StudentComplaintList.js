@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Image, View, Text, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
-import Image1 from '../assets/BackArrow.png';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png'
 
 const StudentComplaintList = ({ route }) => {
     const email = route.params.email;
@@ -13,11 +15,27 @@ const StudentComplaintList = ({ route }) => {
     const [className, setClassName] = useState('');
     const [section, setSection] = useState('');
     const [profile, setProfile] = useState({});
+    const [status, setStatus] = useState('all');
+    const [filteredComplaintList, setFilteredComplaintList] = useState([]);
+    const statusOptions = [
+        { label: 'All', value: 'all' },
+        { label: 'Resolved', value: 1 },
+        { label: 'Pending', value: 0 },
+    ];
+
+    useEffect(() => {
+        if (status === 'all') {
+            setFilteredComplaintList(complaints);
+        } else {
+            const filteredData = complaints.filter(item => item.is_resolved === status);
+            setFilteredComplaintList(filteredData);
+        }
+    }, [status, complaints]);
 
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await axios.get('http://10.0.2.2:3000/studentComplaints', { params: { fullname, className, section } });
+                const response = await axios.get('http://10.0.2.2:3000/studentComplaintList', { params: { fullname, className, section } });
                 setComplaints(response.data.reverse());
             } catch (error) {
                 setErrors({ general: 'Unable to fetch the data' });
@@ -29,7 +47,7 @@ const StudentComplaintList = ({ route }) => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+                const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
                 setProfile(response.data);
                 setFullName(response.data.fullname);
                 setClassName(response.data.className);
@@ -50,25 +68,35 @@ const StudentComplaintList = ({ route }) => {
             <Text style={styles.head1}>Complaint: {item.reason}</Text>
             <Text style={styles.text}>Explanation: {item.explanation}</Text>
             <Text style={styles.resolved}>
-                {item.is_resolved !== null ? "Resolved" : "Pending"}
+                {item.is_resolved === 1 ? "Resolved" : "Pending"}
             </Text>
         </View>
     );
 
     return (
         <View style={styles.container}>
+            <Image source={Image2} style={styles.bc} />
             <View style={styles.row}>
                 <TouchableOpacity onPress={() => navigation.navigate('StudentComplaint', { email })}>
                     <Image source={Image1} style={styles.image} />
                 </TouchableOpacity>
                 <Text style={styles.head}>Complaints List</Text>
             </View>
-            <View style={styles.box}>
-            <FlatList
-                data={complaints}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderItem}
-            />
+            <View style={styles.body}>
+                <Dropdown
+                    style={styles.dropdown}
+                    data={statusOptions}
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Select status"
+                    value={status}
+                    onChange={item => setStatus(item.value)}
+                />
+                <FlatList
+                    data={filteredComplaintList}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={renderItem}
+                />
             </View>
         </View>
     );
@@ -80,24 +108,40 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     image: {
-        height: 30,
-        width: 30,
-        right: 110,
+        height: 23,
+        width: 20,
+        marginRight: 20,
     },
-    box:{
-        padding:10,
+    body: {
+        backgroundColor: 'white',
+        borderRadius: 30,
+        height: '110%',
+        padding: 10,
+    },
+    dropdown: {
+        margin: 16,
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
+    },
+    bc: {
+        height: '110%',
+        width: '110%',
+        position: 'absolute',
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        borderBottomWidth: 2,
-        padding: 10,
+        justifyContent: 'flex-start',
+        padding: 12,
+        marginBottom: 40,
+        top: 10,
     },
     head: {
         fontSize: 20,
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
-        justifyContent: 'center',
     },
     head1: {
         fontSize: 20,
@@ -107,11 +151,11 @@ const styles = StyleSheet.create({
     },
     complaints: {
         padding: 10,
-        borderRadius: 20,
-        borderWidth:2,
+        borderRadius: 0,
+        borderBottomWidth: 1,
         backgroundColor: 'white',
-        justifyContent: 'center',
-        margin:10,
+        alignItems: 'center',
+        margin: 10,
     },
     text: {
         fontSize: 16,
@@ -121,11 +165,11 @@ const styles = StyleSheet.create({
         color: 'white',
         backgroundColor: 'blue',
         fontSize: 16,
-        marginHorizontal:100,
-        margin:10,
-        padding:10,
-        borderRadius:30,
-        textAlign:'center',
+        marginHorizontal: 100,
+        margin: 10,
+        padding: 10,
+        borderRadius: 30,
+        textAlign: 'center',
         fontWeight: 'bold',
     },
 });

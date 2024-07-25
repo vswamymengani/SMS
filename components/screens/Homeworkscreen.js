@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Image1 from '../assets/BackArrow.png';
+import { ScrollView, View, Text, Image, TouchableOpacity, TextInput, Button, StyleSheet } from 'react-native';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 import axios from 'axios';
 
 const HomeworkScreen = ({ navigation, route }) => {
-  const [classname, setClassName] = useState('');
+  const [className, setclassName] = useState('');
   const [section, setSection] = useState('');
   const [profile, setProfile] = useState({});
   const [errors, setErrors] = useState({});
   const [homeworkList, setHomeworkList] = useState([]);
+  const [filteredHomeworkList, setFilteredHomeworkList] = useState([]);
+  const [date, setDate] = useState('');
   const email = route.params.email;
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         setProfile(response.data);
-        setClassName(response.data.className);
+        setclassName(response.data.className);
         setSection(response.data.section);
       } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -30,19 +33,19 @@ const HomeworkScreen = ({ navigation, route }) => {
   }, [email]);
 
   useEffect(() => {
-    const fetchHomeworkData = async (classname, section) => {
+    const fetchHomeworkData = async (className, section) => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/homework/${classname}/${section}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentHomework/${className}/${section}`);
         setHomeworkList(response.data.reverse()); // Assuming API returns an array of homework objects
-        console.log("Homework data:", response.data); // Log the homework data for debugging
+        setFilteredHomeworkList(response.data.reverse()); // Initialize filtered list with all homework
       } catch (error) {
         console.error('Error fetching homework data:', error);
       }
     };
-    if (classname && section) {
-      fetchHomeworkData(classname, section);
+    if (className && section) {
+      fetchHomeworkData(className, section);
     }
-  }, [classname, section]);
+  }, [className, section]);
 
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
@@ -53,26 +56,43 @@ const HomeworkScreen = ({ navigation, route }) => {
     return `${day}/${month}/${year}`;
   };
 
+  const handleFilter = () => {
+    const filtered = homeworkList.filter(homework => formatDate(homework.created_at) === date);
+    setFilteredHomeworkList(filtered);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <Image source={Image2} style={styles.bc} />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })}>
           <Image source={Image1} style={styles.backArrow} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Homework</Text>
       </View>
-      {homeworkList.map((homework) => (
-        <View key={homework.id} style={styles.homeworkContainer}>
-          <Text style={styles.subjectText}>{homework.subject}</Text>
-          {homework.created_at && (
-            <Text style={styles.text}>Given Date: {formatDate(homework.created_at)}</Text>
-          )}
-          <Text style={styles.text}>Type of Homework: {homework.typeOfHomework}</Text>
-          <Text style={styles.text}>Title: {homework.title}</Text>
-          <Text style={styles.text}>Duration: {homework.duration}</Text>
-          <Text style={styles.text}>Homework: {homework.homework}</Text>
+      <View style={styles.body}>
+        <View style={styles.filterContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter date (DD/MM/YYYY)"
+            value={date}
+            onChangeText={setDate}
+          />
+          <Button title="Filter" onPress={handleFilter} />
         </View>
-      ))}
+        {filteredHomeworkList.map((homework) => (
+          <View key={homework.id} style={styles.homeworkContainer}>
+            <Text style={styles.subjectText}>{homework.subject}</Text>
+            {homework.created_at && (
+              <Text style={styles.text}>Given Date: {formatDate(homework.created_at)}</Text>
+            )}
+            <Text style={styles.text}>Type of Homework: {homework.typeOfHomework}</Text>
+            <Text style={styles.text}>Title: {homework.title}</Text>
+            <Text style={styles.text}>Duration: {homework.duration}</Text>
+            <Text style={styles.text}>Homework: {homework.homework}</Text>
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -80,20 +100,29 @@ const HomeworkScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
-    padding: 10,
-    alignItems: 'center',
-    backgroundColor: "#3F1175",
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
+    alignItems: 'flex-start',
+    marginBottom: 50,
+    top: 10,
+  },
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
+  },
+  body: {
+    backgroundColor: 'white',
+    borderRadius: 30,
+    height: '110%',
+    padding: 10,
   },
   backArrow: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 23,
     marginRight: 10,
-    left: -130,
+    left: 20,
   },
   text: {
     fontSize: 14,
@@ -103,17 +132,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    left: -10,
+    left: 30,
   },
   homeworkContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderBottomWidth: 1,
     padding: 10,
     marginBottom: 10,
     borderRadius: 20,
     width: '100%',
     borderColor: 'black',
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   subjectText: {
     fontSize: 20,
@@ -121,6 +149,20 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     textAlign: 'center',
     color: 'blue',
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 10,
+    paddingHorizontal: 10,
   },
 });
 

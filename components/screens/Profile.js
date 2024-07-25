@@ -1,10 +1,11 @@
-//profile.js code
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Image1 from '../assets/Admin.png';
+import Image2 from '../assets/ProfileBc.png';
+import Image3 from '../assets/Back_Arrow.png';
 
 const Profile = ({ navigation, route }) => {
   const [profile, setProfile] = useState({});
@@ -14,7 +15,7 @@ const Profile = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         setProfile(response.data);
       } catch (err) {
         setError('Failed to load profile data');
@@ -29,41 +30,44 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() =>navigation.navigate('Homescreen' , {email})}>
+          <Image source={Image3} style={styles.back} />
+        </TouchableOpacity>
+        <Text style={styles.head}>Profile</Text>
+      </View>
       <View style={styles.profileBox}>
         <Image source={Image1} style={styles.profileImage} />
-        {error && <Text style={styles.error}>{error}</Text>}
+        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.details1}>Class: {profile.className} {profile.section}</Text>
       </View>
       
     
       <View style={styles.info}>
-        <Text style={styles.name}>{profile.fullname}</Text>
-        <Text style={styles.details}>Class: {profile.className}</Text>
-        <Text style={styles.details}>Section: {profile.section}</Text>
-        <Text style={styles.details}>D.O.B: {profile.dateofbirth}</Text>
-        <Text style={styles.details}>Roll Number: {profile.rollno}</Text>
-        <Text style={styles.details}>Admission Number: {profile.admissionid}</Text>
-      </View>
-      <View style={styles.info}>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>Father Name:</Text>
-        <Text style={styles.parentsName1}>{profile.fathername}</Text>
+        <View style={styles.body}>
+          <View style={styles.topic}>
+          <Text style={styles.details}>D.O.B:</Text>
+          <Text style={styles.details}>Roll Number: </Text>
+          <Text style={styles.details}>Admission Number:            </Text>
+          <Text style={styles.details}>Father Name:</Text>
+          <Text style={styles.details}>Father mobile:</Text>
+          <Text style={styles.details}>Mother Name:</Text>
+          <Text style={styles.details}>Mother mobile:</Text>
+          <Text style={styles.details}>Present Address:</Text>
+          </View>
+          <View style={styles.topic}>
+          <Text style={styles.details2}>{profile.dateofbirth}</Text>
+          <Text style={styles.details2}>{profile.rollNo}</Text>
+          <Text style={styles.details2}>{profile.admissionid}</Text>
+          <Text style={styles.details2}>{profile.fatherName}</Text>
+          <Text style={styles.details2}>{profile.fatherNo}</Text>
+          <Text style={styles.details2}>{profile.motherName}</Text>
+          <Text style={styles.details2}>{profile.motherNo}</Text>
+          <Text style={styles.details2}>{profile.presentAddress}</Text>
+          </View>
         </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>Father mobile:</Text>
-        <Text style={styles.parentsName1}>{profile.fatherno}</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>Mother Name:</Text>
-        <Text style={styles.parentsName1}>{profile.mothername}</Text>
-        </View>
-        <View style={styles.parentsBox}>
-        <Text style={styles.parentsName}>Mother mobile:</Text>
-        <Text style={styles.parentsName1}>{profile.motherno}</Text>
-        </View>
-      </View>
-      <View style={styles.address}>
-        <Text style={styles.addressTitle}>Present Address:</Text>
-        <Text style={styles.addressName}>{profile.presentaddress}</Text>
+
       </View>
     </ScrollView>
   );
@@ -72,75 +76,83 @@ const Profile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    alignItems: 'center',
-    padding: 20,
+  },
+  back:{
+    height:23,
+    width:20,
+    marginLeft:20,
+    top:10,
+  },
+  bc:{
+    position:'absolute',
+    width:'110%',
+  },
+  head:{
+    fontSize:20,
+    color:'white',
+    fontWeight:'bold',
+    marginLeft:30,
+    top:10,
   },
   profileBox: {
     alignItems: 'center',
     marginVertical: 20,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 40,
+    marginTop:10,  
+  },
   profileImage: {
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
     borderRadius: 70,
+    borderColor:'white',
+    borderWidth:2,
     marginBottom: 10,
   }, 
   info:{
-    width:'90%',
+    width:'100%',
     backgroundColor:'white',
     alignItems:'center',
     borderRadius:30,
-    padding:20,
     marginBottom:20,
   },
   name:{
     fontSize:30,
-    color:'blue',
+    color:'white',
     fontWeight:'bold',
   },
   details:{
-    fontSize:18,
-    color:'orange',
-    margin:5,
-  },
-  parentsBox:{
-    justifyContent:'flex-start',
-    flexDirection:'row',
-    width:'80%',
-    right:40,
-  },
-  parents:{
-    backgroundColor:'red',
-    borderRadius:20,
-    padding:15,
+    fontSize:20,
+    color:'black',
     margin:10,
-    marginBottom:20,
-    alignItems:'center',
+    padding:5,
+    borderBottomWidth:1,
+    marginBottom:10,
   },
-  parentsName:{
+  details2:{
     fontSize:20,
-    color:'red',
-    margin:5, 
-  },
-  parentsName1:{
-    fontSize:20,
+    marginBottom:10,
     color:'blue',
-    margin:5, 
+    margin:10,
+    right:20,
+    padding:5,
+    borderBottomWidth:1,
   },
-  address:{
-    width:"100%",
-    backgroundColor:'yellow',
-    alignItems:'center',
-    borderRadius:20,
+  details1:{
+    fontSize:18,
+    color:'white',
+    margin:10,
+    marginBottom:20,   
+  },
+  body:{
+    justifyContent:'space-between',
+    flexDirection:'row',
+    width:'100%',
+    height:'100%',
     padding:20,
-  },
-  addressTitle:{
-    fontSize:20,
-    color:'blue',
-  },
-  addressName:{
-    fontSize:20,
-    color:'blue',
   },
 });
 

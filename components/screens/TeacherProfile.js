@@ -15,7 +15,7 @@ const TeacherProfile = ({ navigation, route }) => {
   useEffect(() => {
     const fetchTeacherProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/teacherprofile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
         setTeacherProfile(response.data);
       } catch (err) {
         setError('Failed to load profile data');
@@ -41,15 +41,20 @@ const TeacherProfile = ({ navigation, route }) => {
 
       <View style={styles.info}>
         <Text style={styles.name}>{teacherprofile.fullname}</Text>
-        <Text style={styles.details}>Employee ID: {teacherprofile.employeeid}</Text>
         <Text style={styles.details}>Email: {teacherprofile.email}</Text>
         <Text style={styles.details}>Date of Birth: {teacherprofile.dateofbirth}</Text>
         <Text style={styles.details}>Mobile Number: {teacherprofile.mobileNo}</Text>
-        <Text style={styles.details}>Experience: {teacherprofile.experience}</Text>
       </View>
       <View style={styles.info}>
-        <Text style={styles.details}>Present Address: </Text>
-        <Text style={styles.details}>{teacherprofile.presentaddress}</Text>
+        <Text style={styles.name1}>Profecinal Info</Text>
+      <Text style={styles.details}>Subject:{teacherprofile.subject}</Text>
+      <Text style={styles.details}>Employee ID: {teacherprofile.employeeid}</Text>
+      <Text style={styles.details}>Qualification: {teacherprofile.qualification}</Text>
+      <Text style={styles.details}>Experience: {teacherprofile.experience}</Text>
+      </View>
+      <View style={styles.info}>
+        <Text style={styles.name1}>Present Address: </Text>
+        <Text style={styles.details}>{teacherprofile.presentAddress}</Text>
       </View>
 
       <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('RequestEdit', { email })}>
@@ -83,6 +88,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
   },
+  name1: {
+    fontSize: 20,
+    color: 'red',
+    fontWeight: 'bold',
+  },
   name: {
     fontSize: 30,
     color: 'blue',
@@ -90,7 +100,7 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 18,
-    color: 'orange',
+    color: 'black',
     margin: 5,
   },
   editButton: {
@@ -121,3 +131,4 @@ const styles = StyleSheet.create({
 });
 
 export default TeacherProfile;
+

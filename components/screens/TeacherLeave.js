@@ -57,7 +57,7 @@ const TeacherLeave = ({ route }) => {
 
   const Leave = async () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/leave', {
+      axios.post('http://10.0.2.2:3000/teacherLeave', {
         employeeid: profile.employeeid,
         email,
         purpose,

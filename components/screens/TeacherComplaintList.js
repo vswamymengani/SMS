@@ -13,7 +13,7 @@ const TeacherComplaintList = ({ route }) => {
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/teacherComplaints?employeeid=${employeeid}`);
+                const response = await axios.get(`http://10.0.2.2:3000/teacherComplaintList?employeeid=${employeeid}`);
                 setComplaints(response.data.reverse());
             } catch (error) {
                 setErrors({ general: 'Unable to fetch the data' });

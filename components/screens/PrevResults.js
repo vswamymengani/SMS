@@ -130,7 +130,7 @@ const PrevResults = () => {
             resultsData.map((results, index) => (
               <View key={index} style={styles.resultsRow}>
                 <Text style={styles.resultsText}>{results.fullname}</Text>
-                <Text style={styles.resultsText}>{results.rollno}</Text>
+                <Text style={styles.resultsText}>{results.rollNo}</Text>
                 <Text style={styles.resultsText}>{results.marks}</Text>
               </View>
             ))
