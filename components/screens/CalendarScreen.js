@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const CalendarScreen = ({route}) => {
   const navigation = useNavigation();
-  const email = route.params;
+  const { email } = route.params;
 
   const handleBack = () => {
     navigation.navigate('Homescreen',{ email });
@@ -189,7 +189,7 @@ const CalendarScreen = ({route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
-        <TouchableOpacity onPress={handleBack} style={styles.button}>
+        <TouchableOpacity onPress={() =>navigation.navigate('Homescreen',{email})} style={styles.button}>
           <Image source={require('../assets/arrow-left.png')} style={styles.buttonImage} />
         </TouchableOpacity>
         <Text style={styles.text}>Calendar</Text>

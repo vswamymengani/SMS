@@ -36,8 +36,9 @@ const HomeworkScreen = ({ navigation, route }) => {
     const fetchHomeworkData = async (className, section) => {
       try {
         const response = await axios.get(`http://10.0.2.2:3000/studentHomework/${className}/${section}`);
-        setHomeworkList(response.data.reverse()); // Assuming API returns an array of homework objects
-        setFilteredHomeworkList(response.data.reverse()); // Initialize filtered list with all homework
+        const data = response.data.reverse(); // Assuming API returns an array of homework objects
+        setHomeworkList(data);
+        setFilteredHomeworkList(data); // Initialize filtered list with all homework
       } catch (error) {
         console.error('Error fetching homework data:', error);
       }
@@ -57,8 +58,12 @@ const HomeworkScreen = ({ navigation, route }) => {
   };
 
   const handleFilter = () => {
-    const filtered = homeworkList.filter(homework => formatDate(homework.created_at) === date);
-    setFilteredHomeworkList(filtered);
+    if (date.trim() === '') {
+      setFilteredHomeworkList(homeworkList); // Show all data if input is empty
+    } else {
+      const filtered = homeworkList.filter(homework => formatDate(homework.created_at) === date);
+      setFilteredHomeworkList(filtered);
+    }
   };
 
   return (

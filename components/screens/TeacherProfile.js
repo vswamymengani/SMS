@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import Image1 from '../assets/BackArrow.png';
-import Image2 from '../assets/Admin.png';
-import Image5 from '../assets/Component1.png';
-import Image3 from '../assets/Edit.png';
+import Image1 from '../assets/Admin.png';
+import Image2 from '../assets/ProfileBc.png';
+import Image3 from '../assets/Back_Arrow.png';
+import Image4 from '../assets/Edit.png';
 
 const TeacherProfile = ({ navigation, route }) => {
-  const [teacherprofile, setTeacherProfile] = useState({});
+  const [teacherProfile, setTeacherProfile] = useState({});
   const [error, setError] = useState(null);
   const email = route.params.email;
 
@@ -30,36 +30,49 @@ const TeacherProfile = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={Image5} style={styles.image5} />
-      <TouchableOpacity onPress={() => navigation.navigate('TeacherHomeScreen', { email })}>
-        <Image source={Image1} style={styles.back} />
-      </TouchableOpacity>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.navigate('TeacherHomeScreen', { email })}>
+          <Image source={Image3} style={styles.back} />
+        </TouchableOpacity>
+        <Text style={styles.head}>Teacher Profile</Text>
+        <TouchableOpacity 
+            onPress={() => navigation.navigate('RequestEdit', { email })}
+            style={styles.editButton}
+          >
+            <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.profileBox}>
-        <Image source={Image2} style={styles.profileImage} />
+        <Image source={Image1} style={styles.profileImage} />
         {error && <Text style={styles.error}>{error}</Text>}
+        <Text style={styles.name}>{teacherProfile.fullname}</Text>
+        <Text style={styles.details1}>Subject: {teacherProfile.subject}</Text>
       </View>
-
+      
       <View style={styles.info}>
-        <Text style={styles.name}>{teacherprofile.fullname}</Text>
-        <Text style={styles.details}>Email: {teacherprofile.email}</Text>
-        <Text style={styles.details}>Date of Birth: {teacherprofile.dateofbirth}</Text>
-        <Text style={styles.details}>Mobile Number: {teacherprofile.mobileNo}</Text>
+        <View style={styles.body}>
+          <View style={styles.topic}>
+            <Text style={styles.details}>Email:</Text>
+            <Text style={styles.details}>D.O.B:</Text>
+            <Text style={styles.details}>Mobile Number:</Text>
+            <Text style={styles.details}>Employee ID:</Text>
+            <Text style={styles.details}>Qualification:</Text>
+            <Text style={styles.details}>Experience:</Text>
+          </View>
+          <View style={styles.topic}>
+            <Text style={styles.details2}>{teacherProfile.email}</Text>
+            <Text style={styles.details2}>{teacherProfile.dateofbirth}</Text>
+            <Text style={styles.details2}>{teacherProfile.mobileNo}</Text>
+            <Text style={styles.details2}>{teacherProfile.employeeid}</Text>
+            <Text style={styles.details2}>{teacherProfile.qualification}</Text>
+            <Text style={styles.details2}>{teacherProfile.experience}</Text>
+          </View>
+        </View>
+        <View style={styles.body}>
+          
+        </View>
       </View>
-      <View style={styles.info}>
-        <Text style={styles.name1}>Profecinal Info</Text>
-      <Text style={styles.details}>Subject:{teacherprofile.subject}</Text>
-      <Text style={styles.details}>Employee ID: {teacherprofile.employeeid}</Text>
-      <Text style={styles.details}>Qualification: {teacherprofile.qualification}</Text>
-      <Text style={styles.details}>Experience: {teacherprofile.experience}</Text>
-      </View>
-      <View style={styles.info}>
-        <Text style={styles.name1}>Present Address: </Text>
-        <Text style={styles.details}>{teacherprofile.presentAddress}</Text>
-      </View>
-
-      <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('RequestEdit', { email })}>
-        <Text style={styles.editButtonText}>Edit</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -67,68 +80,102 @@ const TeacherProfile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    alignItems: 'center',
-    padding: 20,
+  },
+  back: {
+    height: 23,
+    width: 20,
+    marginLeft: 20,
+    top: 10,
+  },
+  bc: {
+    position: 'absolute',
+    width: '110%',
+  },
+  head: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: 30,
+    top: 10,
   },
   profileBox: {
     alignItems: 'center',
     marginVertical: 20,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    marginBottom: 40,
+    marginTop: 10,
+  },
   profileImage: {
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
     borderRadius: 70,
+    borderColor: 'white',
+    borderWidth: 2,
     marginBottom: 10,
   },
   info: {
-    width: '90%',
+    width: '110%',
     backgroundColor: 'white',
     alignItems: 'center',
     borderRadius: 30,
-    padding: 20,
     marginBottom: 20,
-  },
-  name1: {
-    fontSize: 20,
-    color: 'red',
-    fontWeight: 'bold',
+    right: 10,
   },
   name: {
     fontSize: 30,
-    color: 'blue',
+    color: 'white',
     fontWeight: 'bold',
   },
-  details: {
+  details1: {
     fontSize: 18,
+    color: 'white',
+    margin: 10,
+    marginBottom: 20,
+  },
+  details: {
+    fontSize: 20,
     color: 'black',
-    margin: 5,
+    margin: 10,
+    padding: 5,
+    borderBottomWidth: 1,
+    marginBottom: 10,
+  },
+  details2: {
+    fontSize: 20,
+    marginBottom: 10,
+    color: 'blue',
+    margin: 10,
+    right: 20,
+    padding: 5,
+    borderBottomWidth: 1,
+  },
+  body: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+    padding: 20,
   },
   editButton: {
-    backgroundColor: '#1DBBFF',
+    backgroundColor: 'blue',  // Adjust the color as needed
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
   editButtonText: {
-    color: 'white',
-    fontSize: 18,
+    color: 'white',  // Text color
+    fontSize: 16,    // Text size
   },
   error: {
     color: 'red',
     marginTop: 10,
   },
-  back: {
-    height: 30,
-    width: 30,
-    left: -180,
-  },
-  image5: {
-    width: 415,
-    height: 250,
-    position: 'absolute',
-    top: 0,
+  topic: {
+    flex: 1,
   },
 });
 
 export default TeacherProfile;
-

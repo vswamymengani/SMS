@@ -4,7 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import Image1 from '../assets/Verified.png';
-import Image2 from '../assets/BackArrow.png';
+import Image2 from '../assets/Back_Arrow.png';
+import Image3 from '../assets/BackImage.png';
 
 const TeacherComplaint1 = ({ route }) => {
   const navigation = useNavigation();
@@ -92,13 +93,14 @@ const TeacherComplaint1 = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <Image source={Image3} style={styles.bc} />
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() => navigation.navigate('TeacherHomeScreen', { email })}>
           <Image source={Image2} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Complaints</Text>
         <TouchableOpacity onPress={() => navigation.navigate('TeacherComplaintList', { email, employeeid })}>
-          <Text style={styles.list}>Prev</Text>
+          <Text style={styles.button}>Prev</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
@@ -119,7 +121,7 @@ const TeacherComplaint1 = ({ route }) => {
         />
         {errors.typeOfComplaint && <Text style={styles.error}>{errors.typeOfComplaint}</Text>}
         <TextInput
-          style={styles.text}
+          style={styles.dateInput}
           placeholder="Write the Complaint here"
           value={reason}
           onChangeText={(text) => { setReason(text); clearError('reason'); }}
@@ -167,38 +169,56 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  image: {
-    height: 30,
-    width: 30,
-  },
-  body: {
-    paddingHorizontal: 20,
-  },
-  list: {
-    color: 'white',
-    backgroundColor: '#3F1175',
-    padding: 10,
-    borderRadius: 20,
-    fontSize: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
-    borderBottomWidth: 2,
+    margin: 10,
+    marginBottom: 40,
+  },
+  image: {
+    height: 23,
+    width: 20,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+  button: {
+    alignItems: 'center',
+    color: "white",
+    backgroundColor: "#3F1175",
+    fontSize: 18,
+    fontWeight: 'bold',
+    borderRadius: 15,
+    borderColor: 'white',
     padding: 5,
-    paddingHorizontal: 10,
+    textAlign: 'center',
+    left: 10,
+    top: -5,
+  },
+  body: {
+    backgroundColor: 'white',
+    borderRadius: 40,
+    height: '110%',
+    padding: 10,
+  },
+  text: {
+    borderBottomWidth: 1,
+    color: 'black',
+    fontSize: 15,
+    borderRadius: 20,
+    borderColor: '#3F1175',
+    textAlign: 'auto',
+    padding: 15,
+    marginVertical: 10,
   },
   dropdown: {
     margin: 13,
@@ -206,9 +226,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginLeft: 0,
     padding: 20,
-    borderWidth: 3,
+    borderBottomWidth: 1,
     borderColor: '#3F1175',
-    borderRadius: 30,
+    borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 10,
   },
@@ -220,14 +240,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-  text: {
-    borderWidth: 3,
-    color: 'black',
-    fontSize: 15,
-    borderRadius: 30,
-    borderColor: '#3F1175',
-    textAlign: 'auto',
+  dateInput: {
+    borderBottomWidth: 1,
+    borderRadius: 10,
     padding: 15,
+    fontSize: 16,
+    color: 'black',
     marginVertical: 10,
   },
   descriptionInput: {
@@ -248,8 +266,9 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   sendButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   modalContainer: {
     flex: 1,
@@ -258,38 +277,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    width: '70%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: 'white',
     padding: 20,
+    borderRadius: 10,
     alignItems: 'center',
   },
   successImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+    height: 70,
+    width: 70,
   },
   modalText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 20,
+    fontSize: 18,
+    marginVertical: 15,
     color: 'black',
   },
   modalButton: {
     backgroundColor: '#3F1175',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    padding: 10,
+    borderRadius: 10,
+    marginTop: 10,
   },
   modalButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   error: {
     color: 'red',
-    marginTop: -10,
     marginBottom: 10,
-    marginHorizontal: 15,
+    marginLeft: 15,
   },
 });
 

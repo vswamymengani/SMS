@@ -219,6 +219,11 @@ const TeacherExamResults = ({ route }) => {
             {students.length > 0 && (
                 <View>
                     <Text style={styles.boldText}>Student Marks</Text>
+                    <View style={styles.marks}>
+                            <Text style={styles.text}>Name</Text>
+                            <Text style={styles.text}>Roll No</Text>
+                            <Text style={styles.text}>Marks</Text>
+                    </View>
                     {students.map(student => (
                         <View key={student.rollNo} style={styles.studentRow}>
                             <Text style={styles.studentText}>{student.fullname}</Text>
@@ -260,6 +265,16 @@ const styles = StyleSheet.create({
     right: {
         alignItems: 'flex-end',
         marginBottom: 10,
+    },
+    marks:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        margin:10,
+    },
+    text:{
+        fontSize:20,
+        fontWeight:'bold',
+        color:'black',
     },
     button: {
         backgroundColor: '#3F1175',

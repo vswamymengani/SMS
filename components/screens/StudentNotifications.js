@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity,Image } from 'react-native';
 import axios from 'axios';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 import { useNavigation } from '@react-navigation/native';
 
 const StudentNotifications = ({ route }) => {
@@ -77,7 +79,6 @@ const StudentNotifications = ({ route }) => {
         {item.type === 'homework' ? (
           <>
             <Text style={styles.text1}>New Homework</Text>
-            <Text style={styles.text}>Class: {item.className} Section: {item.section}</Text>
             <Text style={styles.text}>Subject: {item.subject}</Text>
             <Text style={styles.text}>Homework: {item.title}</Text>
           </>
@@ -98,7 +99,8 @@ const StudentNotifications = ({ route }) => {
           <>
             <Text style={styles.text1}>Complaint Response</Text>
             <Text style={styles.text}>Complaint: {item.reason}</Text>
-            <Text style={styles.text}>Status: {item.is_resolved === 1 ? 'Resolved' : 'Pending'}</Text>
+            <Text style={styles.text}>Explanation: {item.explanation}</Text>
+            <Text style={styles.text}>Status: {item.is_resolved === 1 ? 'Resolved' : null}</Text>
           </>
         ) : null}
       </View>
@@ -107,12 +109,21 @@ const StudentNotifications = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.head}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email })} >
+          <Image source={Image1} style={styles.image} />
+        </TouchableOpacity>
+        <Text style={styles.header}>Notifications</Text>
+      </View>
+      <View style={styles.body}>
       {errors.general && <Text style={styles.error}>{errors.general}</Text>}
       <FlatList
         data={notifications}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
       />
+      </View>
     </View>
   );
 };
@@ -120,18 +131,39 @@ const StudentNotifications = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderColor: 'black',
-    borderWidth: 3,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
+  },
+  head:{
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    top:10,
+    marginBottom:60,
+  },
+  image:{
+    height:23,
+    width:20,
+    marginHorizontal:30
+  },
+  header:{
+    fontSize:20,
+    fontWeight:'bold',
+    color:'white',
+  },
+  body:{
+    borderRadius:30,
+    backgroundColor:'white',
+    height:'110%',
   },
   notificationItem: {
-    padding: 15,
+    padding: 20,
     borderBottomColor: '#ccc',
-    borderWidth: 2,
+    borderBottomWidth: 2,
     width: '100%',
-    marginBottom: 10,
-    borderRadius: 10,
+    borderBottomRadius: 10,
     borderColor: '#3F1175',
   },
   text: {

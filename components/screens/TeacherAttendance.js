@@ -129,14 +129,7 @@ const TeacherAttendance = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.prevButton}
-          onPress={() => navigation.navigate('PrevAttendance')}
-        >
-          <Text style={styles.prevButtonText}>Prev</Text>
-        </TouchableOpacity>
-      </View>
+      
       <View style={styles.dropdownRow2}>
         <Dropdown
           style={styles.dropdown2}
@@ -363,3 +356,16 @@ const styles = StyleSheet.create({
 });
 
 export default TeacherAttendance;
+
+
+
+
+
+<View style={styles.header}>
+        <TouchableOpacity
+          style={styles.prevButton}
+          onPress={() => navigation.navigate('PrevAttendance')}
+        >
+          <Text style={styles.prevButtonText}>Prev</Text>
+        </TouchableOpacity>
+      </View>

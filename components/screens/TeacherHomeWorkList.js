@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text } from "react-native";
+import { StyleSheet, ScrollView, View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import Image1 from '../assets/BackArrow.png';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const TeacherHomeWorkList = ({ route }) => {
     const email = route.params.email;
@@ -26,7 +27,14 @@ const TeacherHomeWorkList = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <Image source={Image2} style={styles.bc} />
+            <View style={styles.head}>
+                <TouchableOpacity onPress={() =>navigation.navigate('TeacherHomework',{ email})} >
+                    <Image source={Image1} style={styles.image} />
+                </TouchableOpacity>
+                <Text style={styles.header}>Homework List</Text>
+            </View>
+            <ScrollView style={styles.body}>
                 {homeworkList.map((homework) => (
                     <View key={homework.id} style={styles.homeworkContainer}>
                         <Text style={styles.text}>Class: {homework.className} Section: {homework.section}</Text>
@@ -44,12 +52,35 @@ const TeacherHomeWorkList = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems:'center',
-        top:10,
-        backgroundColor:'#3F1175',
     },
+    bc:{
+        height:'110%',
+        width:'110%',
+        position:'absolute',
+      },
+      head:{
+        flexDirection:'row',
+        justifyContent:'flex-start',
+        top:20,
+        marginBottom:80,
+      },
+      image:{
+        height:23,
+        width:18,
+        marginHorizontal:10
+      },
+      header:{
+        fontSize:20,
+        fontWeight:'bold',
+        color:'white',
+      },
+      body:{
+        borderRadius:30,
+        backgroundColor:'white',
+        height:'110%',
+      },
     homeworkContainer: {
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: '#ccc',
         margin: 10,
         borderRadius: 20,

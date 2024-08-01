@@ -74,9 +74,9 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image7} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('ClassWork',{ email })}>
+        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('TeacherOnlineExam',{ email })}>
           <Image source={Image18} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Class Work</Text>
+          <Text style={styles.loginButtonText}>Online Exam</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.square3} onPress={() => navigation.navigate('TeacherHomework',{ email })}>
           <Image source={Image9} style={styles.squareImage} />
@@ -104,7 +104,7 @@ const TeacherHomeScreen = ({route}) => {
       <View style={styles.squareRow}>
         <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('TeacherExamResults',{ email })}>
           <Image source={Image10} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Examination</Text>
+          <Text style={styles.loginButtonText}>Exam Results</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.square8} onPress={() => navigation.navigate('ClassWork',{ email })}>
           <Image source={Image15} style={styles.squareImage} />

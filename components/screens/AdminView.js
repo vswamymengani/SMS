@@ -11,6 +11,7 @@ import Image9 from '../assets/Admin.png';
 import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
 import Image4 from '../assets/timetable1.png';
+import Image20 from '../assets/library.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -84,6 +85,12 @@ const AdminView = ({ navigation }) => {
               <Image source={Image4} style={styles.squareImage} />
               <Text>Timetable</Text>
             </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => navigation.navigate('AdminLibrary')}>
+          <View style={styles.square}>
+            <Image source={Image20} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Library</Text>
+          </View>
         </TouchableOpacity>
       </View>
       
@@ -169,9 +176,9 @@ const styles = StyleSheet.create({
   },
   squareRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     width: '100%',
-    marginBottom: 20,
+    margin: 20,
     top: 400,
   },
   singleSquare: {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, Button, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -49,6 +49,7 @@ const AdminStudentComplaints = () => {
         setComplaints(response.data);
         setFilteredComplaints(response.data.filter(item => item.is_resolved.toString() === filter));
       } catch (err) {
+        console.error('Failed to load complaints:', err);
         setErrors({ general: 'Failed to load complaints' });
       }
     };
@@ -69,7 +70,8 @@ const AdminStudentComplaints = () => {
         ).filter(item => item.is_resolved.toString() === filter)
       );
     } catch (err) {
-      console.error(err);
+      console.error('Error resolving complaint:', err);
+      Alert.alert('Error', 'Failed to resolve complaint. Please try again later.');
     }
   };
 

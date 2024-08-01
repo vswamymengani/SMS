@@ -37,7 +37,6 @@ const TeacherTimetable = ({ route }) => {
     try {
       const response = await axios.get(`http://10.0.2.2:3000/teacherTimetable?employeeid=${employeeid}`);
       console.log('Timetable Data:', response.data); // Debugging line
-      // Transforming the timetable data into a format easy to access by day
       const transformedTimetable = response.data.reduce((acc, entry) => {
         if (!acc[entry.day]) {
           acc[entry.day] = [];
@@ -55,14 +54,14 @@ const TeacherTimetable = ({ route }) => {
     if (employeeid) {
       fetchTimetable();
     }
-  }, [employeeid]); // Added employeeid as a dependency
+  }, [employeeid]);
 
   const getBoxStylesAndTexts = () => {
     if (!timetable[selectedDay]) {
       return [];
     }
     return timetable[selectedDay].map((entry) => ({
-      backgroundColor: '#3E61DE', // You can set different colors based on subjects or other criteria
+      backgroundColor: '#3E61DE',
       text: entry.subject,
       className: entry.className,
       section: entry.section,
@@ -73,74 +72,93 @@ const TeacherTimetable = ({ route }) => {
   const boxes = getBoxStylesAndTexts();
 
   return (
-    <View style={{ flex: 1, }}>
+    <View style={styles.container}>
+      <Image source={require('../assets/BackImage.png')} style={styles.bc} />
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Image source={require('../assets/arrow-left.png')} style={styles.backImage} />
+          <Image source={require('../assets/Back_Arrow.png')} style={styles.backImage} />
         </TouchableOpacity>
         <Text style={styles.headerText}>Time Table</Text>
       </View>
 
-      <ScrollView
-        horizontal
-        contentContainerStyle={styles.scrollViewContent}
-        showsHorizontalScrollIndicator={false}
-      >
-        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => handleDayClick(day)}
-            style={[
-              styles.dayButton,
-              { backgroundColor: selectedDay === day ? '#FE9900' : '#FE990080' },
-            ]}
-          >
-            <Text style={{ color: 'black' }}>{day}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View style={styles.body}>
+        <View style={styles.dayContainer}>
+          <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
+            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleDayClick(day)}
+                style={[
+                  styles.dayButton,
+                  { backgroundColor: selectedDay === day ? 'blue' : 'white' }
+                ]}
+              >
+                <Text style={styles.dayButtonText}>{day}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
-      <ScrollView >
-        {boxes.map((box, index) => (
-          <View key={index} style={[styles.box, { backgroundColor: box.backgroundColor }]}>
-            <Text style={styles.boxText}>{box.text}</Text>
-            <Text style={styles.timeText}>{box.timeText}</Text>
-            <Text style={styles.classSectionText}>Class: {box.className} Section: {box.section}</Text>
-          </View>
-        ))}
-      </ScrollView>
+        <ScrollView contentContainerStyle={styles.timetableContainer}>
+          {boxes.map((box, index) => (
+            <View key={index} style={[styles.box, { backgroundColor: box.backgroundColor }]}>
+              <Text style={styles.boxText}>{box.text}</Text>
+              <Text style={styles.timeText}>{box.timeText}</Text>
+              <Text style={styles.classSectionText}>Class: {box.className} Section: {box.section}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
     width: '100%',
-    height: 60,
-    backgroundColor: '#3F1175',
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: 65,
+    top: 10,
+    marginBottom: 15,
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
   },
-  backButton: {
+  bc: {
+    height: '110%',
+    width: '110%',
     position: 'absolute',
-    top: 22.87,
-    left: 12,
+  },
+  body: {
+    backgroundColor: 'white',
+    height: "110%",
+    borderRadius: 30,
+    padding: 20,
   },
   backImage: {
     width: 20,
-    height: 15,
-    tintColor: '#ffffff',
+    height: 23,
+    top: 5,
+    marginHorizontal: 10,
   },
   headerText: {
+    fontFamily: 'Open Sans',
     fontSize: 24,
     fontWeight: '400',
-    lineHeight: 32.68,
+    marginLeft: 10,
     color: 'white',
-    position: 'absolute',
   },
-  scrollViewContent: {
-    paddingHorizontal: 10,
+  dayContainer: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 0,
+    height: 34,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  scrollContainer: {
+    paddingHorizontal: 0,
   },
   dayButton: {
     width: 96,
@@ -148,32 +166,44 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 5,
+    marginBottom: 10,
+  },
+  dayButtonText: {
+    color: 'black',
+  },
+  timetableContainer: {
+    paddingHorizontal: 0,
+    alignItems: 'flex-start',
   },
   box: {
-    width: '95%',
-    padding: 20,
-    margin: 10,
-    borderRadius: 10,
+    width: '100%',
+    height: 150,
+    borderRadius: 17,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    marginVertical: 5,
+    padding: 10,
   },
   boxText: {
+    fontFamily: 'Inria Serif',
     fontSize: 20,
     fontWeight: '700',
-    marginBottom: 10,
-    color:'white',
     textAlign: 'center',
-    borderBottomWidth:2,
+    color: 'white',
   },
   timeText: {
+    fontFamily: 'Inria Serif',
     fontSize: 18,
-    marginBottom: 10,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
+    marginBottom: 10,
   },
   classSectionText: {
+    fontFamily: 'Inria Serif',
     fontSize: 18,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
   },
 });
 

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { Dropdown } from 'react-native-element-dropdown';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const TeacherNotifications = ({ route }) => {
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
+  const [filteredNotifications, setFilteredNotifications] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState('all');
   const [errors, setErrors] = useState({});
   const email = route.params.email;
 
@@ -13,7 +18,7 @@ const TeacherNotifications = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const [complaintsResponse, announcementsResponse, leaveResponse] = await Promise.all([
-          axios.get('http://10.0.2.2:3000/complaints?recipient=teacher'),
+          axios.get('http://10.0.2.2:3000/notificationComplaints?recipient=teacher'),
           axios.get('http://10.0.2.2:3000/reciveAnnouncements?reciver=Teacher'),
           axios.get(`http://10.0.2.2:3000/leaveNotification?email=${email}`)
         ]);
@@ -24,10 +29,10 @@ const TeacherNotifications = ({ route }) => {
           ...leaveResponse.data.map(item => ({ ...item, type: 'leave' }))
         ];
 
-        // Optionally sort combinedData by date if there's a date field available
         combinedData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         setNotifications(combinedData);
+        setFilteredNotifications(combinedData);
       } catch (err) {
         console.error('Error fetching notifications:', err);
         setErrors({ general: 'Failed to load notifications' });
@@ -36,6 +41,15 @@ const TeacherNotifications = ({ route }) => {
 
     fetchNotifications();
   }, [email]);
+
+  const handleFilterChange = (item) => {
+    setSelectedFilter(item.value);
+    if (item.value === 'all') {
+      setFilteredNotifications(notifications);
+    } else {
+      setFilteredNotifications(notifications.filter(notification => notification.type === item.value));
+    }
+  };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => {
@@ -80,12 +94,35 @@ const TeacherNotifications = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {errors.general && <Text style={styles.error}>{errors.general}</Text>}
-      <FlatList
-        data={notifications}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-      />
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.head}>
+        <TouchableOpacity onPress={() => navigation.navigate('TeacherHomeScreen', { email })}>
+          <Image source={Image1} style={styles.image} />
+        </TouchableOpacity>
+        <Text style={styles.header}>Notifications</Text>
+      </View>
+      <View style={styles.body}>
+        {errors.general && <Text style={styles.error}>{errors.general}</Text>}
+        <Dropdown
+          style={styles.dropdown}
+          data={[
+            { label: 'All', value: 'all' },
+            { label: 'Announcements', value: 'announcement' },
+            { label: 'Complaints', value: 'complaint' },
+            { label: 'Leaves', value: 'leave' }
+          ]}
+          labelField="label"
+          valueField="value"
+          placeholder="Select filter"
+          value={selectedFilter}
+          onChange={handleFilterChange}
+        />
+        <FlatList
+          data={filteredNotifications}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
+        />
+      </View>
     </View>
   );
 };
@@ -93,10 +130,36 @@ const TeacherNotifications = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
+  },
+  head: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    top: 10,
+    marginBottom: 60,
+  },
+  image: {
+    height: 23,
+    width: 20,
+    marginHorizontal: 10,
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  body: {
+    borderRadius: 30,
+    backgroundColor: 'white',
+    height: '110%',
     padding: 20,
-    backgroundColor: '#fff',
-    borderColor: 'black',
-    borderWidth: 3,
+  },
+  dropdown: {
+    marginBottom: 20,
   },
   notificationItem: {
     padding: 15,
@@ -114,7 +177,7 @@ const styles = StyleSheet.create({
   text1: {
     fontSize: 16,
     color: 'red',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   error: {
     color: 'red',

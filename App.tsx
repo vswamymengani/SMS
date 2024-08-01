@@ -72,6 +72,10 @@ import PrevResults from './components/screens/PrevResults';
 import SingleSyudentComplaint from './components/screens/SingleStudentComplaint';
 import SingleStudentComplaint from './components/screens/SingleStudentComplaint';
 import StudentExamResults from './components/screens/StudentExamResults';
+import AdminLibrary from './components/screens/AdminLibrary';
+import Library from './components/screens/Library';
+import TeacherOnlineExam from './components/screens/TeacherOnlineExam';
+import StudentOnlineExam from './components/screens/StudentOnlineExam';
 
 const Stack = createNativeStackNavigator();
 
@@ -112,12 +116,12 @@ function App() {
         <Stack.Screen name="TeacherTimetable" component={TeacherTimetable} options={{ headerShown: false }} />
         <Stack.Screen name="RequestEdit" component={RequestEdit} options={{title: "Update Details"}} />
         <Stack.Screen name="ReciveComplaint" component={ReciveComplaint} options={{title:"Student Complaint"}} />
-        <Stack.Screen name="TeacherNotifications" component={TeacherNotifications} options={{title :"Notificatios"}} />
+        <Stack.Screen name="TeacherNotifications" component={TeacherNotifications} options={{headerShown: false}} />
         <Stack.Screen name="TeacherDetails" component={TeacherDetails} options={{title: "Teacher Details"}} />
         <Stack.Screen name="AdminTeacherComplaints" component={AdminTeacherComplaints} options={{title: "Teacher Complaints"}} />
         <Stack.Screen name="TeacherAnnouncements" component={TeacherAnnouncements} options={{title:"Teacher Announcements"}} />
         <Stack.Screen name="ModifyInfo" component={ModifyInfo} options={{title :"Update Profile"}} />
-        <Stack.Screen name="StudentNotifications" component={StudentNotifications} options={{title:"Notifications"}} />
+        <Stack.Screen name="StudentNotifications" component={StudentNotifications} options={{headerShown: false}} />
         <Stack.Screen name="CalendarScreen" component={CalendarScreen} options={{headerShown: false}} />
         <Stack.Screen name="HomeworkScreen" component={HomeworkScreen} options={{headerShown: false}} />
         <Stack.Screen name="StudentDetails" component={StudentDetails} options={{title:"Student Details"}} />
@@ -128,7 +132,7 @@ function App() {
         <Stack.Screen name="AdminTimeTable" component={AdminTimeTable} options={{title:"Time Table"}} />
         <Stack.Screen name = "LeaveApproval" component={LeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="WorkInProgress" component={WorkInProgress} options={{headerShown: false}} />
-        <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{title: "List Of Home Works"}} />
+        <Stack.Screen name="TeacherHomeWorkList" component={TeacherHomeWorkList} options={{headerShown : false}} />
         <Stack.Screen name="TeacherLeaveApproval" component={TeacherLeaveApproval} options={{headerShown: false}} />
         <Stack.Screen name="TeacherExamResults" component={TeacherExamResults} options={{title:"Exam results"}} />
         <Stack.Screen name="StudentVerification" component={StudentVerification} options={{headerShown: false}} />
@@ -143,11 +147,15 @@ function App() {
         <Stack.Screen name="TeacherRegistration" component={TeacherRegistration} options={{headerShown: false}} />
         <Stack.Screen name="TeacherForgotPassword" component={TeacherForgotPassword} options={{headerShown: false}} />
         <Stack.Screen name="TeacherPasswordChange" component={TeacherPasswordChange} options={{headerShown: false}} />
-        <Stack.Screen name="TeacherStudyMaterial" component={TeacherStudyMaterial} options={{title: "Study Material"}} />
+        <Stack.Screen name="TeacherStudyMaterial" component={TeacherStudyMaterial} options={{headerShown: false}} />
         <Stack.Screen name="StudentStudyMaterial" component={StudentStudyMaterial} options={{headerShown: false}} />
         <Stack.Screen name="PrevResults" component={PrevResults} options={{title: "Previous Results"}} />
         <Stack.Screen name="SingleStudentComplaint" component={SingleStudentComplaint} options={{title: "Student Complaint"}} />
-        <Stack.Screen name="StudentExamResults" component={StudentExamResults} options={{title: "Exam Results"}} />
+        <Stack.Screen name="StudentExamResults" component={StudentExamResults} options={{headerShown: false}} />
+        <Stack.Screen name="AdminLibrary" component={AdminLibrary} options={{headerShown: false}} />
+        <Stack.Screen name="Library" component={Library} options={{headerShown:false}} />
+        <Stack.Screen name="StudentOnlineExam" component={StudentOnlineExam} options={{title: "Online Exam"}} />
+        <Stack.Screen name="TeacherOnlineExam" component={TeacherOnlineExam} options={{title: "Online Exam"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

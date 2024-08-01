@@ -17,7 +17,7 @@ const RequestEdit = () => {
       try {
         const response = await axios.get(`http://10.0.2.2:3000/teacherprofile?email=${email}`);
         if (response.data) {
-          const { id, created_at,employeeid,confirmPassword, ...rest } = response.data;
+          const { id, created_at,employeeid,confirmPassword,qualification, ...rest } = response.data;
           setProfile(rest);
         }
       } catch (err) {

@@ -1,20 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, ScrollView, Image, View, Text, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
-import Image1 from '../assets/BackArrow.png';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const TeacherComplaintList = ({ route }) => {
     const { email, employeeid } = route.params;
     const navigation = useNavigation();
     const [complaints, setComplaints] = useState([]);
     const [errors, setErrors] = useState({});
+    const [status, setStatus] = useState('all');
+    const [filteredComplaintList, setFilteredComplaintList] = useState([]);
+    const statusOptions = [
+        { label: 'All', value: 'all' },
+        { label: 'Resolved', value: 1 },
+        { label: 'Pending', value: 0 },
+    ];
+
+    useEffect(() => {
+        if (status === 'all') {
+            setFilteredComplaintList(complaints);
+        } else {
+            const filteredData = complaints.filter(item => item.is_resolved === status);
+            setFilteredComplaintList(filteredData);
+        }
+    }, [status, complaints]);
 
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
                 const response = await axios.get(`http://10.0.2.2:3000/teacherComplaintList?employeeid=${employeeid}`);
                 setComplaints(response.data.reverse());
+                setFilteredComplaintList(response.data.reverse());
             } catch (error) {
                 setErrors({ general: 'Unable to fetch the data' });
             }
@@ -34,15 +53,25 @@ const TeacherComplaintList = ({ route }) => {
 
     return (
         <View style={styles.container}>
+            <Image source={Image2} style={styles.bc} />
             <View style={styles.row}>
                 <TouchableOpacity onPress={() => navigation.navigate('TeacherComplaint1', { email })}>
                     <Image source={Image1} style={styles.image} />
                 </TouchableOpacity>
                 <Text style={styles.head}>Complaints List</Text>
             </View>
-            <View style={styles.box}>
+            <View style={styles.body}>
+                <Dropdown
+                    style={styles.dropdown}
+                    data={statusOptions}
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Select status"
+                    value={status}
+                    onChange={item => setStatus(item.value)}
+                />
                 <FlatList
-                    data={complaints}
+                    data={filteredComplaintList}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                 />
@@ -57,24 +86,41 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     image: {
-        height: 30,
-        width: 30,
-        right: 110,
+        height: 23,
+        width: 18,
+        left: 5,
     },
-    box: {
+    bc: {
+        height: '110%',
+        width: '110%',
+        position: 'absolute',
+    },
+    body: {
+        backgroundColor: 'white',
+        borderRadius: 30,
+        height: '110%',
         padding: 10,
+    },
+    dropdown: {
+        margin: 16,
+        height: 50,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        borderRadius: 8,
+        paddingHorizontal: 8,
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        borderBottomWidth: 2,
+        justifyContent: 'flex-start',
+        marginBottom: 60,
+        top: 10,
         padding: 10,
     },
     head: {
         fontSize: 20,
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
-        justifyContent: 'center',
+        marginHorizontal: 20,
     },
     head1: {
         fontSize: 20,
@@ -84,8 +130,8 @@ const styles = StyleSheet.create({
     },
     complaints: {
         padding: 10,
-        borderRadius: 20,
-        borderWidth: 2,
+        borderRadius: 10,
+        borderBottomWidth: 1,
         backgroundColor: 'white',
         justifyContent: 'center',
         margin: 10,

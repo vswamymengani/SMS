@@ -3,6 +3,8 @@ import {View,Text,TextInput,StyleSheet,TouchableOpacity,Modal,Image, ScrollView}
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Image1 from '../assets/Verified.png';
+import Image2 from '../assets/Back_Arrow.png';
+import Image3 from '../assets/BackImage.png';
 import { Dropdown } from "react-native-element-dropdown";
 
 const TeacherStudyMaterial = ({route}) =>{
@@ -105,7 +107,15 @@ const TeacherStudyMaterial = ({route}) =>{
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.dropdownRow2}>
+            <Image source={Image3} style={styles.bc} />
+            <View style={styles.head}>
+                <TouchableOpacity onPress={() =>navigation.navigate('TeacherHomeScreen',{ email})}>
+                    <Image source={Image2} style={styles.image} />
+                </TouchableOpacity>
+                <Text style={styles.heading}>Study Material</Text>
+            </View>
+        <View style={styles.body}>
+        <View style={styles.dropdownRow2}>
         <Dropdown
           style={styles.dropdown2}
           placeholderStyle={styles.placeholderStyle2}
@@ -180,6 +190,7 @@ const TeacherStudyMaterial = ({route}) =>{
                     <Text style={styles.text2}>Submit</Text>
                 </TouchableOpacity>
             </View>
+        </View>
             <Modal visible={isModalVisible} transparent={true} animationType="fade">
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
@@ -198,8 +209,34 @@ const TeacherStudyMaterial = ({route}) =>{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        padding: 20,
+    },
+    bc: {
+        height: '110%',
+        width: '110%',
+        position: 'absolute',
+    },
+    body: {
+        backgroundColor: 'white',
+        height: '110%',
+        borderRadius: 30,
+        paddingHorizontal: 10,
+    },
+    head: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginVertical: 40,
+    },
+    heading: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+    },
+    image: {
+        height: 23,
+        width: 20,
+        left: 10,
+        marginRight: 30,
     },
     text1:{
         fontSize:15,
@@ -210,12 +247,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
+        padding:10,
+        marginTop:20,
     },
     dropdown2: {
         width: '48%',
-        borderWidth:2,
+        borderBottomWidth:1,
         color:'black',
-        padding:8,
+        padding:10,
         borderRadius:10,
         borderColor: '#3F1175',
     },
@@ -223,10 +262,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 20,
+        padding:10,
     },
     dropdown: {
         width: '48%',
-        borderWidth:2,
+        borderBottomWidth:1,
         padding:8,
         borderColor: '#3F1175',
         borderRadius:10,

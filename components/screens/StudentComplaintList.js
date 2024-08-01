@@ -37,6 +37,7 @@ const StudentComplaintList = ({ route }) => {
             try {
                 const response = await axios.get('http://10.0.2.2:3000/studentComplaintList', { params: { fullname, className, section } });
                 setComplaints(response.data.reverse());
+                setFilteredComplaintList(response.data.reverse());
             } catch (error) {
                 setErrors({ general: 'Unable to fetch the data' });
             }

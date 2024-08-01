@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button ,Image, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const StudentExamResults = ({ route }) => {
@@ -49,6 +51,14 @@ const StudentExamResults = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.head}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email })} >
+          <Image source={Image1} style={styles.image} />
+        </TouchableOpacity>
+        <Text style={styles.header}>Exam Results</Text>
+      </View>
+      <View style={styles.body}>
       {errors.general && <Text style={styles.error}>{errors.general}</Text>}
       <View style={styles.dropdownContainer}>
         <Dropdown
@@ -75,6 +85,7 @@ const StudentExamResults = ({ route }) => {
         renderItem={renderResult}
         keyExtractor={(item, index) => index.toString()}
       />
+      </View>
     </View>
   );
 };
@@ -82,19 +93,42 @@ const StudentExamResults = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderColor: 'black',
-    borderWidth: 3,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
+  },
+  head:{
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    top:20,
+    marginBottom:80,
+  },
+  image:{
+    height:23,
+    width:20,
+    marginHorizontal:10
+  },
+  header:{
+    fontSize:20,
+    fontWeight:'bold',
+    color:'white',
+  },
+  body:{
+    borderRadius:30,
+    backgroundColor:'white',
+    height:'110%',
   },
   dropdownContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    margin: 20,
   },
   dropdown: {
     flex: 1,
     height: 50,
+    width:60,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 8,

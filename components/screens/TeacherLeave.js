@@ -3,7 +3,8 @@ import { Text, TextInput, StyleSheet, Modal, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import Image1 from '../assets/BackArrow.png';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const TeacherLeave = ({ route }) => {
   const navigation = useNavigation();
@@ -88,6 +89,7 @@ const TeacherLeave = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <Image source={Image2} style={styles.bc} />
       <View style={styles.heading}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Image1} style={styles.image} />
@@ -112,7 +114,8 @@ const TeacherLeave = ({ route }) => {
         <TextInput
           style={styles.text}
           value={startdate}
-          placeholder="Starting Date YYYY-MM-DD"
+          keyboardType='numeric'
+          placeholder="DD-MM-YYYY"
           onChangeText={(text) => { setStartDate(text); clearError('startdate'); }}
         />
         {errors.startdate && <Text style={styles.error}>{errors.startdate}</Text>}
@@ -120,7 +123,8 @@ const TeacherLeave = ({ route }) => {
         <TextInput
           style={styles.text}
           value={enddate}
-          placeholder="Ending Date YYYY-MM-DD"
+          keyboardType='numeric'
+          placeholder="DD-MM-YYYY"
           onChangeText={(text) => { setEndDate(text); clearError('enddate'); }}
         />
         {errors.enddate && <Text style={styles.error}>{errors.enddate}</Text>}
@@ -129,7 +133,7 @@ const TeacherLeave = ({ route }) => {
           style={styles.description}
           value={description}
           multiline
-          numberOfLines={5}
+          numberOfLines={10}
           placeholder="Explain the Leave Purpose"
           onChangeText={(text) => { setDescription(text); clearError('description'); }}
         />
@@ -172,25 +176,29 @@ const styles = StyleSheet.create({
   container1: {
     backgroundColor: '#fff',
     padding: 20,
+    borderRadius:30,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
   },
   heading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 2,
-    borderColor: 'gray',
     margin: 15,
-    marginBottom: 10,
+    marginBottom: 60,
     padding: 3,
   },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
   },
   image: {
-    height: 30,
-    width: 30,
+    height: 23,
+    width: 18,
   },
   headding: {
     fontSize: 18,
@@ -211,16 +219,16 @@ const styles = StyleSheet.create({
     top: -5,
   },
   text: {
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#3F1175',
     borderRadius: 5,
     padding: 15,
     fontSize: 16,
     color: 'black',
-    marginVertical: 10,
+    marginVertical: 5,
   },
   description: {
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: '#3F1175',
     borderRadius: 15,
     padding: 15,

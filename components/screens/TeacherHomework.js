@@ -5,7 +5,8 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import Image1 from "../assets/Verified.png";
-import Image2 from "../assets/BackArrow.png";
+import Image2 from "../assets/Back_Arrow.png";
+import Image3 from '../assets/BackImage.png';
 
 const TeacherHomework = ({route}) => {
     const navigation = useNavigation();
@@ -111,6 +112,7 @@ const TeacherHomework = ({route}) => {
 
     return (
         <ScrollView style={styles.container}>
+            <Image source={Image3} style={styles.bc} />
             <View style={styles.right}>
                 <TouchableOpacity onPress={() =>navigation.navigate('TeacherHomeScreen',{email})}>
                     <Image source={Image2} style={styles.image} />
@@ -236,20 +238,28 @@ const styles = StyleSheet.create({
     },
     body:{
         padding:15,
+        backgroundColor:'white',
+        borderRadius:30,
+    },
+    bc:{
+        height:'110%',
+        width:'110%',
+        position:'absolute',
     },
     right: {
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        borderBottomWidth:2,
+        marginBottom:40,
     },
     image:{
-        height:30,
-        width:30,
+        height:23,
+        width:18,
+        left:10,
     },
     head:{
         fontSize:20,
-        color:'black',
+        color:'white',
         fontWeight:'bold',
     },
     button: {
@@ -270,7 +280,7 @@ const styles = StyleSheet.create({
     dropdown: {
         height: 50,
         borderColor: '#3F1175',
-        borderWidth: 2,
+        borderBottomWidth: 1,
         borderRadius: 12,
         paddingHorizontal: 8,
         marginVertical: 10,
@@ -351,8 +361,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#3F1175',
         padding: 10,
-        borderRadius: 25,
-        borderTopEndRadius:20,
         backgroundColor: 'white',
         fontSize: 16,
         textAlignVertical: 'top',
