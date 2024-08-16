@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Image, Scro
 import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Image1 from '../assets/Verified.png';
-import Image2 from '../assets/BackArrow.png';
+import Image2 from '../assets/Back_Arrow.png';
+import Image3 from '../assets/BackImage.png';
 import axios from 'axios';
 
 const StudentLeave = ({ route }) => {
@@ -12,7 +13,7 @@ const StudentLeave = ({ route }) => {
   const [fullname, setFullname] = useState('');
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
-  const [recipient, setRecipient] = useState('');
+  const [recipient, setRecipient] = useState('Principal'); // Set recipient to "teacher" initially
   const [leavePurpose, setLeavePurpose] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -24,11 +25,11 @@ const StudentLeave = ({ route }) => {
 
   const validate = () => {
     const newErrors = {};
-    if (!recipient) newErrors.recipient = 'select the recipient';
-    if (!leavePurpose) newErrors.leavePurpose = 'enter the leave purpose';
-    if (!startDate) newErrors.startDate = 'enter the starting date';
-    if (!endDate) newErrors.endDate = 'enter the endDate';
-    if (!description) newErrors.description = 'explain your reason';
+    if (!recipient) newErrors.recipient = 'Select the recipient';
+    if (!leavePurpose) newErrors.leavePurpose = 'Enter the leave purpose';
+    if (!startDate) newErrors.startDate = 'Enter the starting date';
+    if (!endDate) newErrors.endDate = 'Enter the end date';
+    if (!description) newErrors.description = 'Explain your reason';
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
@@ -47,7 +48,7 @@ const StudentLeave = ({ route }) => {
         setFullname(profile.fullname);
         setClassName(profile.className);
         setSection(profile.section);
-        setYourEmail(profile.email)
+        setYourEmail(profile.email);
       } catch (err) {
         setErrors('Failed to load profile data');
       }
@@ -76,7 +77,7 @@ const StudentLeave = ({ route }) => {
         if (response.status === 200) {
           handleSend();
         } else {
-          console.error('failed to send', response.status);
+          console.error('Failed to send', response.status);
         }
       })
       .catch(error => {
@@ -102,11 +103,6 @@ const StudentLeave = ({ route }) => {
     navigation.navigate('Homescreen', { email });
   };
 
-  const recipientData = [
-    { label: 'Principal', value: 'principal' },
-    { label: 'Teacher', value: 'teacher' },
-  ];
-
   const leavePurposeData = [
     { label: 'Health Issue', value: 'health' },
     { label: 'Family-related Issue', value: 'family' },
@@ -116,43 +112,18 @@ const StudentLeave = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
+      <Image source={Image3} style={styles.bc} />
       <View style={styles.heading}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Image2} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Leave Letter</Text>
-        <TouchableOpacity onPress={() =>navigation.navigate('LeaveApproval',{email})}>
-           <Text style ={styles.button}>My Leaves</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('LeaveApproval', { email })}>
+          <Text style={styles.button}>My Leaves</Text>
         </TouchableOpacity>
-        </View>
-      <View style={styles.row}>
-        <Text style={styles.details}>
-          {fullname}
-        </Text>
-        <Text style={styles.details}>
-          Class:{className}
-        </Text>
-        <Text style={styles.details}>
-          Section:{section}
-        </Text>
       </View>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={recipientData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Select Recipient"
-        value={recipient}
-        onChange={item => {
-          setRecipient(item.value);
-          clearError('recipient');
-        }}
-        accessible={true}
-        accessibilityLabel="Type of recipient"
-      />
+      <View style={styles.body}>
+      <Text style={styles.dateInput}>To {recipient}</Text>
       {errors.recipient && <Text style={styles.error}>{errors.recipient}</Text>}
       <Dropdown
         style={styles.dropdown}
@@ -177,6 +148,7 @@ const StudentLeave = ({ route }) => {
         placeholder="Enter Start Date (DD-MM-YYYY)"
         value={startDate}
         accessible={true}
+        keyboardType='numeric'
         accessibilityLabel="starting date"
         onChangeText={(text) => {
           setStartDate(text);
@@ -189,6 +161,7 @@ const StudentLeave = ({ route }) => {
         placeholder="Enter End Date (DD-MM-YYYY)"
         value={endDate}
         accessible={true}
+        keyboardType='numeric'
         accessibilityLabel="ending date"
         onChangeText={(text) => {
           setEndDate(text);
@@ -214,6 +187,7 @@ const StudentLeave = ({ route }) => {
       <TouchableOpacity style={styles.sendButton} onPress={handleSendLeaveRequest}>
         <Text style={styles.sendButtonText}>Send</Text>
       </TouchableOpacity>
+      </View>
       <Modal visible={isModalVisible} transparent={true} animationType='fade'>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -233,25 +207,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 10,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
   },
   heading: {
     flexDirection: 'row',
-    justifyContent:'space-between',
-    borderBottomWidth :2,
-    borderColor:'gray',
-    margin:10,
-    marginBottom:10,
-  },  
+    justifyContent: 'space-between',
+    margin: 10,
+    top:10,
+    marginBottom: 40,
+  },
   header: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black',
+    color: 'white',
     textAlign: 'center',
   },
+  body:{
+    backgroundColor:'white',
+    borderRadius:30,
+    height:'110%',
+    padding:10,
+  },
   image: {
-    height: 30,
-    width: 30,
+    height: 23,
+    width: 20,
   },
   button: {
     alignItems: 'center',
@@ -260,29 +243,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     borderRadius: 15,
+    borderColor:'white',
     padding: 5,
     textAlign: 'center',
-    left:10,
-    top:-5,
+    left: 10,
+    top: -5,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 30,
-  },
-  details:{
-      fontSize:20,
-      fontWeight:'bold',
-      color:'white',
-      borderColor:'black',
-      backgroundColor:'#3F1175',
-      borderWidth:2,
-      width:'33%',
-      height:40,
-      top:10,
-      borderRadius:20,
-      textAlign:'center',
-      padding:5,
   },
   dropdown: {
     margin: 13,
@@ -290,12 +260,11 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     marginLeft: 0,
     padding: 20,
-    borderWidth: 3,
-    borderColor: '#3F1175',
-    borderRadius: 30,
+    borderRadius: 10,
+    borderBottomWidth:1,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    top:0,
+    top: 0,
   },
   placeholderStyle: {
     fontSize: 16,
@@ -306,9 +275,8 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dateInput: {
-    borderWidth: 3,
-    borderColor: '#3F1175',
-    borderRadius: 30,
+    borderBottomWidth:1,
+    borderRadius: 10,
     padding: 15,
     fontSize: 16,
     color: 'black',

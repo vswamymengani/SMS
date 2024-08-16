@@ -4,44 +4,37 @@ import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const RequestEdit = () => {
-  const [value, setValue] = useState('');
-  const [fieldToEdit, setFieldToEdit] = useState('');
+  const [profile, setProfile] = useState({});
   const [email, setEmail] = useState('');
   const navigation = useNavigation();
   const route = useRoute();
   
   useEffect(() => {
-    const { field, email } = route.params;
-    setFieldToEdit(field);
+    const { email } = route.params;
     setEmail(email);
 
-    const fetchCurrentValue = async () => {
+    const fetchProfile = async () => {
       try {
         const response = await axios.get(`http://10.0.2.2:3000/teacherprofile?email=${email}`);
         if (response.data) {
-          setValue(response.data[field]);
+          const { id, created_at,employeeid,confirmPassword,qualification, ...rest } = response.data;
+          setProfile(rest);
         }
       } catch (err) {
-        Alert.alert('Error', 'Failed to load current value');
+        Alert.alert('Error', 'Failed to load profile data');
       }
     };
 
-    if (email && field) {
-      fetchCurrentValue();
+    if (email) {
+      fetchProfile();
     }
   }, [route.params]);
 
   const handleUpdate = async () => {
-    if (!value) {
-      Alert.alert('Validation Error', 'Value cannot be empty');
-      return;
-    }
-
     try {
       const response = await axios.post('http://10.0.2.2:3000/teacherupdate', {
-        field: fieldToEdit,
-        value: value,
-        email: email,
+        profile,
+        email,
       });
 
       if (response.data.success) {
@@ -56,15 +49,26 @@ const RequestEdit = () => {
     }
   };
 
+  const handleChange = (field, value) => {
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      [field]: value,
+    }));
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>Update {fieldToEdit}</Text>
-      <TextInput
-        style={styles.input}
-        value={value}
-        onChangeText={setValue}
-        placeholder={`Enter new Details`}
-      />
+      {Object.keys(profile).map((key) => (
+        <View key={key} style={styles.fieldContainer}>
+          <Text style={styles.label}>{key}</Text>
+          <TextInput
+            style={styles.input}
+            value={profile[key]}
+            onChangeText={(value) => handleChange(key, value)}
+            placeholder={`Enter new ${key}`}
+          />
+        </View>
+      ))}
       <TouchableOpacity onPress={handleUpdate} style={styles.updateButton}>
         <Text style={styles.updateButtonText}>Update</Text>
       </TouchableOpacity>
@@ -80,17 +84,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
   },
+  fieldContainer: {
+    width: '100%',
+    marginBottom: 15,
+  },
   label: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
+    color:'black',
   },
   input: {
     height: 40,
-    width: '80%',
-    borderColor: 'gray',
+    width: '100%',
+    color:'black',
+    borderColor: 'black',
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 10,
+    borderRadius:10,
     paddingHorizontal: 10,
   },
   updateButton: {

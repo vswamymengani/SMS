@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import axios from 'axios';
 
-const StudentExamScreen = () => {
+const StudentOnlineExam = ({ route }) => {
+  const email = route.params.email;
+  const [className, setClassName] = useState('');
+  const [section, setSection] = useState('');
+  const [profile, setProfile] = useState({});
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -11,24 +15,44 @@ const StudentExamScreen = () => {
   const [incorrectAnswers, setIncorrectAnswers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  //this is online exam screen
 
   useEffect(() => {
-    // Fetch questions from the backend
-    axios.get('http://10.0.2.2:3000/api/questions')
-      .then(response => {
-        setQuestions(response.data);
-        setTotalQuestions(response.data.length);
-        setLoading(false);
-      })
-      .catch(error => {
-        setLoading(false);
-        setError('Failed to load questions');
-        console.error(error);
-      });
-  }, []);
+    const fetchProfileData = async () => {
+      try {
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const profileData = response.data;
+        setProfile(profileData);
+        setClassName(profileData.className);
+        setSection(profileData.section);
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+      }
+    };
 
-  // Handle option selection
+    if (email) {
+      fetchProfileData();
+    } else {
+      setError('Email not provided');
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (className && section) {
+      // Fetch questions from the backend
+      axios.get(`http://10.0.2.2:3000/questions?className=${className}&section=${section}`)
+        .then(response => {
+          setQuestions(response.data);
+          setTotalQuestions(response.data.length);
+          setLoading(false);
+        })
+        .catch(error => {
+          setLoading(false);
+          setError('Failed to load questions');
+          console.error(error);
+        });
+    }
+  }, [className, section]);
+
   const handleOptionSelect = (questionId, option) => {
     setAnswers(prevAnswers => ({
       ...prevAnswers,
@@ -36,9 +60,8 @@ const StudentExamScreen = () => {
     }));
   };
 
-  // Submit answers and calculate score
   const handleSubmit = () => {
-    axios.post('http://10.0.2.2:3000/api/submit', { answers })
+    axios.post('http://10.0.2.2:3000/submit', { answers, email })
       .then(response => {
         const { score, totalQuestions, incorrectAnswers } = response.data;
         setScore(score);
@@ -52,13 +75,12 @@ const StudentExamScreen = () => {
       });
   };
 
-  // Render a single question
   const renderQuestion = ({ item }) => (
     <View key={item.id} style={styles.questionContainer}>
       <Text style={styles.questionText}>{item.question}</Text>
-      {(Array.isArray(item.options) ? item.options : []).map((option, index) => (
+      {item.options.map((option, index) => (
         <TouchableOpacity
-          key={`${item.id}-option-${index}`} // Unique key for each option button
+          key={`${item.id}-option-${index}`}
           style={[
             styles.optionButton,
             answers[item.id] === option && styles.selectedOption
@@ -82,7 +104,7 @@ const StudentExamScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {questions.length > 0 ? (
-        questions.map((question) => renderQuestion({ item: question }))
+        questions.map(question => renderQuestion({ item: question }))
       ) : (
         <Text>No questions available</Text>
       )}
@@ -128,4 +150,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default StudentExamScreen;
+export default StudentOnlineExam;

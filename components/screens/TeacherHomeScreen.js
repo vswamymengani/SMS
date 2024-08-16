@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity ,Modal} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
@@ -20,14 +20,45 @@ import Image20 from '../assets/library.png';
 import Image21 from '../assets/Birthdays.png';
 import Image22 from '../assets/studymaterial.png';
 import Image23 from '../assets/liveclasses.png';
+import Image1 from '../assets/Menu.png';
+import Image2 from '../assets/Menuicon.png';
+import Image24 from '../assets/profilepic.png';
+import axios from 'axios';
 import TeacherLogin from './TeacherLogin';
 
 const TeacherHomeScreen = ({route}) => {
     const navigation = useNavigation();
-    const { email } = route.params;
-  return (
+    const  email  = route.params.email;
+    const [profileVisible, setProfileVisible] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [profile, setProfile] = useState([]);
+    const [subject, setSubject] = useState('');
+    const [errors ,setErrors] = useState({});
+
+    useEffect(() =>{
+      const fetchProfile = async() =>{
+        try{
+          const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+          setProfile(response.data);
+          setSubject(response.data.subject);
+        }
+        catch(error){
+          setErrors({general:"unable to fetch the data"});
+        }
+      }
+      fetchProfile();
+    },[email]);
+   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {profileVisible && (
+        <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
+          {/* Add any profile image or icon here if needed */}
+        </TouchableOpacity>
+      )}
       <Image source={Image5} style={styles.image5} />
+      <TouchableOpacity style={styles.menuIcon} onPress={() => setModalVisible(true)}>
+        <Image source={Image2} style={styles.image2} />
+      </TouchableOpacity>
       <Image source={Image6} style={styles.image6} />
       <Image source={Image3} style={styles.image3} />
         
@@ -45,9 +76,9 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image7} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('ClassWork',{ email })}>
+        <TouchableOpacity style={styles.square2} onPress={() => navigation.navigate('TeacherOnlineExam',{ email })}>
           <Image source={Image18} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Class Work</Text>
+          <Text style={styles.loginButtonText}>Online Exam</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.square3} onPress={() => navigation.navigate('TeacherHomework',{ email })}>
           <Image source={Image9} style={styles.squareImage} />
@@ -73,9 +104,9 @@ const TeacherHomeScreen = ({route}) => {
       
       
       <View style={styles.squareRow}>
-        <TouchableOpacity style={styles.square16} onPress={() => navigation.navigate('ClassWork',{ email })}>
-          <Image source={Image23} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Live Class</Text>
+        <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('TeacherExamResults',{ email })}>
+          <Image source={Image10} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>Exam Results</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.square8} onPress={() => navigation.navigate('ClassWork',{ email })}>
           <Image source={Image15} style={styles.squareImage} />
@@ -96,26 +127,55 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image3} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Time Table</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('ClassWork',{ email })}>
+        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('TeacherStudyMaterial',{ email })}>
           <Image source={Image22} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Study Material</Text>
         </TouchableOpacity>
       </View>
        
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('TeacherExamResults',{ email })}>
-          <Image source={Image10} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Examination</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('OnlineExamination',{ email })}>
-          <Image source={Image10} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>OnlineExamination</Text>
-        </TouchableOpacity>
         <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ClassWork',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>
         </TouchableOpacity>
+        <View style={styles.squareRow}>
+                <TouchableOpacity style={styles.square14} onPress={() => {
+                    if (subject === 'Library') {
+                        navigation.navigate('LibraryManagement', { email });
+                    } else {
+                        navigation.navigate('Library', { email });
+                    }
+                }}>
+                    <Image source={require('../assets/library.png')} style={styles.squareImage} />
+                    <Text style={styles.loginButtonText}>Library</Text>
+                </TouchableOpacity>
+            </View>
       </View>
+      <Modal
+        animationType="slide-left"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <TouchableOpacity style={styles.modalMenuIcon} onPress={() => setModalVisible(false)}>
+              <Image source={Image2} style={styles.image1} />
+            </TouchableOpacity>
+            <Image source={Image24} style={styles.image} />
+            <Text style={styles.modalText1}>{profile.fullname}</Text>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('TeacherHomeScreen',{ email }); }}>
+              <Text style={styles.modalText}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('TeacherProfile',{ email }); }}>
+              <Text style={styles.modalText}>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('TeacherLogin'); }}>
+              <Text style={styles.modalText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -133,9 +193,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
   },
+  image: {
+    width: 130,
+    height: 130,
+    marginBottom: 40,
+    marginTop: 90,
+  },
+  image1: {
+    width: 30,
+    height: 30,
+    marginBottom: 20,
+    marginTop: 30,
+  },
   image3: {
-    width:150,
-    height: 200,
+    width:180,
+    height: 180,
     position: 'absolute',
     top: 90,
   },
@@ -144,6 +216,43 @@ const styles = StyleSheet.create({
     height: 200,
     position: 'absolute',
     top: 90,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalView: {
+    width: 250,
+    height: 780,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
+  },
+  modalMenuIcon: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
+  modalText: {
+    fontSize: 18,
+    color: 'black',
+    marginVertical: 10,
+  },
+  image2: {
+    width: 30,
+    height: 30,
+    top:20,
+    position:'absolute',
+    right:160,
+  },
+  modalText1: {
+    fontSize: 20,
+    color: 'blue',
+    fontWeight:'bold',
+    marginVertical: 10,
   },
   welcomeBox: {
     width: 338,

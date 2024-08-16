@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import axios from 'axios';
 import PieChart from 'react-native-pie-chart';
 
+
 const LegendItem = ({ color, label, value }) => (
   <View style={styles.legendItem}>
     <View style={[styles.legendColor, { backgroundColor: color }]} />
@@ -10,7 +11,7 @@ const LegendItem = ({ color, label, value }) => (
   </View>
 );
 
-const StudentAttendance = ({ rollno, className, section }) => {
+const StudentAttendance = ({ rollNo, className, section }) => {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +20,7 @@ const StudentAttendance = ({ rollno, className, section }) => {
     const fetchSummary = async () => {
       try {
         const response = await axios.get('http://10.0.2.2:3000/attendance/summary', {
-          params: { rollno, className, section },
+          params: { rollNo, className, section },
         });
         setSummary(response.data);
       } catch (err) {
@@ -30,7 +31,7 @@ const StudentAttendance = ({ rollno, className, section }) => {
     };
 
     fetchSummary();
-  }, [rollno, className, section]);
+  }, [rollNo, className, section]);
 
   if (loading) {
     return <Text style={styles.loading}>Loading...</Text>;

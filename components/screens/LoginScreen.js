@@ -56,16 +56,6 @@ const LoginScreen = () => {
   // Render different content based on whether user is logged in or not
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {loggedInEmail ? ( // If logged in, show different content
-        <View>
-          <Text style={styles.logout}>Are you sure want to Logout,</Text>
-          <Text style={styles.logout}>{loggedInEmail}!</Text>
-          <TouchableOpacity onPress={() => setLoggedInEmail(null)}>
-            <Text style={styles.logout}>Logout</Text>
-          </TouchableOpacity>
-        </View>
-      ) : ( // If not logged in, show login form
-        <>
           <Image source={Image5} style={styles.image5} />
           <Image source={Image6} style={styles.image6} />
           <Image source={Image3} style={styles.image3} />
@@ -96,6 +86,7 @@ const LoginScreen = () => {
             />
             {errors.password && <Text style={styles.error}>{errors.password}</Text>}
           </View>
+          <View style={styles.formContainer1}>
           <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
@@ -103,13 +94,12 @@ const LoginScreen = () => {
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Form')}>
+          <TouchableOpacity onPress={() => navigation.navigate('StudentVerification')}>
             <Text style={styles.signupText}>
               Don't have an account? <Text style={styles.signupLink}>Register Now</Text>
             </Text>
           </TouchableOpacity>
-        </>
-      )}
+          </View>
     </ScrollView>
   );
 };
@@ -148,39 +138,52 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 150,
+    marginBottom:350,
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
+    borderRadius:30,
   },
   formContainer: {
     alignItems: 'flex-start',
-    marginTop: 30,
+    marginTop: 60,
+    top:350,
     width: '80%',
+    position:'absolute',
+  },
+  formContainer1: {
+    alignItems: 'center',
+    width: '80%',
+    top:650,
+    position:'absolute',
   },
   labelContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 15,
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
-    marginRight: 5,
+    marginRight: 10,
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: 30,
     width: '100%',
+    borderRadius:8,
     paddingHorizontal: 10,
   },
   forgotPassword: {
-    marginTop: 10,
-    marginBottom: 20,
+    position:'absolute',
+    top:-40,
+    right:10,
+    
   },
   forgotPasswordText: {
     fontSize: 14,
@@ -189,9 +192,9 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#1DBBFF',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: 'center',
-    width: '80%',
+    width: '60%',
     marginBottom: 20,
   },
   loginButtonText: {
@@ -200,7 +203,7 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 14,
-    color: 'gray',
+    color: 'black',
   },
   signupLink: {
     color: '#1DBBFF',

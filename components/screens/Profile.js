@@ -1,10 +1,11 @@
-//profile.js code
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Image1 from '../assets/Admin.png';
+import Image2 from '../assets/ProfileBc.png';
+import Image3 from '../assets/Back_Arrow.png';
 
 const Profile = ({ navigation, route }) => {
   const [profile, setProfile] = useState({});
@@ -14,7 +15,7 @@ const Profile = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/profile?email=${email}`);
+        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
         setProfile(response.data);
       } catch (err) {
         setError('Failed to load profile data');
@@ -29,49 +30,43 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() =>navigation.navigate('Homescreen' , {email})}>
+          <Image source={Image3} style={styles.back} />
+        </TouchableOpacity>
+        <Text style={styles.head}>Profile</Text>
+      </View>
       <View style={styles.profileBox}>
-        <Image source={Image1} style={styles.profileImage} />
-        {error && <Text style={styles.error}>{error}</Text>}
+        <Image source={profile.photo ? { uri: profile.photo } : Image1} style={styles.profileImage} />
+        <Text style={styles.name}>{profile.fullname}</Text>
+        <Text style={styles.details1}>Class: {profile.className} {profile.section}</Text>
       </View>
-      <View style={styles.infoTitle}>
-          <Text style={styles.infoTitle}>Your  Information</Text>
-      </View>
-      <View style={styles.box}>
-      <View style={styles.infoBox}>
-        
-        <Text style={styles.infoText}>Full Name:</Text>
-        <Text style={styles.infoText}>Email</Text>
-        <Text style={styles.infoText}>Class: </Text>
-        <Text style={styles.infoText}>Section:</Text>
-        <Text style={styles.infoText}>Roll No:</Text>
-        <Text style={styles.infoText}>Date of Birth: </Text>
-        <Text style={styles.infoText}>Father's Name: </Text>
-        <Text style={styles.infoText}>Father's Number:</Text>
-        <Text style={styles.infoText}>Mother's Name:</Text>
-        <Text style={styles.infoText}>Mother's Number:</Text>
-        <Text style={styles.infoText}>Admission ID:</Text>
-        <Text style={styles.infoText2}>Present Address:</Text>
-      </View>
-      <View style={styles.infoBox}>
-      <Text style={styles.infoText1}>{profile.fullname}</Text>
-        <Text style={styles.infoText1}>{profile.email}</Text>
-        <Text style={styles.infoText1}>{profile.className}</Text>
-        <Text style={styles.infoText1}>{profile.section}</Text>
-        <Text style={styles.infoText1}>{profile.rollno}</Text>
-        <Text style={styles.infoText1}>{profile.dateofbirth}</Text>
-        <Text style={styles.infoText1}>{profile.fathername}</Text>
-        <Text style={styles.infoText1}>{profile.fatherno}</Text>
-        <Text style={styles.infoText1}>{profile.mothername}</Text>
-        <Text style={styles.infoText1}>{profile.motherno}</Text>
-        <Text style={styles.infoText1}>{profile.admissionid}</Text>
-        <Text style={styles.infoText2}>{profile.presentaddress}</Text>
+      
+    
+      <View style={styles.info}>
+        <View style={styles.body}>
+          <View style={styles.topic}>
+          <Text style={styles.details}>D.O.B:</Text>
+          <Text style={styles.details}>Roll Number: </Text>
+          <Text style={styles.details}>Admission No:</Text>
+          <Text style={styles.details}>Father Name:</Text>
+          <Text style={styles.details}>Father mobile:</Text>
+          <Text style={styles.details}>Mother Name:</Text>
+          <Text style={styles.details}>Mother mobile:</Text>
+          </View>
+          <View style={styles.topic}>
+          <Text style={styles.details2}>{profile.dateofbirth}</Text>
+          <Text style={styles.details2}>{profile.rollNo}</Text>
+          <Text style={styles.details2}>{profile.admissionid}</Text>
+          <Text style={styles.details2}>{profile.fatherName}</Text>
+          <Text style={styles.details2}>{profile.fatherNo}</Text>
+          <Text style={styles.details2}>{profile.motherName}</Text>
+          <Text style={styles.details2}>{profile.motherNo}</Text>
+          </View>
+        </View>
 
       </View>
-      </View>
-
-      <TouchableOpacity style={styles.homeButton} onPress={() => navigation.navigate('ModifyInfo',{ email })}>
-        <Text style={styles.homeButtonText}>Modify Info</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -79,71 +74,80 @@ const Profile = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    alignItems: 'center',
-    backgroundColor: 'white',
-    padding: 20,
+  },
+  back:{
+    height:23,
+    width:20,
+    marginLeft:20,
+    top:10,
+  },
+  bc:{
+    position:'absolute',
+    width:'110%',
+  },
+  head:{
+    fontSize:20,
+    color:'white',
+    fontWeight:'bold',
+    marginLeft:30,
+    top:10,
   },
   profileBox: {
     alignItems: 'center',
     marginVertical: 20,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 40,
+    marginTop:10,  
+  },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
-  },
-  box:{
-    flexDirection:'row',
-    
-  },
-  infoBox: {
-    width: '50%',
-    marginTop: 10,
+    width: 130,
+    height: 130,
+    borderRadius: 70,
+    borderColor:'white',
     borderWidth:2,
-  },
-  infoTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color:'black',
     marginBottom: 10,
+  }, 
+  info:{
+    width:'100%',
+    backgroundColor:'white',
+    alignItems:'center',
+    borderRadius:30,
+    marginBottom:20,
   },
-  infoText: {
-    fontSize: 20,
-    marginBottom: 2,
+  name:{
+    fontSize:30,
+    color:'white',
+    fontWeight:'bold',
+  },
+  details:{
+    fontSize:20,
     color:'black',
-    borderBottomWidth:1,
-    margin:1,
-    textAlign:'center',
+    margin:10,
+    padding:5,
+    marginBottom:10,
   },
-  infoText1: {
-    fontSize: 20,
-    marginBottom: 2,
-    color:'black',
-    borderBottomWidth:1,
-    margin:1,
-    textAlign:'center',
+  details2:{
+    fontSize:20,
+    marginBottom:10,
+    color:'blue',
+    margin:10,
+    padding:5,
   },
-  infoText2: {
-    fontSize: 20,
-    marginBottom: 2,
-    color:'black',
-    margin:1,
-    textAlign:'center',
+  details1:{
+    fontSize:18,
+    color:'white',
+    margin:10,
+    marginBottom:20,   
   },
-  homeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#1DBBFF',
-    borderRadius: 5,
-  },
-  homeButtonText: {
-    fontSize: 18,
-    color: 'white',
-  },
-  error: {
-    color: 'red',
-    marginTop: 10,
+  body:{
+    justifyContent:'space-around',
+    flexDirection:'row',
+    width:'90%',
+    height:'70%',
+    marginTop:20,
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal,ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import axios from 'axios';
 import Image5 from '../assets/Component1.png';
 import Image2 from '../assets/Menu.png';
@@ -10,8 +10,9 @@ import Image8 from '../assets/Teacher1.png';
 import Image9 from '../assets/Admin.png';
 import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
+import Image4 from '../assets/timetable1.png';
 import Image20 from '../assets/library.png';
-
+import Image23 from '../assets/gallary1.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -50,7 +51,6 @@ const AdminView = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
       {profileVisible && (
         <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
@@ -78,15 +78,27 @@ const AdminView = ({ navigation }) => {
           <Image source={Image9} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Parent Details</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminLibrary')}>
-          <Image source={Image20} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Library</Text>
-        </TouchableOpacity>
+      </View>
 
-        
-       
-       
+      <View style={styles.squareRow}>
+        <TouchableOpacity onPress={() => navigation.navigate('AdminTimeTable')}>
+            <View style={styles.square}>
+              <Image source={Image4} style={styles.squareImage} />
+              <Text>Timetable</Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => navigation.navigate('AdminLibrary')}>
+          <View style={styles.square}>
+            <Image source={Image20} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Library</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => navigation.navigate('AdminEventScreen')}>
+          <View style={styles.square}>
+            <Image source={Image23} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Events</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       
       <Modal
@@ -114,7 +126,6 @@ const AdminView = ({ navigation }) => {
         </View>
       </Modal>
     </View>
-    </ScrollView>
   );
 };
 
@@ -172,9 +183,9 @@ const styles = StyleSheet.create({
   },
   squareRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     width: '100%',
-    marginBottom: 20,
+    margin: 20,
     top: 400,
   },
   singleSquare: {

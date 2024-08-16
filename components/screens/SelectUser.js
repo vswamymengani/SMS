@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
@@ -9,40 +9,34 @@ import Image9 from '../assets/Admin.png';
 
 const SelectUser = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Image source={Image5} style={styles.image5} />
-        <Image source={Image6} style={styles.image6} />
-        <Image source={Image3} style={styles.image3} />
+    <View style={styles.container}>
+      <Image source={Image5} style={styles.image5} />
+      <Image source={Image6} style={styles.image6} />
+      <Image source={Image3} style={styles.image3} />
 
-        <Text style={styles.text}>Select Your Role</Text>
+      <Text style={styles.text}>Select Your Role</Text>
 
-        <View style={styles.squareRow}>
-          <TouchableOpacity style={[styles.square, styles.studentSquare]} onPress={() => navigation.navigate('LoginScreen')}>
-            <Image source={Image7} style={styles.squareImage} />
-            <Text style={styles.squareText}>Student</Text>
-          </TouchableOpacity>
+      <View style={styles.squareRow}>
+        <TouchableOpacity style={[styles.square, styles.studentSquare]} onPress={() => navigation.navigate('LoginScreen')}>
+          <Image source={Image7} style={styles.squareImage} />
+          <Text style={styles.squareText}>Student</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.square, styles.teacherSquare]} onPress={() => navigation.navigate('TeacherLogin')}>
-            <Image source={Image8} style={styles.squareImage} />
-            <Text style={styles.squareText}>Teacher</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity style={[styles.square, styles.adminSquare]} onPress={() => navigation.navigate('AdminLogin')}>
-          <Image source={Image9} style={styles.squareImage} />
-          <Text style={styles.squareText}>Admin</Text>
+        <TouchableOpacity style={[styles.square, styles.teacherSquare]} onPress={() => navigation.navigate('TeacherLogin')}>
+          <Image source={Image8} style={styles.squareImage} />
+          <Text style={styles.squareText}>Teacher</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      <TouchableOpacity style={[styles.square, styles.adminSquare]} onPress={() => navigation.navigate('AdminLogin')}>
+        <Image source={Image9} style={styles.squareImage} />
+        <Text style={styles.squareText}>Admin</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   container: {
     flex: 1,
     alignItems: 'center',
@@ -75,6 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 120,
     marginTop: 190,
     color: '#1DBBFF',
+
   },
   squareRow: {
     flexDirection: 'row',
@@ -113,8 +108,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 0,
     color: 'black',
-    fontWeight: 'bold',
+    fontWeight:'bold',
+
   },
 });
 
-export default SelectUser;
+export default SelectUser;

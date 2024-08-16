@@ -90,14 +90,14 @@ const TeacherLogin = () => {
         />
         {errors.password && <Text style={styles.error}>{errors.password}</Text>}
       </View>
-      <TouchableOpacity style={styles.forgotPassword}>
+      <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('TeacherForgotPassword')}>
         <Text style={styles.forgotPasswordText}>Forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginButton} onPress={handleTeacherLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('TeacherForm')}>
+      <TouchableOpacity onPress={() => navigation.navigate('TeacherVerification')}>
         <Text style={styles.signupText}>
           Don't have an account? <Text style={styles.signupLink}>Register Now</Text>
         </Text>
@@ -181,9 +181,14 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginBottom: 20,
     marginTop: 0,
+    left:100,
+    color:'blue',
+    borderBottomWidth:1,
+    borderColor:'blue',
   },
   forgotPasswordText: {
-    color: '#231f24',
+    color: 'blue',
+    
   },
   signupText: {
     color: 'black',

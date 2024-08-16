@@ -28,14 +28,16 @@ const AdminTeacherHomeScreen = ({ navigation }) => {
               <Text>Teacher Details</Text>
             </View>
           </TouchableOpacity>
-          <View style={styles.square}>
-            <Image source={Image4} style={styles.squareImage} />
-            <Text>Teacher Timetable</Text>
-          </View>
           <TouchableOpacity onPress={() => navigation.navigate('AdminTeacherComplaints')}>
             <View style={styles.square}>
               <Image source={Image8} style={styles.squareImage} />
               <Text>Teacher Complaints</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() =>navigation.navigate('AdminTeacherLeave')}>
+            <View style={styles.square} >
+              <Image source={Image11} style={styles.squareImage} />
+              <Text>Teacher Leave</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -48,12 +50,6 @@ const AdminTeacherHomeScreen = ({ navigation }) => {
             <View style={styles.square}>
               <Image source={Image7} style={styles.squareImage} />
               <Text>Teacher Announcements</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() =>navigation.navigate('AdminTeacherLeave')}>
-            <View style={styles.square} >
-              <Image source={Image11} style={styles.squareImage} />
-              <Text>Teacher Leave</Text>
             </View>
           </TouchableOpacity>
         </View>

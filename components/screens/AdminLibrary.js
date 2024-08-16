@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
+import { useNavigation } from '@react-navigation/native';
+
 import axios from 'axios';
 
 const AdminLibrary = () => {
+    const navigation = useNavigation();
   const [bookTitle, setBookTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [isbn, setIsbn] = useState('');
@@ -40,6 +45,14 @@ const AdminLibrary = () => {
 
   return (
     <View style={styles.container}>
+        <Image source={Image2} style={styles.bc} />
+        <View style={styles.head}>
+            <TouchableOpacity onPress={() =>navigation.navigate('AdminView') }>
+                <Image source={Image1} style={styles.image} />
+            </TouchableOpacity>
+            <Text style={styles.header}>Admin Library</Text>    
+        </View> 
+        <View style={styles.body}>
       <Text style={styles.heading}>Add Book Details</Text>
       <TouchableOpacity onPress={selectCoverPhoto}>
         <View style={styles.coverPhotoContainer}>
@@ -64,18 +77,20 @@ const AdminLibrary = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="ISBN"
+        placeholder="School Code"
         value={isbn}
         onChangeText={setIsbn}
       />
       <TextInput
-        style={styles.input}
+        style={styles.input1}
         placeholder="Description"
         value={description}
+        numberOfLines={10}
         onChangeText={setDescription}
         multiline
       />
       <Button title="Add Book" onPress={handleAddBook} />
+      </View>
     </View>
   );
 };
@@ -83,18 +98,55 @@ const AdminLibrary = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+  },
+  body:{
+    borderRadius:30,
+    backgroundColor:'white',
+    height:'110%',
+    padding:10,
+  },
+  bc:{
+    height:'110%',
+    width:'110%',
+    position:'absolute',
+  },
+  head:{
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    top:10,
+    marginBottom:60,
+  },
+  image:{
+    height:23,
+    width:20,
+    marginHorizontal:10
+  },
+  header:{
+    fontSize:20,
+    fontWeight:'bold',
+    color:'white',
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
+    color:'black',
     marginBottom: 20,
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     marginBottom: 15,
+    borderRadius:20,
+    paddingHorizontal: 10,
+  },
+  input1: {
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    marginBottom: 15,
+    borderRadius:20,
+
     paddingHorizontal: 10,
   },
   coverPhotoContainer: {
@@ -102,6 +154,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginBottom: 15,
+    borderRadius:20,
     justifyContent: 'center',
     alignItems: 'center',
   },

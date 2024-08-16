@@ -8,6 +8,8 @@ import Image2 from '../assets/Verified.png';
 const TeacherExamResults = ({ route }) => {
     const email = route.params.email;
     const navigation = useNavigation();
+    const [teacherProfile, setTeacherProfile] = useState([]);
+    const [employeeid, setEmployeeid] = useState('');
     const [errors, setErrors] = useState({});
     const [className, setClassName] = useState('');
     const [section, setSection] = useState('');
@@ -16,6 +18,23 @@ const TeacherExamResults = ({ route }) => {
     const [students, setStudents] = useState([]);
     const [marks, setMarks] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+    useEffect(() => {
+        const fetchTeacherProfile = async () => {
+          try {
+            const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+            setTeacherProfile(response.data);
+            setEmployeeid(response.data.employeeid);
+          } catch (err) {
+            setErrors('Failed to load profile data');
+          }
+        };
+        if (email) {
+          fetchTeacherProfile();
+        } else {
+          setErrors('No email provided');
+        }
+      }, [email]);
 
     useEffect(() => {
         const fetchStudentDetails = async () => {
@@ -51,10 +70,10 @@ const TeacherExamResults = ({ route }) => {
         navigation.navigate("TeacherExamResults", { email });
     };
 
-    const handleMarksChange = (rollno, text) => {
+    const handleMarksChange = (rollNo, text) => {
         setMarks(prevMarks => ({
             ...prevMarks,
-            [rollno]: text
+            [rollNo]: text
         }));
     };
 
@@ -65,14 +84,14 @@ const TeacherExamResults = ({ route }) => {
                 section,
                 examType,
                 subject,
-                rollno: student.rollno,
+                rollNo: student.rollNo,
                 fullname: student.fullname,
-                marks: marks[student.rollno] || '',
-                email,
+                marks: marks[student.rollNo] || '',
+                employeeid,
             }));
     
             try {
-                const response = await axios.post('http://10.0.2.2:3000/results', marksData);
+                const response = await axios.post('http://10.0.2.2:3000/teacherExamResults', marksData);
                 console.log(response.data); // Log response from backend for debugging
                 setIsModalVisible(true);
             } catch (error) {
@@ -128,6 +147,11 @@ const TeacherExamResults = ({ route }) => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.head}>
+                <TouchableOpacity onPress={() =>navigation.navigate('PrevResults')}>
+                    <Text style={styles.headText}>Prev</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.dropdownRow2}>
                 <Dropdown
                     style={styles.dropdown2}
@@ -195,15 +219,20 @@ const TeacherExamResults = ({ route }) => {
             {students.length > 0 && (
                 <View>
                     <Text style={styles.boldText}>Student Marks</Text>
+                    <View style={styles.marks}>
+                            <Text style={styles.text}>Name</Text>
+                            <Text style={styles.text}>Roll No</Text>
+                            <Text style={styles.text}>Marks</Text>
+                    </View>
                     {students.map(student => (
-                        <View key={student.rollno} style={styles.studentRow}>
+                        <View key={student.rollNo} style={styles.studentRow}>
                             <Text style={styles.studentText}>{student.fullname}</Text>
-                            <Text style={styles.studentText}>{student.rollno}</Text>
+                            <Text style={styles.studentText}>{student.rollNo}</Text>
                             <TextInput
                                 style={styles.textInput}
                                 placeholder="Marks"
-                                value={marks[student.rollno] || ''}
-                                onChangeText={text => { handleMarksChange(student.rollno, text); clearError('marks'); }}
+                                value={marks[student.rollNo] || ''}
+                                onChangeText={text => { handleMarksChange(student.rollNo, text); clearError('marks'); }}
                             />
                         </View>
                     ))}
@@ -237,6 +266,16 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         marginBottom: 10,
     },
+    marks:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        margin:10,
+    },
+    text:{
+        fontSize:20,
+        fontWeight:'bold',
+        color:'black',
+    },
     button: {
         backgroundColor: '#3F1175',
         padding: 5,
@@ -244,6 +283,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         width: '50%',
+    },
+    head: {
+        backgroundColor: '#3F1175',
+        padding: 5,
+        borderRadius: 10,
+        height:40,
+        width: '20%',
+        left:300,
+        marginBottom:10,
+    },
+    headText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign:'center',
     },
     header: {
         borderWidth: 3,

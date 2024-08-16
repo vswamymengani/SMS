@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView, View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -23,7 +23,6 @@ const StudentDetails = () => {
     const renderStudentDetails = ({ item }) => {
         return (
             <View style={styles.details}>
-                {/* <Text style={styles.text1}>{item.rollno}</Text> */}
                 <Text style={styles.text1}>{item.fullname}</Text>
                 <Text style={styles.text4}>{item.dateofbirth}</Text>
                 <Text style={styles.text5}>{item.className}</Text>
@@ -36,13 +35,14 @@ const StudentDetails = () => {
     return (
         <View style={styles.container}>
             <View style= {styles.head}>
-                <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('Form')} >
+                <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('AdminStudentForm')} >
                     <Text style={styles.headText}>Register</Text>
-                </TouchableOpacity>    
-                <Text style={styles.headText}>Modify</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() =>navigation.navigate('StudentModify')} style={styles.box} >   
+                    <Text style={styles.headText}>Modify</Text>
+                </TouchableOpacity> 
             </View>
             <View style={styles.heading}>
-                {/* <Text style={styles.text}>Roll No</Text> */}
                 <Text style={styles.text}>Name</Text>
                 <Text style={styles.text2}>D.O.B</Text>
                 <Text style={styles.text7}>Class</Text>
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         borderWidth:2,
         borderTopWidth:0,
         width:'100%',
+        
     },
     headText:{
         backgroundColor: '#3F1175',
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
         color:'black',
         margin:10,
         left:0,
+        position:'absolute',
     },
     text2:{
         color:'red',
@@ -130,7 +132,8 @@ const styles = StyleSheet.create({
     text4:{
         color:'black',
         margin:10,
-        left:-20,
+        left:50,
+        
     },
     text5:{
         color:'black',

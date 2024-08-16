@@ -5,10 +5,12 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import Image1 from "../assets/Verified.png";
+import Image2 from "../assets/Back_Arrow.png";
+import Image3 from '../assets/BackImage.png';
 
 const TeacherHomework = ({route}) => {
     const navigation = useNavigation();
-    const [classname, setClassName] = useState('');
+    const [className, setclassName] = useState('');
     const [section, setSection] = useState('');
     const [subject, setSubject] = useState('');
     const [typeOfHomework, setTypeOfHomework] = useState('');
@@ -22,7 +24,7 @@ const TeacherHomework = ({route}) => {
 
     const validate = () => {
         const newErrors = {};
-        if (!classname) newErrors.classname = "Select the class name";
+        if (!className) newErrors.className = "Select the class name";
         if (!section) newErrors.section = "Select the Section";
         if (!subject) newErrors.subject = "Name of the subject";
         if (!typeOfHomework) newErrors.typeOfHomework = "Enter the type of homework";
@@ -47,7 +49,7 @@ const TeacherHomework = ({route}) => {
     const TeacherHomework = async () => {
         if (validate()) {
             axios.post("http://10.0.2.2:3000/teacherHomework", {
-                classname,
+                className,
                 section,
                 subject,
                 typeOfHomework,
@@ -110,11 +112,17 @@ const TeacherHomework = ({route}) => {
 
     return (
         <ScrollView style={styles.container}>
+            <Image source={Image3} style={styles.bc} />
             <View style={styles.right}>
+                <TouchableOpacity onPress={() =>navigation.navigate('TeacherHomeScreen',{email})}>
+                    <Image source={Image2} style={styles.image} />
+                </TouchableOpacity>
+                <Text style={styles.head}>Homework</Text>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TeacherHomeWorkList',{ email })}>
-                     <Text style={styles.header}>Homework List</Text>
+                     <Text style={styles.header}>List</Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.body}>
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
@@ -124,12 +132,12 @@ const TeacherHomework = ({route}) => {
                 labelField="label"
                 valueField="value"
                 placeholder="Class"
-                value={classname}
-                onChange={item => { setClassName(item.value); clearError('classname'); }}
+                value={className}
+                onChange={item => { setclassName(item.value); clearError('className'); }}
                 accessible={true}
                 accessibilityLabel="Class"
             />
-            {errors.classname && <Text style={styles.error}>{errors.classname}</Text>}
+            {errors.className && <Text style={styles.error}>{errors.className}</Text>}
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
@@ -217,6 +225,7 @@ const TeacherHomework = ({route}) => {
                     </View>
                 </View>
             </Modal>
+            </View>
 
         </ScrollView>
     )
@@ -226,24 +235,42 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 20,
+    },
+    body:{
+        padding:15,
+        backgroundColor:'white',
+        borderRadius:30,
+    },
+    bc:{
+        height:'110%',
+        width:'110%',
+        position:'absolute',
     },
     right: {
-        justifyContent: 'right',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        marginBottom:40,
+    },
+    image:{
+        height:23,
+        width:18,
+        left:10,
+    },
+    head:{
+        fontSize:20,
+        color:'white',
+        fontWeight:'bold',
     },
     button: {
         backgroundColor: '#3F1175',
-        padding: 5,
-        borderRadius: 10,
+        borderRadius: 30,
         alignItems: 'center',
-        marginVertical: 10,
-        justifyContent: 'flex-end',
-        width: '50%',
+        marginVertical: 5,
     },
     header: {
-        borderWidth: 3,
         color: 'white',
-        fontSize: 18,
+        fontSize: 16,
         borderRadius: 20,
         borderColor: '#3F1175',
         paddingHorizontal: 20,
@@ -253,7 +280,7 @@ const styles = StyleSheet.create({
     dropdown: {
         height: 50,
         borderColor: '#3F1175',
-        borderWidth: 2,
+        borderBottomWidth: 1,
         borderRadius: 12,
         paddingHorizontal: 8,
         marginVertical: 10,
@@ -323,10 +350,9 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 2,
         borderColor: '#3F1175',
-        // padding: 10,
         borderRadius: 5,
         backgroundColor: 'white',
-        fontSize: 14,
+        fontSize: 16,
         marginBottom:10,
         marginTop:10,
     },
@@ -335,10 +361,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#3F1175',
         padding: 10,
-        borderRadius: 25,
-        borderTopEndRadius:20,
         backgroundColor: 'white',
-        fontSize: 14,
+        fontSize: 16,
         textAlignVertical: 'top',
         // marginVertical: 10,
     },

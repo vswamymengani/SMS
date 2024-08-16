@@ -1,14 +1,17 @@
 
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity,Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
+import Image2 from '../assets/Menu.png';
+import Image1 from '../assets/Menuicon.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
 import Image7 from '../assets/Profile1.png';
 import Image8 from '../assets/notification.png';
 import Image9 from '../assets/Leave.png';
 import Image10 from '../assets/onlineexam.png';
+import Image4 from '../assets/profilepic.png';
 import Image11 from '../assets/feenews.png';
 import Image12 from '../assets/studentattendence.png';
 import Image14 from '../assets/calander.png';
@@ -22,13 +25,39 @@ import Image21 from '../assets/exams.png';
 import Image22 from '../assets/studymaterial.png';
 import Image23 from '../assets/liveclasses.png';
 import LoginScreen from './LoginScreen';
+import axios from 'axios';
 
 const Homescreen = ({ navigation, route }) => {
-  const { email } = route.params; // Receive the email passed from LoginScreen
+  const email  = route.params.email; // Receive the email passed from LoginScreen
+  const [profileVisible, setProfileVisible]= useState(true);
+  const [modalVisible , setModalVisible] = useState(false);
+  const [profile , setProfile] = useState([]);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() =>{
+    const fetchProfile = async () =>{
+      try{
+      const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+      setProfile(response.data);
+      }
+      catch(error){
+        setErrors({general:"unable to fetch the data"});
+      }
+    }
+    fetchProfile();
+  },[email]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {profileVisible && (
+        <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
+          {/* Add any profile image or icon here if needed */}
+        </TouchableOpacity>
+      )}
       <Image source={Image5} style={styles.image5} />
+      <TouchableOpacity style={styles.menuIcon} onPress={() => setModalVisible(true)}>
+        <Image source={Image2} style={styles.image2} />
+      </TouchableOpacity>
       <Image source={Image6} style={styles.image6} />
       <Image source={Image3} style={styles.image3} />
         
@@ -62,7 +91,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image10} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Online Exam</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square5} onPress={() => navigation.navigate('FeeNews')}>
+        <TouchableOpacity style={styles.square5} onPress={() => navigation.navigate('FeeNews',{email})}>
           <Image source={Image11} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Fee News</Text>
         </TouchableOpacity>
@@ -71,6 +100,9 @@ const Homescreen = ({ navigation, route }) => {
           <Text style={styles.loginButtonText}>Student Attendence</Text>
         </TouchableOpacity>
       </View>
+
+      
+      
       <View style={styles.squareRow}>
       <TouchableOpacity style={styles.square7} onPress={() => navigation.navigate('CalendarScreen',{ email })}>
           <Image source={Image14} style={styles.squareImage} />
@@ -80,7 +112,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image15} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Time Table</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('SchoolEvents',{ email })}>
           <Image source={Image16} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Gallary</Text>
         </TouchableOpacity>
@@ -102,26 +134,45 @@ const Homescreen = ({ navigation, route }) => {
       </View>
        
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('StudentLibrary',{ email })}>
+      <TouchableOpacity style={styles.square13} onPress={() => navigation.navigate('Library',{ email })}>
           <Image source={Image20} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Library</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ExamResults',{ email })}>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('StudentExamResults',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Exams Results</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+        <TouchableOpacity style={styles.square15} onPress={() => navigation.navigate('StudentStudyMaterial',{ email })}>
           <Image source={Image22} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Study Material</Text>
         </TouchableOpacity>
       </View>
      
-      <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square16} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
-          <Image source={Image23} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Live Class</Text>
-        </TouchableOpacity>
-      </View>
+      <Modal
+        animationType="slide-left"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <TouchableOpacity style={styles.modalMenuIcon} onPress={() => setModalVisible(false)}>
+              <Image source={Image1} style={styles.image1} />
+            </TouchableOpacity>
+            <Image source={Image4} style={styles.image10} />
+            <Text style={styles.modalText1}>{profile.fullname}</Text>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('Homescreen',{ email }); }}>
+              <Text style={styles.modalText}>Home</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('Profile',{ email }); }}>
+              <Text style={styles.modalText}>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('LoginScreen'); }}>
+              <Text style={styles.modalText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -139,9 +190,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
   },
+  image10: {
+    width: 130,
+    height: 130,
+    marginBottom: 40,
+    marginTop: 90,
+  },
   image3: {
-    width:150,
-    height: 200,
+    width:180,
+    height: 180,
     position: 'absolute',
     top: 90,
   },
@@ -150,6 +207,19 @@ const styles = StyleSheet.create({
     height: 200,
     position: 'absolute',
     top: 90,
+  },
+  image2: {
+    width: 30,
+    height: 30,
+    top:20,
+    position:'absolute',
+    right:160,
+  },
+  image1: {
+    width: 30,
+    height: 30,
+    marginBottom: 20,
+    marginTop: 30,
   },
   welcomeBox: {
     width: 338,
@@ -185,7 +255,36 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight:'bold',
   },
-
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalView: {
+    width: 250,
+    height: 780,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20,
+  },
+  modalMenuIcon: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
+  modalText: {
+    fontSize: 20,
+    color: 'black',
+    marginVertical: 10,
+  },
+  modalText1: {
+    fontSize: 25,
+    color: 'blue',
+    fontWeight:'bold',
+    marginVertical: 10,
+  },
   square1: {
     width: 100,
     height: 100,

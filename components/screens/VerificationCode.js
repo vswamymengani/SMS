@@ -1,57 +1,133 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Image,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import Image1 from '../assets/BackArrow.png';
+import Image2 from '../assets/Verified.png'; // Assuming Verified.png is imported correctly
 
-const VerificationCode = () => {
+const VerificationCode = ({ route }) => {
   const navigation = useNavigation();
-  const [code, setCode] = useState(['', '', '', '']);
+  const admissionid = route.params.admissionid;
+  const [errors, setErrors] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleCodeChange = (index, value) => {
-    const newCode = [...code];
-    newCode[index] = value;
-    setCode(newCode);
+  const validate = () => {
+    const newErrors = {};
+    if (!password) newErrors.password = "Enter the Password";
+    if (!confirmPassword) newErrors.confirmPassword = "Repeat the password";
+    if (password !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleVerify = () => {
-    // Add verification logic here
-    navigation.navigate('CreateNewPassword');
+  const togglePopup = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const handleSend = async () => {
+    if (validate()) {
+      axios
+        .post(`http://10.0.2.2:3000/changePassword?admissionid=${admissionid}`, {
+          password,
+          confirmPassword,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            togglePopup();
+          } else {
+            console.error("Failed to Change the Password:", response.status);
+          }
+        })
+        .catch((error) => {
+          console.error("Axios error:", error);
+        });
+    }
+  };
+
+  const clearError = (field) => {
+    setErrors((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[field];
+      return newErrors;
+    });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Forgot Password</Text>
+        <TouchableOpacity onPress={() =>navigation.navigate('ForgotPassword')} >
+            <Image source={Image1} style={styles.headerImage} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Forgot Password</Text>
       </View>
-      <Text style={styles.verifyTitle}>Verify</Text>
-      <Text style={styles.instructionText}>Please enter the code we sent to you</Text>
-
-      <View style={styles.codeInputContainer}>
-        {code.map((digit, index) => (
-          <TextInput
-            key={index}
-            style={styles.codeInput}
-            keyboardType="number-pad"
-            maxLength={1}
-            value={digit}
-            onChangeText={(value) => handleCodeChange(index, value)}
-          />
-        ))}
-      </View>
-
-      <Text style={styles.resendText}>Didn't receive the code?</Text>
-      <Text style={styles.resendLink}>Resend code</Text>
-      <Text style={styles.rightside}>1 of 2</Text>
-
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBar}>
-          <View style={styles.progressActive}></View>
-          <View style={styles.progressInactive}></View>
+      <View style={styles.formContainer}>
+        <Text style={styles.text}>Password</Text>
+        <TextInput
+          placeholder="Enter Your Password"
+          value={password}
+          style={styles.input}
+          onChangeText={(text) => {
+            setPassword(text);
+            clearError("password");
+          }}
+          secureTextEntry={true}
+        />
+        {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+        <Text style={styles.text}>Confirm Password</Text>
+        <TextInput
+          placeholder="Repeat your password"
+          value={confirmPassword}
+          style={styles.input}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            clearError("confirmPassword");
+          }}
+          secureTextEntry={true}
+        />
+        {errors.confirmPassword && (
+          <Text style={styles.error}>{errors.confirmPassword}</Text>
+        )}
+        <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleSend} style={styles.button}>
+                <Text style={styles.buttonText}>Modify</Text>
+            </TouchableOpacity>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
-        <Text style={styles.verifyButtonText}>Verify</Text>
-      </TouchableOpacity>
+      <Modal
+        visible={isModalVisible}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => {
+          togglePopup();
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <Image source={Image2} style={styles.successImage} />
+          <Text style={styles.modalText}>Password Change successful!</Text>
+          <TouchableOpacity
+            onPress={() => {
+              togglePopup(); // Close the popup
+              navigation.navigate("LoginScreen"); // Navigate to the Login screen
+            }}
+            style={styles.modalButton}
+          >
+            <Text style={styles.modalButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -59,102 +135,89 @@ const VerificationCode = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    padding: 20,
+    backgroundColor: '#3F1175',
+    paddingHorizontal: 20,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    justifyContent:'center',
-    color:'black',
-    flex: 1, 
-    marginBottom:20,
-  },
-  verifyTitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color:'black',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  instructionText: {
-    textAlign: 'center',
-    color:'black',
-    marginBottom: 25,
-    fontSize: 16,
-  },
-  codeInputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 30,
-  },
-  codeInput: {
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    textAlign: 'center',
-    fontSize: 18,
-  },
-  resendText: {
-    textAlign: 'center',
-    fontSize: 14,
-    color:'black',
-  },
-  rightside:{
-    textAlign:"right",
-    fontSize:17,
-    color:'black',
-
-  },
-  resendLink: {
-    textAlign: 'center',
-    fontSize: 14,
-    color: 'blue',
+    flexDirection: "row",
+    alignItems: "center",
+    top:20,
     marginBottom: 40,
   },
-  progressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  headerImage: {
+    height: 30,
+    width: 30,
+    marginRight: 50,
+  },
+  headerText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    color:'white',
+  },
+  formContainer: {
+    marginBottom: 20,
+    justifyContent:'center',
+    backgroundColor:'white',
+    padding:30,
+    borderRadius:30,
+    top:100,
+  },
+  text:{
+    fontSize:16,
+    color:'black',
+    fontWeight:'bold',
+    margin:15,
+    right:20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  successImage: {
+    height: 50,
+    width: 50,
     marginBottom: 20,
   },
-  progressText: {
-    fontSize: 14,
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
   },
-  progressBar: {
-    flex: 1,
-    flexDirection: 'row',
-    height: 4,
-    borderRadius: 2,
-    overflow: 'hidden',
-    marginLeft: 10,
+  modalButton: {
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
-  progressActive: {
-    flex: 1,
-    backgroundColor: 'blue',
-  },
-  progressInactive: {
-    flex: 1,
-    backgroundColor: 'lightgray',
-  },
-  verifyButton: {
-    backgroundColor: '#3F1175',
-    padding: 15,
-    borderRadius: 30,
-    alignItems: 'center',
-    alignSelf: 'center',
-    width: '100%',
-  },
-  verifyButtonText: {
-    color: '#fff',
+  modalButtonText: {
+    color: "white",
     fontSize: 16,
   },
 });
