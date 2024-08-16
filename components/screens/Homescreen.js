@@ -112,7 +112,7 @@ const Homescreen = ({ navigation, route }) => {
           <Image source={Image15} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Time Table</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('WorkInProgress',{ email })}>
+        <TouchableOpacity style={styles.square9} onPress={() => navigation.navigate('SchoolEvents',{ email })}>
           <Image source={Image16} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Gallary</Text>
         </TouchableOpacity>

@@ -77,14 +77,15 @@ const AdminLibrary = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="ISBN"
+        placeholder="School Code"
         value={isbn}
         onChangeText={setIsbn}
       />
       <TextInput
-        style={styles.input}
+        style={styles.input1}
         placeholder="Description"
         value={description}
+        numberOfLines={10}
         onChangeText={setDescription}
         multiline
       />
@@ -137,6 +138,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     borderRadius:20,
+    paddingHorizontal: 10,
+  },
+  input1: {
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    marginBottom: 15,
+    borderRadius:20,
+
     paddingHorizontal: 10,
   },
   coverPhotoContainer: {

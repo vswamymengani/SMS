@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
+import axios from 'axios';
+
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
 import Image1 from '../assets/Verified.png';
-import axios from 'axios';
 
 const TeacherForm = ({ navigation }) => {
   const [fullname, setFullname] = useState('');
@@ -13,9 +15,10 @@ const TeacherForm = ({ navigation }) => {
   const [experience, setExperience] = useState('');
   const [dateofbirth, setDateOfBirth] = useState('');
   const [mobileNo, setMobileNo] = useState('');
-  const [employeeid, setemployeeid] = useState('');
+  const [employeeid, setEmployeeid] = useState('');
   const [presentAddress, setPresentAddress] = useState('');
   const [errors, setErrors] = useState({});
+  const [photo, setPhoto] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
   const validateForm = () => {
@@ -36,6 +39,14 @@ const TeacherForm = ({ navigation }) => {
     setShowPopup(!showPopup);
   };
 
+  const selectPhoto = () => {
+    launchImageLibrary({ mediaType: 'photo' }, (response) => {
+      if (response.assets && response.assets.length > 0) {
+        setPhoto(response.assets[0].uri);
+      }
+    });
+  };
+
   const handleRegister = async () => {
     if (validateForm()) {
       try {
@@ -48,6 +59,7 @@ const TeacherForm = ({ navigation }) => {
           mobileNo,
           employeeid,
           presentAddress,
+          photo,
         });
         if (response.status === 200) {
           togglePopup(); // Show the popup
@@ -76,14 +88,16 @@ const TeacherForm = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Image source={Image5} style={styles.image5} />
       <View style={styles.imageContainer}>
-        <Image source={Image5} style={styles.image5} />
         <View style={styles.overlayImages}>
           <Image source={Image6} style={styles.image6} />
-          <Image source={Image3} style={styles.image3} />
+          <TouchableOpacity onPress={selectPhoto}>
+            <Image source={photo ? { uri: photo } : Image3} style={styles.image3} />
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.formContainer}>
+      <ScrollView style={styles.formContainer}>
         <LabelWithStar label="Full Name" />
         <TextInput
           style={styles.input}
@@ -143,7 +157,7 @@ const TeacherForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your employee ID...."
           value={employeeid}
-          onChangeText={(text) => { setemployeeid(text); clearError('employeeid'); }}
+          onChangeText={(text) => { setEmployeeid(text); clearError('employeeid'); }}
         />
         {errors.employeeid && <Text style={styles.error}>{errors.employeeid}</Text>}
 
@@ -164,18 +178,15 @@ const TeacherForm = ({ navigation }) => {
           visible={showPopup}
           animationType="fade"
           transparent={true}
-          onRequestClose={() => {
-            togglePopup();
-          }}
         >
-          <View style={styles.popup}>
-            <View style={styles.modalContainer} >
+          <View style={styles.popupContainer}>
+            <View style={styles.popup}>
               <Image source={Image1} style={styles.successImage} />
               <Text style={styles.popupText}>Registration successful!</Text>
               <TouchableOpacity
                 onPress={() => {
                   togglePopup(); // Close the popup
-                  navigation.navigate('TeacherDetails'); // Navigate to the Login screen
+                  navigation.navigate('TeacherDetails'); // Navigate to the TeacherDetails screen
                 }}
                 style={styles.modalButton}
               >
@@ -184,7 +195,7 @@ const TeacherForm = ({ navigation }) => {
             </View>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     </ScrollView>
   );
 };
@@ -192,112 +203,109 @@ const TeacherForm = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    alignItems: 'center',
     backgroundColor: 'white',
   },
   imageContainer: {
+    position: 'absolute',
     alignItems: 'center',
-    marginBottom: 20,
+    justifyContent: 'center',
+    top: 10,
   },
   image5: {
-    width: "100%",
-    height: 200,
+    width: '100%',
+    height: 150,
   },
   overlayImages: {
     position: 'absolute',
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    top: 70,
   },
   image6: {
-    width: 150,
-    height: 150,
-    left:75,
+    top: 170,
+    width: 160,
+    height: 160,
   },
   image3: {
-    width: 130,
+    width: 150,
+    top: 15,
+    borderRadius: 70,
     height: 150,
-    right:65,
   },
   formContainer: {
-    backgroundColor: 'white',
+    flex: 1,
+    width: '100%',
+    marginTop: 20,
     borderRadius: 20,
+    borderWidth: 1,
+    top: 40,
     padding: 20,
-    top: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   labelContainer: {
-    flexDirection: 'row',
     marginBottom: 5,
   },
   label: {
-    fontSize: 14,
-    color: '#666666',
-    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'black',
   },
   star: {
     color: 'red',
-    fontSize: 16,
   },
   input: {
-    height: 40,
-    borderColor: '#D3D3D3',
     borderWidth: 1,
-    borderRadius: 8,
+    borderColor: 'black',
+    padding: 7,
+    borderRadius: 15,
     marginBottom: 10,
-    paddingHorizontal: 10,
+    color: 'black',
   },
   error: {
     color: 'red',
     marginBottom: 10,
-    marginTop: -5,
   },
   loginButton: {
-    backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 8,
+    backgroundColor: '#D5282C',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginTop: 20,
     alignItems: 'center',
-    marginBottom: 10,
   },
   loginButtonText: {
     color: 'white',
-    fontSize: 16,
     fontWeight: 'bold',
+    fontSize: 18,
   },
-  popup: {
+  popupContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContainer: {
+  popup: {
+    width: 300,
     backgroundColor: 'white',
-    padding: 20,
     borderRadius: 10,
+    padding: 20,
     alignItems: 'center',
   },
-  successImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
   popupText: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 18,
     marginBottom: 20,
   },
+  successImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
   modalButton: {
-    backgroundColor: '#6200ee',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#D5282C',
+    padding: 10,
     borderRadius: 5,
+    marginTop: 20,
   },
   modalButtonText: {
     color: 'white',
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });

@@ -32,6 +32,7 @@ const TeacherHomeScreen = ({route}) => {
     const [profileVisible, setProfileVisible] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [profile, setProfile] = useState([]);
+    const [subject, setSubject] = useState('');
     const [errors ,setErrors] = useState({});
 
     useEffect(() =>{
@@ -39,6 +40,7 @@ const TeacherHomeScreen = ({route}) => {
         try{
           const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
           setProfile(response.data);
+          setSubject(response.data.subject);
         }
         catch(error){
           setErrors({general:"unable to fetch the data"});
@@ -136,10 +138,18 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ClassWork',{ email })}>
-          <Image source={Image20} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Libery</Text>
-        </TouchableOpacity>
+        <View style={styles.squareRow}>
+                <TouchableOpacity style={styles.square14} onPress={() => {
+                    if (subject === 'Library') {
+                        navigation.navigate('LibraryManagement', { email });
+                    } else {
+                        navigation.navigate('Library', { email });
+                    }
+                }}>
+                    <Image source={require('../assets/library.png')} style={styles.squareImage} />
+                    <Text style={styles.loginButtonText}>Library</Text>
+                </TouchableOpacity>
+            </View>
       </View>
       <Modal
         animationType="slide-left"

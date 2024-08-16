@@ -13,7 +13,7 @@ const TeacherAttendance = ({ navigation, route }) => {
   const [attendance, setAttendance] = useState([]);
   const [errors, setErrors] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { email } = route.params;  // Correctly destructuring email from route.params
+  const email = route.params;
 
   const fetchStudents = () => {
     axios.get('http://10.0.2.2:3000/studentResults', { params: { className, section } })
@@ -127,9 +127,15 @@ const TeacherAttendance = ({ navigation, route }) => {
     { label: 'Biology', value: 'Biology' },
   ];
 
+  const attendanceStatusData = [
+    { label: 'Present', value: 'Present' },
+    { label: 'Absent', value: 'Absent' },
+    { label: 'Leave', value: 'Leave' },
+    { label: 'Holiday', value: 'Holiday' }
+  ];
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
       <View style={styles.dropdownRow2}>
         <Dropdown
           style={styles.dropdown2}
@@ -140,7 +146,6 @@ const TeacherAttendance = ({ navigation, route }) => {
           labelField="label"
           valueField="value"
           placeholder="Class"
-          
           value={className}
           onChange={item => { setClassName(item.value); clearError('className'); }}
           accessible={true}
@@ -194,11 +199,17 @@ const TeacherAttendance = ({ navigation, route }) => {
             <View key={student.rollNo} style={styles.studentRow}>
               <Text style={styles.studentText}>{student.fullname}</Text>
               <Text style={styles.studentText}>{student.rollNo}</Text>
-              <TextInput
-                style={styles.attendanceInput}
+              <Dropdown
+                style={styles.attendanceDropdown}
+                placeholderStyle={styles.attendancePlaceholderStyle}
+                selectedTextStyle={styles.attendanceSelectedTextStyle}
+                data={attendanceStatusData}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Status"
                 value={attendance.find(att => att.rollNo === student.rollNo)?.status}
-                onChangeText={text => handleAttendanceChange(student.rollNo, text.toUpperCase())}
-                placeholder='P'
+                onChange={item => handleAttendanceChange(student.rollNo, item.value)}
                 accessible={true}
                 accessibilityLabel={`attendance-${student.rollNo}`}
               />
@@ -228,94 +239,90 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
   },
-  header: {
-    
-    alignItems: 'flex-end',
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  prevButton: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-  },
-  prevButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  dropdownRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25,
   },
   dropdownRow2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 25,
+    width: '60%',
   },
   dropdown2: {
-    width: '48%',
-    borderWidth:2,
-    color:'black',
-    padding:8,
-    borderRadius:10,
-  },
-  dropdownRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  dropdown: {
-    width: '48%',
-    borderWidth:2,
-    padding:8,
-    borderRadius:10,
-  },
-  placeholderStyle2: {
-    fontSize: 16,
-    color: '#8a8a8a',
-  },
-  selectedTextStyle2: {
-    fontSize: 16,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-    color: '#8a8a8a',
-  },
-  selectedTextStyle: {
-    fontSize: 16,
+    borderColor: '#3F1175',
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    marginBottom: 10,
+    width: '75%',
+    height: 50,
+    marginRight: 30,
   },
   textInput: {
-    borderColor: 'black',
     borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    width: '48%',
-    height:60,
+    borderColor: '#3F1175',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    fontSize: 16,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    height: 50,
   },
   boldText: {
     fontWeight: 'bold',
-    marginBottom: 10,
-    justifyContent:'center',
-    color:'black',
-    fontSize:18,
-    left:100,
+    marginVertical: 16,
+    fontSize: 25,
+    color: 'black',
+    textAlign: 'center',
   },
   studentRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
-    borderWidth:2,
+    marginBottom: 8,
+    borderWidth: 2,
+    padding: 10,
   },
   studentText: {
-    fontSize: 16,
+    flex: 1,
+    marginHorizontal: 8,
+    fontSize: 20,
+    color: 'black',
   },
-  attendanceInput: {
-    borderColor: '#ddd',
-    borderWidth: 1,
+  attendanceDropdown: {
+    borderColor: '#3F1175',
+    borderWidth: 2,
     borderRadius: 5,
+    paddingHorizontal: 8,
+    width: '30%',
+    height: 40,
+  },
+  attendancePlaceholderStyle: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  attendanceSelectedTextStyle: {
+    fontSize: 16,
+    color: 'black',
+  },
+  dropdown: {
+    borderColor: '#3F1175',
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingHorizontal: 8,
+    marginBottom: 10,
+    right: 8,
+    height: 50,
+    width: '45%',
+  },
+  sendButton: {
+    backgroundColor: '#3F1175',
     padding: 10,
-    width: '15%',
-    textAlign: 'center',
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 10,
   },
   error: {
     color: 'red',
@@ -328,44 +335,34 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
     width: '80%',
-  },
-  successImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
   },
   modalText: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: 10,
   },
   modalButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#3F1175',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginVertical: 10,
+    width: '100%',
   },
   modalButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  successImage: {
+    width: 100,
+    height: 100,
   },
 });
 
 export default TeacherAttendance;
-
-
-
-
-
-<View style={styles.header}>
-        <TouchableOpacity
-          style={styles.prevButton}
-          onPress={() => navigation.navigate('PrevAttendance')}
-        >
-          <Text style={styles.prevButtonText}>Prev</Text>
-        </TouchableOpacity>
-      </View>

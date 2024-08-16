@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         borderWidth:2,
         borderTopWidth:0,
         width:'100%',
+        
     },
     headText:{
         backgroundColor: '#3F1175',
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
         color:'black',
         margin:10,
         left:0,
+        position:'absolute',
     },
     text2:{
         color:'red',
@@ -130,7 +132,8 @@ const styles = StyleSheet.create({
     text4:{
         color:'black',
         margin:10,
-        left:-20,
+        left:50,
+        
     },
     text5:{
         color:'black',

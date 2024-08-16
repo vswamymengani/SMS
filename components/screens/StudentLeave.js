@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 10,
+    top:10,
     marginBottom: 40,
   },
   header: {

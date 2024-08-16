@@ -44,7 +44,7 @@ const TeacherProfile = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.profileBox}>
-        <Image source={Image1} style={styles.profileImage} />
+        <Image source={teacherProfile.photo ? { uri: teacherProfile.photo } : Image1} style={styles.profileImage} />
         {error && <Text style={styles.error}>{error}</Text>}
         <Text style={styles.name}>{teacherProfile.fullname}</Text>
         <Text style={styles.details1}>Subject: {teacherProfile.subject}</Text>
@@ -139,7 +139,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     margin: 10,
+    top:23,
     padding: 5,
+    position:'relative',
     borderBottomWidth: 1,
     marginBottom: 10,
   },
@@ -150,6 +152,7 @@ const styles = StyleSheet.create({
     margin: 10,
     right: 20,
     padding: 5,
+    position:'relative',
     borderBottomWidth: 1,
   },
   body: {

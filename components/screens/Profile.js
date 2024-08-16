@@ -38,7 +38,7 @@ const Profile = ({ navigation, route }) => {
         <Text style={styles.head}>Profile</Text>
       </View>
       <View style={styles.profileBox}>
-        <Image source={Image1} style={styles.profileImage} />
+        <Image source={profile.photo ? { uri: profile.photo } : Image1} style={styles.profileImage} />
         <Text style={styles.name}>{profile.fullname}</Text>
         <Text style={styles.details1}>Class: {profile.className} {profile.section}</Text>
       </View>
@@ -49,12 +49,11 @@ const Profile = ({ navigation, route }) => {
           <View style={styles.topic}>
           <Text style={styles.details}>D.O.B:</Text>
           <Text style={styles.details}>Roll Number: </Text>
-          <Text style={styles.details}>Admission Number:            </Text>
+          <Text style={styles.details}>Admission No:</Text>
           <Text style={styles.details}>Father Name:</Text>
           <Text style={styles.details}>Father mobile:</Text>
           <Text style={styles.details}>Mother Name:</Text>
           <Text style={styles.details}>Mother mobile:</Text>
-          <Text style={styles.details}>Present Address:</Text>
           </View>
           <View style={styles.topic}>
           <Text style={styles.details2}>{profile.dateofbirth}</Text>
@@ -64,7 +63,6 @@ const Profile = ({ navigation, route }) => {
           <Text style={styles.details2}>{profile.fatherNo}</Text>
           <Text style={styles.details2}>{profile.motherName}</Text>
           <Text style={styles.details2}>{profile.motherNo}</Text>
-          <Text style={styles.details2}>{profile.presentAddress}</Text>
           </View>
         </View>
 
@@ -129,7 +127,6 @@ const styles = StyleSheet.create({
     color:'black',
     margin:10,
     padding:5,
-    borderBottomWidth:1,
     marginBottom:10,
   },
   details2:{
@@ -137,9 +134,7 @@ const styles = StyleSheet.create({
     marginBottom:10,
     color:'blue',
     margin:10,
-    right:20,
     padding:5,
-    borderBottomWidth:1,
   },
   details1:{
     fontSize:18,
@@ -148,11 +143,11 @@ const styles = StyleSheet.create({
     marginBottom:20,   
   },
   body:{
-    justifyContent:'space-between',
+    justifyContent:'space-around',
     flexDirection:'row',
-    width:'100%',
-    height:'100%',
-    padding:20,
+    width:'90%',
+    height:'70%',
+    marginTop:20,
   },
 });
 

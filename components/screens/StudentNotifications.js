@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
   head:{
     flexDirection:'row',
     justifyContent:'flex-start',
-    top:10,
+    top:20,
     marginBottom:60,
   },
   image:{
     height:23,
     width:20,
-    marginHorizontal:30
+    marginHorizontal:10
   },
   header:{
     fontSize:20,

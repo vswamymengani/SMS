@@ -12,6 +12,7 @@ import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
 import Image4 from '../assets/timetable1.png';
 import Image20 from '../assets/library.png';
+import Image23 from '../assets/gallary1.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -90,6 +91,12 @@ const AdminView = ({ navigation }) => {
           <View style={styles.square}>
             <Image source={Image20} style={styles.squareImage} />
             <Text style={styles.loginButtonText}>Library</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity  onPress={() => navigation.navigate('AdminEventScreen')}>
+          <View style={styles.square}>
+            <Image source={Image23} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Events</Text>
           </View>
         </TouchableOpacity>
       </View>
