@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Image10 from '../assets/profilepic.png';
 import Image11 from '../assets/AdminProfile.png';
 import Image1 from '../assets/arrow-left.png';

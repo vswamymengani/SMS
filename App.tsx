@@ -1,81 +1,85 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Welcome from './components/screens/Welcome';
-import SelectUser from './components/screens/SelectUser';
-import LoginScreen from './components/screens/LoginScreen';
-import AdminView from './components/screens/AdminView';
-import AdminLogin from './components/screens/AdminLogin';
-import Form from './components/screens/Form';
-import Homescreen from './components/screens/Homescreen';
-import ClassesTable from './components/screens/ClassesTable';
-import AdminProfile from './components/screens/AdminProfile';
-import Profile from './components/screens/Profile';
-import TeacherForm from './components/screens/TeacherForm';
-import TeacherLogin from './components/screens/TeacherLogin';
-import ForgotPassword from './components/screens/ForgotPassword';
-import VerificationCode from './components/screens/VerificationCode';
-import CreateNewPassword from './components/screens/CreateNewPassword';
-import StudentLeave from './components/screens/StudentLeave';
-import StudentComplaint from './components/screens/StudentComplaint';
-import StudentTimetable from './components/screens/StudentTimetable';
-import TeacherHomeScreen from './components/screens/TeacherHomeScreen';
-import TeacherProfile from './components/screens/TeacherProfile';
-import StudentAttendence from './components/screens/StudentAttendence';
-import FeeNews from './components/screens/FeeNews';
-import ClassWork from './components/screens/ClassWork';
-import TeacherLeave from './components/screens/TeacherLeave';
-import TeacherComplaints from './components/screens/TeacherComplaints';
-import TeacherComplaint1 from './components/screens/TeacherComplaint1';
-import TeacherHomework from './components/screens/TeacherHomework';
-import TeacherAttendance from './components/screens/TeacherAttendance';
-import TeacherTimetable from './components/screens/TeacherTimetable';
-import RequestEdit from './components/screens/RequestEdit';
-import ReciveComplaint from './components/screens/ReciveComplaint';
-import TeacherNotifications from './components/screens/TeacherNotifications';
-import AdminStudentHomeScreen from './components/screens/AdminStudentHomeScreen';
-import AdminTeacherHomeScreen from './components/screens/AdminTeacherHomeScreen';
-import TeacherDetails from './components/screens/TeacherDetails';
-import AdminTeacherComplaints from './components/screens/AdminTeacherComplaints';
-import TeacherAnnouncements from './components/screens/TeacherAnnouncements';
-import ModifyInfo from './components/screens/ModifyInfo';
-import { Button, Title } from 'react-native-paper';
-import StudentNotifications from './components/screens/StudentNotifications';
-import CalendarScreen from './components/screens/CalendarScreen';
-import HomeworkScreen from './components/screens/HomeworkScreen';
-import StudentDetails from './components/screens/StudentDetails';
-import AdminStudentComplaints from './components/screens/AdminStudentComplaints';
-import StudentAnnouncements from './components/screens/StudentAnnouncements';
-import AdminStudentLeave from './components/screens/AdminStudentLeave';
-import AdminTeacherLeave from './components/screens/AdminTeacherLeave';
-import AdminTimeTable from './components/screens/AdminTimeTable';
-import LeaveApproval from './components/screens/LeaveApproval';
-import WorkInProgress from './components/screens/WorkInProgress';
-import TeacherHomeWorkList from './components/screens/TeacherHomeWorkList';
-import TeacherLeaveApproval from './components/screens/TeacherLeaveApproval';
-import TeacherExamResults from './components/screens/TeacherExamResults';
-import StudentVerification from './components/screens/StudentVerification';
-import AdminStudentForm from './components/screens/AdminStudentForm';
-import StudentRegistration from './components/screens/StudentRegistration';
-import AdminFeeDetails from './components/screens/AdminFeeDetails';
-import StudentComplaintList from './components/screens/StudentComplaintList';
-import TeacherComplaintList from './components/screens/TeacherComplaintList';
-import PrevAttendance from './components/screens/PrevAttendance';
-import StudentModify from './components/screens/StudentModify';
-import TeacherVerification from './components/screens/TeacherVerification';
-import TeacherRegistration from './components/screens/TeacherRegistration';
-import TeacherForgotPassword from './components/screens/TeacherForgotPassword';
-import TeacherPasswordChange from './components/screens/TeacherPasswordChange';
-import TeacherStudyMaterial from './components/screens/TeacherStudyMaterial';
-import StudentStudyMaterial from './components/screens/StudentStudyMaterial';
-import PrevResults from './components/screens/PrevResults';
-import SingleSyudentComplaint from './components/screens/SingleStudentComplaint';
-import SingleStudentComplaint from './components/screens/SingleStudentComplaint';
-import StudentExamResults from './components/screens/StudentExamResults';
-import AdminLibrary from './components/screens/AdminLibrary';
-import Library from './components/screens/Library';
-import TeacherOnlineExam from './components/screens/TeacherOnlineExam';
-import StudentOnlineExam from './components/screens/StudentOnlineExam';
+import Welcome from './Components/screens/Welcome';
+import SelectUser from './Components/screens/SelectUser';
+import LoginScreen from './Components/screens/LoginScreen';
+import AdminView from './Components/screens/AdminView';
+import AdminLogin from './Components/screens/AdminLogin';
+import Form from './Components/screens/Form';
+import Homescreen from './Components/screens/Homescreen';
+import ClassesTable from './Components/screens/ClassesTable';
+import AdminProfile from './Components/screens/AdminProfile';
+import Profile from './Components/screens/Profile';
+import TeacherForm from './Components/screens/TeacherForm';
+import TeacherLogin from './Components/screens/TeacherLogin';
+import ForgotPassword from './Components/screens/ForgotPassword';
+import VerificationCode from './Components/screens/VerificationCode';
+import CreateNewPassword from './Components/screens/CreateNewPassword';
+import StudentLeave from './Components/screens/StudentLeave';
+import StudentComplaint from './Components/screens/StudentComplaint';
+import StudentTimetable from './Components/screens/StudentTimetable';
+import TeacherHomeScreen from './Components/screens/TeacherHomeScreen';
+import TeacherProfile from './Components/screens/TeacherProfile';
+import FeeNews from './Components/screens/FeeNews';
+import ClassWork from './Components/screens/ClassWork';
+import TeacherLeave from './Components/screens/TeacherLeave';
+import TeacherComplaints from './Components/screens/TeacherComplaints';
+import TeacherComplaint1 from './Components/screens/TeacherComplaint1';
+import TeacherHomework from './Components/screens/TeacherHomework';
+import TeacherAttendance from './Components/screens/TeacherAttendance';
+import TeacherTimetable from './Components/screens/TeacherTimetable';
+import RequestEdit from './Components/screens/RequestEdit';
+import ReciveComplaint from './Components/screens/ReciveComplaint';
+import TeacherNotifications from './Components/screens/TeacherNotifications';
+import AdminStudentHomeScreen from './Components/screens/AdminStudentHomeScreen';
+import AdminTeacherHomeScreen from './Components/screens/AdminTeacherHomeScreen';
+import TeacherDetails from './Components/screens/TeacherDetails';
+import AdminTeacherComplaints from './Components/screens/AdminTeacherComplaints';
+import TeacherAnnouncements from './Components/screens/TeacherAnnouncements';
+import ModifyInfo from './Components/screens/ModifyInfo';
+import StudentNotifications from './Components/screens/StudentNotifications';
+import CalendarScreen from './Components/screens/CalendarScreen';
+import HomeworkScreen from './Components/screens/HomeworkScreen';
+import StudentDetails from './Components/screens/StudentDetails';
+import AdminStudentComplaints from './Components/screens/AdminStudentComplaints';
+import StudentAnnouncements from './Components/screens/StudentAnnouncements';
+import AdminStudentLeave from './Components/screens/AdminStudentLeave';
+import AdminTeacherLeave from './Components/screens/AdminTeacherLeave';
+import AdminTimeTable from './Components/screens/AdminTimeTable';
+import LeaveApproval from './Components/screens/LeaveApproval';
+import WorkInProgress from './Components/screens/WorkInProgress';
+import TeacherHomeWorkList from './Components/screens/TeacherHomeWorkList';
+import TeacherLeaveApproval from './Components/screens/TeacherLeaveApproval';
+import TeacherExamResults from './Components/screens/TeacherExamResults';
+import StudentVerification from './Components/screens/StudentVerification';
+import AdminStudentForm from './Components/screens/AdminStudentForm';
+import StudentRegistration from './Components/screens/StudentRegistration';
+import AdminFeeDetails from './Components/screens/AdminFeeDetails';
+import StudentComplaintList from './Components/screens/StudentComplaintList';
+import TeacherComplaintList from './Components/screens/TeacherComplaintList';
+import PrevAttendance from './Components/screens/PrevAttendance';
+import StudentModify from './Components/screens/StudentModify';
+import TeacherVerification from './Components/screens/TeacherVerification';
+import TeacherRegistration from './Components/screens/TeacherRegistration';
+import TeacherForgotPassword from './Components/screens/TeacherForgotPassword';
+import TeacherPasswordChange from './Components/screens/TeacherPasswordChange';
+import TeacherStudyMaterial from './Components/screens/TeacherStudyMaterial';
+import StudentStudyMaterial from './Components/screens/StudentStudyMaterial';
+import PrevResults from './Components/screens/PrevResults';
+import SingleSyudentComplaint from './Components/screens/SingleStudentComplaint';
+import SingleStudentComplaint from './Components/screens/SingleStudentComplaint';
+import StudentExamResults from './Components/screens/StudentExamResults';
+import AdminLibrary from './Components/screens/AdminLibrary';
+import Library from './Components/screens/Library';
+import TeacherOnlineExam from './Components/screens/TeacherOnlineExam';
+import StudentOnlineExam from './Components/screens/StudentOnlineExam';
+import LibraryManagement from './Components/screens/LibraryManagement';
+import AdminEventScreen from './Components/screens/AdminEventScreen';
+import SchoolEvents from './Components/screens/SchoolEvents';
+import StudentAttendence from './Components/screens/StudentAttendence';
+import BookApproval from './Components/screens/BookApproval';
+import ReturnBook from './Components/screens/ReturnBook';
 
 const Stack = createNativeStackNavigator();
 
@@ -105,7 +109,6 @@ function App() {
         <Stack.Screen name="TeacherHomeScreen" component={TeacherHomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="TeacherProfile" component={TeacherProfile} options={{ headerShown: false }} />
         <Stack.Screen name="StudentComplaint" component={StudentComplaint} options={{headerShown: false }} />
-        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{headerShown: false }} />
         <Stack.Screen name="FeeNews" component={FeeNews} options={{headerShown: false}} />
         <Stack.Screen name="ClassWork" component={ClassWork} options={{headerShown: false}} />
         <Stack.Screen name="TeacherLeave" component={TeacherLeave} options={{headerShown: false}} />
@@ -156,6 +159,12 @@ function App() {
         <Stack.Screen name="Library" component={Library} options={{headerShown:false}} />
         <Stack.Screen name="StudentOnlineExam" component={StudentOnlineExam} options={{title: "Online Exam"}} />
         <Stack.Screen name="TeacherOnlineExam" component={TeacherOnlineExam} options={{title: "Online Exam"}} />
+        <Stack.Screen name="LibraryManagement" component={LibraryManagement} options={{headerShown:false}} />
+        <Stack.Screen name="AdminEventScreen" component={AdminEventScreen} options={{title: "Events"}} />
+        <Stack.Screen name="SchoolEvents" component={SchoolEvents} options={{title: "School Gallary"}} />
+        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{title: "Attendance"}} />
+        <Stack.Screen name='BookApproval' component={BookApproval} options={{title :"Book Allocation"}} />
+        <Stack.Screen name='ReturnBook' component={ReturnBook} options={{title :"Return Book"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

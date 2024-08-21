@@ -139,10 +139,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'black',
     margin: 10,
-    top:23,
     padding: 5,
     position:'relative',
-    borderBottomWidth: 1,
     marginBottom: 10,
   },
   details2: {
@@ -150,10 +148,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'blue',
     margin: 10,
-    right: 20,
     padding: 5,
     position:'relative',
-    borderBottomWidth: 1,
   },
   body: {
     justifyContent: 'space-between',

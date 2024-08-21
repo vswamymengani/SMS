@@ -22,18 +22,6 @@ const LibraryManagement = ({route}) => {
             });
     };
 
-    const updateBookStatus = (bookId, newStatus) => {
-        axios.post(`http://10.0.2.2:3000/updateBookStatus`, { bookId, status: newStatus })
-            .then(response => {
-                Alert.alert('Success', `Book status updated to ${newStatus}`);
-                searchBook(); // Refresh the book list to update status
-            })
-            .catch(error => {
-                console.error('There was an error updating the book status!', error);
-                Alert.alert('Error', `There was an error updating the book status to ${newStatus}`);
-            });
-    };
-
     const renderBookItem = ({ item }) => (
         <View style={styles.bookItem}>
             <Text style={styles.bookTitle}>{item.bookTitle}</Text>
@@ -41,9 +29,9 @@ const LibraryManagement = ({route}) => {
             <Text style={styles.bookDetail}>ISBN: {item.isbn}</Text>
             <Text style={styles.bookDetail}>Status: {item.status}</Text>
             {item.status === 'Available' ? (
-                <Button title="Allocate" onPress={() => updateBookStatus(item.id, 'Allocated')} />
+                <Button title="Allocate" onPress={() => navigation.navigate('BookApproval', { book: item })} />
             ) : (
-                <Button title="Available" onPress={() => updateBookStatus(item.id, 'Available')} />
+                <Button title="Return" onPress={() => navigation.navigate('ReturnBook', { bookId: item.id})} />
             )}
         </View>
     );
@@ -142,3 +130,4 @@ const styles = StyleSheet.create({
 });
 
 export default LibraryManagement;
+

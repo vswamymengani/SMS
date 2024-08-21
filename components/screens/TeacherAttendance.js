@@ -5,8 +5,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Image1 from '../assets/Verified.png';
 
 const TeacherAttendance = ({ navigation, route }) => {
-  const [className, setClassName] = useState('1');
-  const [section, setSection] = useState('A');
+  const [className, setClassName] = useState('Class');
+  const [section, setSection] = useState('Section');
   const [students, setStudents] = useState([]);
   const [date, setDate] = useState('');
   const [subject, setSubject] = useState('');
@@ -171,7 +171,7 @@ const TeacherAttendance = ({ navigation, route }) => {
       <View style={styles.dropdownRow}>
         <TextInput
           style={styles.textInput}
-          placeholder="Date (YYYY-MM-DD)"
+          placeholder="Date (DD-MM-YYYY)"
           value={date}
           onChangeText={text => { setDate(text); clearError('date'); }}
         />
