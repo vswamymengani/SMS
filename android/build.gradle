@@ -1,11 +1,9 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
         buildToolsVersion = "34.0.0"
         minSdkVersion = 23
-        compileSdkVersion = 35
-        targetSdkVersion = 35
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         ndkVersion = "26.1.10909125"
         kotlinVersion = "1.9.24"
     }
@@ -14,74 +12,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.0")
+        classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-// Apply plugins
-apply plugin: "com.android.application"
-apply plugin: "com.facebook.react"
-apply plugin: "kotlin-android"
-
-android {
-    namespace "com.example.sdsms" // Your package name
-
-    compileSdkVersion 35
-    buildToolsVersion "34.0.0"
-
-    defaultConfig {
-        applicationId "com.example.sdsms" // Your application ID
-        minSdkVersion 23
-        targetSdkVersion 35
-        versionCode 1
-        versionName "1.0"
-        ndkVersion "26.1.10909125"
-    }
-
-    signingConfigs {
-        release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(project.property('MYAPP_UPLOAD_STORE_FILE'))
-                storePassword project.property('MYAPP_UPLOAD_STORE_PASSWORD')
-                keyAlias project.property('MYAPP_UPLOAD_KEY_ALIAS')
-                keyPassword project.property('MYAPP_UPLOAD_KEY_PASSWORD')
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    // Add your other dependencies here
-}
-
-repositories {
-    mavenCentral()
-    google()
-}
+apply plugin: "com.facebook.react.rootproject"
