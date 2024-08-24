@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-import axios from 'axios';
 import { Dimensions } from 'react-native';
+import axios from 'axios';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
+import { useNavigation } from '@react-navigation/native';
 
 const screenWidth = Dimensions.get('window').width;
 
 const StudentAttendence = ({ route }) => {
+  const navigation = useNavigation();
+  const email = route.params?.email;
   const [attendanceData, setAttendanceData] = useState({
     present: 0,
     absent: 0,
@@ -15,7 +20,6 @@ const StudentAttendence = ({ route }) => {
   });
   const [profile, setProfile] = useState({});
   const [error, setError] = useState('');
-  const email = route.params?.email;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -87,8 +91,15 @@ const StudentAttendence = ({ route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Attendance Summary</Text>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.heading}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })}>
+          <Image source={Image1} style={styles.image} />
+        </TouchableOpacity>
+        <Text style={styles.header}>Attendance Summary</Text>
+      </View>
       {error ? <Text style={styles.error}>{error}</Text> : null}
+      <View style={styles.body}>
       <PieChart
         data={chartData}
         width={screenWidth - 40}
@@ -105,10 +116,22 @@ const StudentAttendence = ({ route }) => {
         absolute
       />
       <View style={styles.summaryContainer}>
-        <Text style={styles.summaryText}>Present: {attendanceData.present} Classes</Text>
-        <Text style={styles.summaryText}>Absent: {attendanceData.absent} Classes</Text>
-        <Text style={styles.summaryText}>Leave: {attendanceData.leave} Classes</Text>
-        <Text style={styles.summaryText}>Holiday: {attendanceData.holiday} Classes</Text>
+        <Text style={styles.tableHeader}>Attendance Details</Text>
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCell}>Present</Text>
+            <Text style={styles.tableCell}>Absent</Text>
+            <Text style={styles.tableCell}>Leave</Text>
+            <Text style={styles.tableCell}>Holiday</Text>
+          </View>
+          <View style={styles.tableRow}>
+            <Text style={styles.tableCell}>{attendanceData.present}</Text>
+            <Text style={styles.tableCell}>{attendanceData.absent}</Text>
+            <Text style={styles.tableCell}>{attendanceData.leave}</Text>
+            <Text style={styles.tableCell}>{attendanceData.holiday}</Text>
+          </View>
+        </View>
+      </View>
       </View>
     </ScrollView>
   );
@@ -117,15 +140,35 @@ const StudentAttendence = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
     backgroundColor: '#f5f5f5',
-    alignItems: 'center',
   },
-  title: {
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
+  },
+  body:{
+    backgroundColor:'white',
+    height:"100%",
+    width:'100%',
+    borderRadius:30,
+    padding:10,
+  },
+  heading: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginVertical: 25,
+  },
+  header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#3F1175',
+    color: 'white',
+  },
+  image: {
+    height: 23,
+    top:5,
+    width: 20,
+    marginHorizontal: 10,
   },
   error: {
     color: 'red',
@@ -133,11 +176,34 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     marginTop: 20,
+    width: '100%',
     alignItems: 'center',
   },
-  summaryText: {
-    fontSize: 18,
-    marginVertical: 5,
+  tableHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#3F1175',
+  },
+  table: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+  },
+  tableRow: {
+    flexDirection: 'row',
+  },
+  tableCell: {
+    flex: 1,
+    padding: 10,
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#000',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 });
 

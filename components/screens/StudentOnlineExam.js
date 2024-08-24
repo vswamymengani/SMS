@@ -3,10 +3,7 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, Alert, ScrollView } f
 import axios from 'axios';
 
 const StudentOnlineExam = ({ route }) => {
-  const email = route.params.email;
-  const [className, setClassName] = useState('');
-  const [section, setSection] = useState('');
-  const [profile, setProfile] = useState({});
+  const { email, className, section, subject } = route.params;
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -17,29 +14,8 @@ const StudentOnlineExam = ({ route }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
-        const profileData = response.data;
-        setProfile(profileData);
-        setClassName(profileData.className);
-        setSection(profileData.section);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    };
-
-    if (email) {
-      fetchProfileData();
-    } else {
-      setError('Email not provided');
-    }
-  }, [email]);
-
-  useEffect(() => {
-    if (className && section) {
-      // Fetch questions from the backend
-      axios.get(`http://10.0.2.2:3000/questions?className=${className}&section=${section}`)
+    if (className && section && subject) {
+      axios.get(`http://10.0.2.2:3000/studentQuestions?className=${className}&section=${section}&subject=${subject}`)
         .then(response => {
           setQuestions(response.data);
           setTotalQuestions(response.data.length);
@@ -51,7 +27,7 @@ const StudentOnlineExam = ({ route }) => {
           console.error(error);
         });
     }
-  }, [className, section]);
+  }, [className, section, subject]);
 
   const handleOptionSelect = (questionId, option) => {
     setAnswers(prevAnswers => ({
@@ -61,7 +37,7 @@ const StudentOnlineExam = ({ route }) => {
   };
 
   const handleSubmit = () => {
-    axios.post('http://10.0.2.2:3000/submit', { answers, email })
+    axios.post('http://10.0.2.2:3000/submit', { answers, email, subject })
       .then(response => {
         const { score, totalQuestions, incorrectAnswers } = response.data;
         setScore(score);

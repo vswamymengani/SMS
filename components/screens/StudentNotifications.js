@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity,Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import Image1 from '../assets/Back_Arrow.png';
 import Image2 from '../assets/BackImage.png';
 import { useNavigation } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const StudentNotifications = ({ route }) => {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ const StudentNotifications = ({ route }) => {
   const [fullname, setFullName] = useState('');
   const [section, setSection] = useState('');
   const [className, setclassName] = useState('');
+  const [selectedType, setSelectedType] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -61,7 +63,10 @@ const StudentNotifications = ({ route }) => {
   
     fetchNotifications();
   }, [fullname, className, section, email]);
-  
+
+  const filteredNotifications = selectedType
+    ? notifications.filter((item) => item.type === selectedType)
+    : notifications;
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => {
@@ -72,10 +77,10 @@ const StudentNotifications = ({ route }) => {
       } else if (item.type === 'leave') {
         navigation.navigate('LeaveApproval', { email });
       } else if (item.type === 'complaint') {
-        navigation.navigate('StudentComplaintList',{ email })
+        navigation.navigate('StudentComplaintList', { email });
       }
     }}>
-      <View key={item.id} style={styles.notificationItem}>
+      <View style={styles.notificationItem}>
         {item.type === 'homework' ? (
           <>
             <Text style={styles.text1}>New Homework</Text>
@@ -111,18 +116,35 @@ const StudentNotifications = ({ route }) => {
     <View style={styles.container}>
       <Image source={Image2} style={styles.bc} />
       <View style={styles.head}>
-        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email })} >
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })} >
           <Image source={Image1} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Notifications</Text>
       </View>
       <View style={styles.body}>
-      {errors.general && <Text style={styles.error}>{errors.general}</Text>}
-      <FlatList
-        data={notifications}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
-      />
+        {errors.general && <Text style={styles.error}>{errors.general}</Text>}
+
+        <Dropdown
+          style={styles.dropdown}
+          data={[
+            { label: 'All', value: null },
+            { label: 'Homework', value: 'homework' },
+            { label: 'Announcement', value: 'announcement' },
+            { label: 'Leave', value: 'leave' },
+            { label: 'Complaint', value: 'complaint' },
+          ]}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Notification Type"
+          value={selectedType}
+          onChange={item => setSelectedType(item.value)}
+        />
+
+        <FlatList
+          data={filteredNotifications}
+          renderItem={renderItem}
+          keyExtractor={(item) => `${item.type}-${item.id}`}
+        />
       </View>
     </View>
   );
@@ -132,31 +154,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  bc:{
-    height:'110%',
-    width:'110%',
-    position:'absolute',
+  bc: {
+    height: '110%',
+    width: '110%',
+    position: 'absolute',
   },
-  head:{
-    flexDirection:'row',
-    justifyContent:'flex-start',
-    top:20,
-    marginBottom:60,
+  head: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    top: 20,
+    marginBottom: 60,
   },
-  image:{
-    height:23,
-    width:20,
-    marginHorizontal:10
+  image: {
+    height: 23,
+    width: 20,
+    marginHorizontal: 10,
   },
-  header:{
-    fontSize:20,
-    fontWeight:'bold',
-    color:'white',
+  header: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
   },
-  body:{
-    borderRadius:30,
-    backgroundColor:'white',
-    height:'110%',
+  body: {
+    borderRadius: 30,
+    backgroundColor: 'white',
+    height: '110%',
+  },
+  dropdown: {
+    margin: 16,
+    height: 50,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
   },
   notificationItem: {
     padding: 20,
@@ -173,7 +201,7 @@ const styles = StyleSheet.create({
   text1: {
     fontSize: 16,
     color: 'red',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   error: {
     color: 'red',

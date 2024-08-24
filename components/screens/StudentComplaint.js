@@ -112,7 +112,7 @@ const StudentComplaint = ({ route }) => {
     <ScrollView style={styles.container}>
       <Image source={Image3} style={styles.bc} />
       <View style={styles.heading}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate('Homescreen',{ email})}>
           <Image source={Image2} style={styles.image} />
         </TouchableOpacity>
         <Text style={styles.header}>Complaints</Text>
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 10,
+    top:10,
     marginBottom: 40,
   },
   header: {

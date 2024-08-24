@@ -80,6 +80,9 @@ import SchoolEvents from './Components/screens/SchoolEvents';
 import StudentAttendence from './Components/screens/StudentAttendence';
 import BookApproval from './Components/screens/BookApproval';
 import ReturnBook from './Components/screens/ReturnBook';
+import StudentCalendar from './Components/screens/StudentCalendar';
+import AdminCalendarManagement from './Components/screens/AdminCalendarManagenment';
+import SubjectsScreen from './Components/screens/SubjectScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -162,9 +165,12 @@ function App() {
         <Stack.Screen name="LibraryManagement" component={LibraryManagement} options={{headerShown:false}} />
         <Stack.Screen name="AdminEventScreen" component={AdminEventScreen} options={{title: "Events"}} />
         <Stack.Screen name="SchoolEvents" component={SchoolEvents} options={{title: "School Gallary"}} />
-        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{title: "Attendance"}} />
-        <Stack.Screen name='BookApproval' component={BookApproval} options={{title :"Book Allocation"}} />
-        <Stack.Screen name='ReturnBook' component={ReturnBook} options={{title :"Return Book"}} />
+        <Stack.Screen name="StudentAttendence" component={StudentAttendence} options={{headerShown: false}} />
+        <Stack.Screen name="BookApproval" component={BookApproval} options={{title :"Book Allocation"}} />
+        <Stack.Screen name="ReturnBook" component={ReturnBook} options={{title :"Return Book"}} />
+        <Stack.Screen name="StudentCalendar" component={StudentCalendar} options={{title: "Calendar"}} />
+        <Stack.Screen name="AdminCalendarManagement" component={AdminCalendarManagement} options={{title:'Calendar'}} />
+        <Stack.Screen name="SubjectScreen" component={SubjectsScreen} options={{title: "Online Exams"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

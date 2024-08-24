@@ -70,7 +70,7 @@ const LeaveApproval = ({ route }) => {
         <View style={styles.container}>
             <Image source={Image2} style={styles.bc} />
             <View style={styles.heading}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <TouchableOpacity onPress={() => navigation.navigate('StudentLeave',{email})}>
                     <Image source={Image1} style={styles.image} />
                 </TouchableOpacity>
                 <Text style={styles.header}>My Leaves</Text>
@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     heading: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginVertical: 40,
+        marginVertical: 20,
+        marginBottom:40,
     },
     header: {
         fontSize: 20,

@@ -1,44 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import { Dropdown } from 'react-native-element-dropdown';
+import { useNavigation } from '@react-navigation/native';
 
-const TeacherOnlineExam = () => {
+const TeacherOnlineExam = ({route}) => {
   const [questions, setQuestions] = useState([{ id: Date.now().toString(), question: '', options: ['', '', '', ''], correctAnswer: '' }]);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
+  const [subject, setSubject] = useState('');
+  const [employeeid, setemployeeid] = useState('');
+  const email = route.params.email;
 
-  // Handle change in question text
+  useEffect(() => {
+    const fetchemployeeid = async () => {
+      try {
+        const response = await axios.get(`http://10.0.2.2:3000/employee?email=${email}`);
+        setemployeeid(response.data.employeeid);
+      } catch (error) {
+        console.error('Error fetching employee ID:', error);
+      }
+    };
+  
+    fetchemployeeid();
+  }, [email]);
+
   const handleQuestionChange = (index, value) => {
     const newQuestions = [...questions];
     newQuestions[index].question = value;
     setQuestions(newQuestions);
   };
 
-  // Handle change in option text
   const handleOptionChange = (questionIndex, optionIndex, value) => {
     const newQuestions = [...questions];
     newQuestions[questionIndex].options[optionIndex] = value;
     setQuestions(newQuestions);
   };
 
-  // Handle change in correct answer text
   const handleCorrectAnswerChange = (index, value) => {
     const newQuestions = [...questions];
     newQuestions[index].correctAnswer = value;
     setQuestions(newQuestions);
   };
 
-  // Add new question fields
   const addNewQuestionFields = () => {
     setQuestions([...questions, { id: Date.now().toString(), question: '', options: ['', '', '', ''], correctAnswer: '' }]);
   };
 
-  // Add questions to the backend
   const addQuestions = () => {
-    axios.post('http://10.0.2.2:3000/questions', { className, section, questions })
+    axios.post('http://10.0.2.2:3000/questions', { className, section, subject, questions, employeeid })
       .then(response => {
         setQuestions([{ id: Date.now().toString(), question: '', options: ['', '', '', ''], correctAnswer: '' }]);
         Alert.alert('Success', 'Questions added successfully');
@@ -49,7 +61,6 @@ const TeacherOnlineExam = () => {
       });
   };
 
-  // Handle option selection for the quiz
   const handleOptionSelect = (questionId, option) => {
     setAnswers(prevAnswers => ({
       ...prevAnswers,
@@ -78,7 +89,13 @@ const TeacherOnlineExam = () => {
     { label: 'C', value: 'C' }
   ];
 
-  // Submit answers and calculate score
+  const subjectData = [
+    { label: 'Math', value: 'Math' },
+    { label: 'Science', value: 'Science' },
+    { label: 'English', value: 'English' },
+    { label: 'History', value: 'History' }
+  ];
+
   const handleSubmit = () => {
     let correctAnswers = 0;
     questions.forEach(question => {
@@ -89,7 +106,6 @@ const TeacherOnlineExam = () => {
     setScore(correctAnswers);
   };
 
-  // Render a single question
   const renderQuestion = ({ item, index }) => (
     <View style={styles.questionBlock}>
       <TextInput
@@ -100,7 +116,7 @@ const TeacherOnlineExam = () => {
       />
       {item.options.map((option, optionIndex) => (
         <TextInput
-          key={`${item.id}-option-${optionIndex}`} // Unique key for each option
+          key={`${item.id}-option-${optionIndex}`}
           style={styles.input}
           placeholder={`Option ${optionIndex + 1}`}
           value={option}
@@ -118,6 +134,7 @@ const TeacherOnlineExam = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.top}>
       <View style={styles.dropdownRow2}>
         <Dropdown
           style={styles.dropdown2}
@@ -148,14 +165,27 @@ const TeacherOnlineExam = () => {
           accessibilityLabel="Section"
         />
       </View>
+      <View style={styles.dropdownRow2}>
+        <Dropdown
+          style={styles.dropdown2}
+          placeholderStyle={styles.placeholderStyle2}
+          selectedTextStyle={styles.selectedTextStyle2}
+          data={subjectData}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Subject"
+          value={subject}
+          onChange={item => setSubject(item.value)}
+          accessible={true}
+          accessibilityLabel="Subject"
+        />
+      </View>
+      </View>
       <FlatList
-        ListHeaderComponent={
-          <>
-            <Button title="Add New Question" onPress={addNewQuestionFields} />
-            <Button title="Add Questions" onPress={addQuestions} />
-          </>
-        }
+        ListHeaderComponent={null}
         data={questions}
+        style={styles.list}
         keyExtractor={item => item.id}
         renderItem={renderQuestion}
         ListFooterComponent={
@@ -165,7 +195,7 @@ const TeacherOnlineExam = () => {
                 <Text style={styles.questionText}>{item.question}</Text>
                 {item.options.map((option, optionIndex) => (
                   <TouchableOpacity
-                    key={`${item.id}-option-${optionIndex}`} // Unique key for each option button
+                    key={`${item.id}-option-${optionIndex}`}
                     style={[
                       styles.optionButton,
                       answers[item.id] === option && styles.selectedOption
@@ -177,7 +207,10 @@ const TeacherOnlineExam = () => {
                 ))}
               </View>
             ))}
-            <Button title="Submit" onPress={handleSubmit} />
+            <View style={styles.buttonRow}>
+              <Button title="Add New Question" onPress={addNewQuestionFields} />
+              <Button title="Submit" onPress={addQuestions} />
+            </View>
             {score !== null && (
               <Text style={styles.scoreText}>Your score is: {score} / {questions.length}</Text>
             )}
@@ -191,7 +224,10 @@ const TeacherOnlineExam = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20
+    padding: 10
+  },
+  top:{
+    padding:10,
   },
   dropdownRow2: {
     flexDirection: 'row',
@@ -205,8 +241,11 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
   },
+  list:{
+    height:'100%',
+  },
   questionBlock: {
-    marginBottom: 20
+    marginBottom: 50
   },
   input: {
     height: 40,
@@ -234,6 +273,11 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16
   },
+  buttonRow: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    margin: 70,
+  },
   scoreText: {
     fontSize: 18,
     marginTop: 20,
@@ -242,3 +286,4 @@ const styles = StyleSheet.create({
 });
 
 export default TeacherOnlineExam;
+

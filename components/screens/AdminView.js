@@ -13,6 +13,7 @@ import Image1 from '../assets/Menuicon.png';
 import Image4 from '../assets/timetable1.png';
 import Image20 from '../assets/library.png';
 import Image23 from '../assets/gallary1.png';
+import Image14 from '../assets/calander.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -74,9 +75,9 @@ const AdminView = ({ navigation }) => {
           <Text style={styles.loginButtonText}>Total {teacherCount} Teachers</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('ClassesTable')}>
-          <Image source={Image9} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Parent Details</Text>
+        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminCalendarManagement')}>
+          <Image source={Image14} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>Calendar</Text>
         </TouchableOpacity>
       </View>
 

@@ -1,4 +1,4 @@
-package com.awesomeproject
+package com.school
 
 import android.app.Application
 import com.facebook.react.PackageList
