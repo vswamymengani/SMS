@@ -37,7 +37,7 @@ const TeacherComplaint1 = ({ route }) => {
   useEffect(() => {
     const fetchTeacher = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
         setTeacher(response.data);
         setEmployeeId(response.data.employeeid);
       } catch (error) {
@@ -57,7 +57,7 @@ const TeacherComplaint1 = ({ route }) => {
 
   const Complaint = async () => {
     if (handleSend()) {
-      axios.post('http://10.0.2.2:3000/TeacherComplaints', {
+      axios.post('http://18.60.190.183:3000/TeacherComplaints', {
         employeeid,
         typeOfComplaint,
         reason,

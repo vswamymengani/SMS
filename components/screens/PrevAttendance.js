@@ -13,7 +13,7 @@ const PrevAttendance = () => {
 
   const handleSearch = () => {
     setSearchPressed(true);
-    axios.get('http://10.0.2.2:3000/prevAttendance', { params: { className, section, date, subject } })
+    axios.get('http://18.60.190.183:3000/prevAttendance', { params: { className, section, date, subject } })
       .then(response => {
         setAttendanceData(response.data);
       })

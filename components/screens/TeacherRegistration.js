@@ -39,7 +39,7 @@ const TeacherRegistration = ({ route }) => {
 
   const handleSend = async () => {
     if (validate()) {
-      axios.post(`http://10.0.2.2:3000/teachersRegister?employeeid=${employeeid}`, {
+      axios.post(`http://18.60.190.183:3000/teachersRegister?employeeid=${employeeid}`, {
         email,
         password,
         confirmPassword,

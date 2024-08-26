@@ -14,7 +14,7 @@ const TeacherHomeWorkList = ({ route }) => {
     useEffect(() => {
         const fetchHomeworkData = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/teacherHomeworkList?email=${email}`);
+                const response = await axios.get(`http://18.60.190.183:3000/teacherHomeworkList?email=${email}`);
                 setHomeworkList(response.data.reverse());
             } catch (error) {
                 console.error("axios error",error);

@@ -18,9 +18,9 @@ const TeacherNotifications = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const [complaintsResponse, announcementsResponse, leaveResponse] = await Promise.all([
-          axios.get('http://10.0.2.2:3000/notificationComplaints?recipient=teacher'),
-          axios.get('http://10.0.2.2:3000/reciveAnnouncements?reciver=Teacher'),
-          axios.get(`http://10.0.2.2:3000/leaveNotification?email=${email}`)
+          axios.get('http://18.60.190.183:3000/notificationComplaints?recipient=teacher'),
+          axios.get('http://18.60.190.183:3000/reciveAnnouncements?reciver=Teacher'),
+          axios.get(`http://18.60.190.183:3000/leaveNotification?email=${email}`)
         ]);
 
         const combinedData = [

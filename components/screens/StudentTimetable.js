@@ -18,12 +18,12 @@ const StudentTimetable = ({ route }) => {
   useEffect(() => {
     const fetchTimetableEntries = async () => {
       try {
-        const profileResponse = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const profileResponse = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         const profile = profileResponse.data;
         setClassName(profile.className);
         setSection(profile.section);
 
-        const timetableResponse = await axios.get(`http://10.0.2.2:3000/studentTimetable?className=${profile.className}&section=${profile.section}`);
+        const timetableResponse = await axios.get(`http://18.60.190.183:3000/studentTimetable?className=${profile.className}&section=${profile.section}`);
         setTimetableEntries(timetableResponse.data);
       } catch (error) {
         console.error('Failed to fetch timetable:', error);
@@ -48,7 +48,7 @@ const StudentTimetable = ({ route }) => {
 
   const showTeacherDetails = async (employeeid) => {
     try {
-      const response = await axios.get(`http://10.0.2.2:3000/teacherData?employeeid=${employeeid}`);
+      const response = await axios.get(`http://18.60.190.183:3000/teacherData?employeeid=${employeeid}`);
       setTeacherDetails(response.data);
       setModalVisible(true);
     } catch (error) {

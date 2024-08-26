@@ -15,7 +15,7 @@ const RequestEdit = () => {
 
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/teacherprofile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/teacherprofile?email=${email}`);
         if (response.data) {
           const { id, created_at,employeeid,confirmPassword,qualification, ...rest } = response.data;
           setProfile(rest);
@@ -32,7 +32,7 @@ const RequestEdit = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.post('http://10.0.2.2:3000/teacherupdate', {
+      const response = await axios.post('http://18.60.190.183:3000/teacherupdate', {
         profile,
         email,
       });

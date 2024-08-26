@@ -23,7 +23,7 @@ const AdminView = ({ navigation }) => {
 
   // Fetch teacher count
   useEffect(() => {
-    axios.get('http://10.0.2.2:3000/teacherCount')
+    axios.get('http://18.60.190.183:3000/teacherCount')
       .then(response => {
         if (response.status === 200) {
           setTeacherCount(response.data.Teacher_Count);
@@ -38,7 +38,7 @@ const AdminView = ({ navigation }) => {
 
   // Fetch student count
   useEffect(() => {
-    axios.get('http://10.0.2.2:3000/studentCount')
+    axios.get('http://18.60.190.183:3000/studentCount')
       .then(response => {
         if (response.status === 200) {
           setStudentCount(response.data.Student_Count);

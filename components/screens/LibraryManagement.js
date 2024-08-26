@@ -12,7 +12,7 @@ const LibraryManagement = ({route}) => {
     const [books, setBooks] = useState([]);
 
     const searchBook = () => {
-        axios.get(`http://10.0.2.2:3000/searchBook?query=${searchQuery}`)
+        axios.get(`http://18.60.190.183:3000/searchBook?query=${searchQuery}`)
             .then(response => {
                 setBooks(response.data);
             })

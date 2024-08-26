@@ -24,7 +24,7 @@ const StudentAttendence = ({ route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         fetchAttendance(response.data.rollNo, response.data.className, response.data.section);
       } catch (err) {
@@ -34,7 +34,7 @@ const StudentAttendence = ({ route }) => {
 
     const fetchAttendance = async (rollNo, className, section) => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/studentAttendance', {
+        const response = await axios.get('http://18.60.190.183:3000/studentAttendance', {
           params: { rollNo, className, section },
         });
         const data = response.data;

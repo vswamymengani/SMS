@@ -16,7 +16,7 @@ const FeeNews = ({ navigation, route }) => {
   // Fetch fee details from server
   useEffect(() => {
     if (admissionid) {
-      axios.get(`http://10.0.2.2:3000/feedetails?admissionid=${admissionid}`)
+      axios.get(`http://18.60.190.183:3000/feedetails?admissionid=${admissionid}`)
         .then(response => {
           const data = response.data;
           setFeeDetails(data);
@@ -34,7 +34,7 @@ const FeeNews = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         const profileData = response.data;
         setProfile(profileData);
         setAdmissionid(profileData.admissionid);
@@ -64,7 +64,7 @@ const FeeNews = ({ navigation, route }) => {
 
       <View style={styles.body}>
       {/* Fee image */}
-      <Image source={require('../assets/Fee.png')} style={styles.feeImage} />
+      <Image source={require('../assets/feenews.png')} style={styles.feeImage} />
 
       {/* Total fees */}
       <View style={styles.totalFeesContainer}>

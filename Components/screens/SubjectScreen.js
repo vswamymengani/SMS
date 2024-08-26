@@ -15,7 +15,7 @@ const SubjectsScreen = ({ route }) => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         const profileData = response.data;
         setClassName(profileData.className);
         setSection(profileData.section);
@@ -34,7 +34,7 @@ const SubjectsScreen = ({ route }) => {
   useEffect(() => {
     if (className && section) {
       // Fetch subjects from the backend
-      axios.get(`http://10.0.2.2:3000/subjects?className=${className}&section=${section}`)
+      axios.get(`http://18.60.190.183:3000/subjects?className=${className}&section=${section}`)
         .then(response => {
           setSubjects(response.data);
           setLoading(false);

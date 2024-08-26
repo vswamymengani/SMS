@@ -31,7 +31,7 @@ const TeacherComplaintList = ({ route }) => {
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/teacherComplaintList?employeeid=${employeeid}`);
+                const response = await axios.get(`http://18.60.190.183:3000/teacherComplaintList?employeeid=${employeeid}`);
                 setComplaints(response.data.reverse());
                 setFilteredComplaintList(response.data.reverse());
             } catch (error) {

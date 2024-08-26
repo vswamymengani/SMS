@@ -17,7 +17,7 @@ const TeacherOnlineExam = ({route}) => {
   useEffect(() => {
     const fetchemployeeid = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/employee?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/employee?email=${email}`);
         setemployeeid(response.data.employeeid);
       } catch (error) {
         console.error('Error fetching employee ID:', error);
@@ -50,7 +50,7 @@ const TeacherOnlineExam = ({route}) => {
   };
 
   const addQuestions = () => {
-    axios.post('http://10.0.2.2:3000/questions', { className, section, subject, questions, employeeid })
+    axios.post('http://18.60.190.183:3000/questions', { className, section, subject, questions, employeeid })
       .then(response => {
         setQuestions([{ id: Date.now().toString(), question: '', options: ['', '', '', ''], correctAnswer: '' }]);
         Alert.alert('Success', 'Questions added successfully');

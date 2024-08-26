@@ -11,7 +11,7 @@ const StudentDetails = () => {
     useEffect(() => {
         const fetchStudentDetails = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/studentDetails`);
+                const response = await axios.get(`http://18.60.190.183:3000/studentDetails`);
                 setStudentDetails(response.data);
             } catch (err) {
                 setErrors({ general: 'Failed to load student Details' });

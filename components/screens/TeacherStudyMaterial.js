@@ -40,7 +40,7 @@ const TeacherStudyMaterial = ({route}) =>{
     const handleAnnouncement = async () =>{
         if(validate()){
             try{
-                const response = await axios.post('http://10.0.2.2:3000/teacherStudyMaterial',{
+                const response = await axios.post('http://18.60.190.183:3000/teacherStudyMaterial',{
                     className,
                     section,
                     subject,

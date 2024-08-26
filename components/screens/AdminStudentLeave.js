@@ -12,7 +12,7 @@ const AdminStudentLeave = () => {
   useEffect(() => {
     const fetchStudentLeaves = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/studentLeaves');
+        const response = await axios.get('http://18.60.190.183:3000/studentLeaves');
         setLeaves(response.data);
         setFilteredLeaves(response.data.filter(leave => leave.approval === null));
       } catch (err) {
@@ -24,7 +24,7 @@ const AdminStudentLeave = () => {
 
   const updateLeaveStatus = async (id, status) => {
     try {
-      await axios.put(`http://10.0.2.2:3000/studentLeaves/${id}`, { approval: status });
+      await axios.put(`http://18.60.190.183:3000/studentLeaves/${id}`, { approval: status });
       const updatedLeaves = leaves.map(leave =>
         leave.id === id ? { ...leave, approval: status } : leave
       );

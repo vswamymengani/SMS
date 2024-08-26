@@ -55,7 +55,7 @@ const AdminStudentForm = ({ navigation }) => {
   const handleRegister = async () => {
     if (validateForm()) {
       try {
-        const response = await axios.post('http://10.0.2.2:3000/adminStudentRegister', {
+        const response = await axios.post('http://18.60.190.183:3000/adminStudentRegister', {
           fullname,
           className,
           section,

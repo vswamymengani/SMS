@@ -16,7 +16,7 @@ const TeacherAttendance = ({ navigation, route }) => {
   const email = route.params;
 
   const fetchStudents = () => {
-    axios.get('http://10.0.2.2:3000/studentResults', { params: { className, section } })
+    axios.get('http://18.60.190.183:3000/studentResults', { params: { className, section } })
       .then(response => {
         const initialAttendance = response.data.map(student => ({
           rollNo: student.rollNo,
@@ -75,7 +75,7 @@ const TeacherAttendance = ({ navigation, route }) => {
         section,
       }));
 
-      axios.post('http://10.0.2.2:3000/attendance', attendanceData)
+      axios.post('http://18.60.190.183:3000/attendance', attendanceData)
         .then(response => {
           setIsModalVisible(true);
         })

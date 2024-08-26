@@ -9,7 +9,7 @@ const StudentModify = ({ navigation }) => {
 
   const fetchStudentData = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:3000/studentModify/${admissionid}`);
+      const response = await axios.get(`http://18.60.190.183:3000/studentModify/${admissionid}`);
       if (response.status === 200) {
         console.log(response.data); // Log the response data for debugging
         // Ensure rollNo is a string for TextInput
@@ -45,7 +45,7 @@ const StudentModify = ({ navigation }) => {
       try {
         // Ensure rollNo is converted back to an integer before sending to the server
         const dataToSend = { ...studentData, rollNo: parseInt(studentData.rollNo, 10) };
-        const response = await axios.put(`http://10.0.2.2:3000/studentModify/${admissionid}`, dataToSend);
+        const response = await axios.put(`http://18.60.190.183:3000/studentModify/${admissionid}`, dataToSend);
         if (response.status === 200) {
           console.log('Data modified successfully');
           navigation.navigate('StudentDetails');

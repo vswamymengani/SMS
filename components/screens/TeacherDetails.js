@@ -11,7 +11,7 @@ const TeacherDetails = () => {
     useEffect(() => {
         const fetchTeacherDetails = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/teacherDetails`);
+                const response = await axios.get(`http://18.60.190.183:3000/teacherDetails`);
                 setTeacherDetails(response.data);
             } catch (err) {
                 setErrors({ general: 'Failed to load Teacher Details' });

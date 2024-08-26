@@ -18,7 +18,7 @@ const StudentStudyMaterial = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         setClassName(response.data.className);
         setSection(response.data.section);
@@ -36,7 +36,7 @@ const StudentStudyMaterial = ({ navigation, route }) => {
   useEffect(() => {
     const fetchStudyMaterial = async (classname, section) => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentStudyMaterial/${classname}/${section}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentStudyMaterial/${classname}/${section}`);
         setStudyMaterialList(response.data.reverse());
       } catch (error) {
         console.error('Error fetching Study material data:', error);

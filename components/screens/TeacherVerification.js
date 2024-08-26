@@ -22,7 +22,7 @@ const TeacherVerification = () => {
 
   const handleSend = () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/teacherVerification', { employeeid, fullname, dateofbirth })
+      axios.post('http://18.60.190.183:3000/teacherVerification', { employeeid, fullname, dateofbirth })
         .then(response => {
           console.log('Server response: ', response.data);
           if (response.data.status === 'Success') {

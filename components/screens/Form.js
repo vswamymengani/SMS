@@ -82,7 +82,7 @@ const Form = ({ navigation }) => {
 
   const handleRegister = async () => {
     if (validateForm()) {
-      axios.post('http://10.0.2.2:3000/register', {
+      axios.post('http://18.60.190.183:3000/register', {
         fullname,
         className, 
         section,

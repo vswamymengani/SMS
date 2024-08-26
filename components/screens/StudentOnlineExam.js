@@ -15,7 +15,7 @@ const StudentOnlineExam = ({ route }) => {
 
   useEffect(() => {
     if (className && section && subject) {
-      axios.get(`http://10.0.2.2:3000/studentQuestions?className=${className}&section=${section}&subject=${subject}`)
+      axios.get(`http://18.60.190.183:3000/studentQuestions?className=${className}&section=${section}&subject=${subject}`)
         .then(response => {
           setQuestions(response.data);
           setTotalQuestions(response.data.length);
@@ -37,7 +37,7 @@ const StudentOnlineExam = ({ route }) => {
   };
 
   const handleSubmit = () => {
-    axios.post('http://10.0.2.2:3000/submit', { answers, email, subject })
+    axios.post('http://18.60.190.183:3000/submit', { answers, email, subject })
       .then(response => {
         const { score, totalQuestions, incorrectAnswers } = response.data;
         setScore(score);

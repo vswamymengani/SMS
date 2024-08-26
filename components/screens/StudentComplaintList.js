@@ -35,7 +35,7 @@ const StudentComplaintList = ({ route }) => {
     useEffect(() => {
         const fetchComplaints = async () => {
             try {
-                const response = await axios.get('http://10.0.2.2:3000/studentComplaintList', { params: { fullname, className, section } });
+                const response = await axios.get('http://18.60.190.183:3000/studentComplaintList', { params: { fullname, className, section } });
                 setComplaints(response.data.reverse());
                 setFilteredComplaintList(response.data.reverse());
             } catch (error) {
@@ -48,7 +48,7 @@ const StudentComplaintList = ({ route }) => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+                const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
                 setProfile(response.data);
                 setFullName(response.data.fullname);
                 setClassName(response.data.className);

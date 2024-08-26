@@ -44,7 +44,7 @@ const AdminTeacherComplaints = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/teacherComplaints');
+        const response = await axios.get('http://18.60.190.183:3000/teacherComplaints');
         setComplaints(response.data);
         setFilteredComplaints(response.data.filter(item => item.is_resolved.toString() === filter));
       } catch (err) {
@@ -56,7 +56,7 @@ const AdminTeacherComplaints = () => {
 
   const resolveComplaint = async (id, isResolved, comments) => {
     try {
-      await axios.put(`http://10.0.2.2:3000/teacherComplaints/${id}/resolve`, { is_resolved: isResolved, comments });
+      await axios.put(`http://18.60.190.183:3000/teacherComplaints/${id}/resolve`, { is_resolved: isResolved, comments });
       setComplaints(prev =>
         prev.map(complaint =>
           complaint.id === id ? { ...complaint, is_resolved: isResolved, comments } : complaint

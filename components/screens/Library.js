@@ -12,7 +12,7 @@ const Library = ({route}) => {
   const {email} = route.params;
 
   const searchBook = () => {
-    axios.get(`http://10.0.2.2:3000/searchBook?query=${searchQuery}`)
+    axios.get(`http://18.60.190.183:3000/searchBook?query=${searchQuery}`)
         .then(response => {
             setBooks(response.data);
         })
@@ -23,7 +23,7 @@ const Library = ({route}) => {
   };
 
   useEffect(() => {
-    axios.get('http://10.0.2.2:3000/getBooks')
+    axios.get('http://18.60.190.183:3000/getBooks')
       .then(response => {
         setBooks(response.data);
       })

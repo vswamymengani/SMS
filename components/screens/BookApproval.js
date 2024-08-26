@@ -12,7 +12,7 @@ const BookApproval = ({ route, navigation }) => {
     const [date, setDate] = useState('');
 
     const fetchStudentDetails = () => {
-        axios.get(`http://10.0.2.2:3000/getStudentDetails?admissionid=${admissionid}`)
+        axios.get(`http://18.60.190.183:3000/getStudentDetails?admissionid=${admissionid}`)
             .then(response => {
                 console.log('Student details response:', response.data);  // Log the full response
                 if (response.data) {
@@ -42,10 +42,10 @@ const BookApproval = ({ route, navigation }) => {
             
         };
 
-        axios.post('http://10.0.2.2:3000/allocateBook', data)
+        axios.post('http://18.60.190.183:3000/allocateBook', data)
             .then(response => {
                 Alert.alert('Success', 'Book allocated successfully');
-                axios.post('http://10.0.2.2:3000/updateBookStatus', { bookId: book.id, status: 'Allocated' });
+                axios.post('http://18.60.190.183:3000/updateBookStatus', { bookId: book.id, status: 'Allocated' });
                 navigation.goBack();
             })
             .catch(error => {

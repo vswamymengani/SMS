@@ -17,7 +17,7 @@ const HomeworkScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         setclassName(response.data.className);
         setSection(response.data.section);
@@ -35,7 +35,7 @@ const HomeworkScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchHomeworkData = async (className, section) => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentHomework/${className}/${section}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentHomework/${className}/${section}`);
         const data = response.data.reverse(); // Assuming API returns an array of homework objects
         setHomeworkList(data);
         setFilteredHomeworkList(data); // Initialize filtered list with all homework

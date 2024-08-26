@@ -31,7 +31,7 @@ const TeacherAnnouncements = ({route}) =>{
     const handleAnnouncement = async () =>{
         if(validate()){
             try{
-                const response = await axios.post('http://10.0.2.2:3000/announcements',{
+                const response = await axios.post('http://18.60.190.183:3000/announcements',{
                     subject,
                     explanation,
                     reciver: "Teacher",

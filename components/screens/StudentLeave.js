@@ -42,7 +42,7 @@ const StudentLeave = ({ route }) => {
   useEffect(() => {
     const fetchLeaveProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/leaveProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/leaveProfile?email=${email}`);
         const profile = response.data;
         setLeaveProfile(profile);
         setFullname(profile.fullname);
@@ -62,7 +62,7 @@ const StudentLeave = ({ route }) => {
 
   const handleSendLeaveRequest = async () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/studentLeave', {
+      axios.post('http://18.60.190.183:3000/studentLeave', {
         fullname,
         className,
         section,

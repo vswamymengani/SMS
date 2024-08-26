@@ -23,7 +23,7 @@ const LeaveApproval = ({ route }) => {
     useEffect(() => {
         const fetchLeaveApproval = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:3000/studentLeaveList?email=${email}`);
+                const response = await axios.get(`http://18.60.190.183:3000/studentLeaveList?email=${email}`);
                 const reversedData = response.data.reverse();
                 setLeaveList(reversedData);
                 setFilteredLeaveList(reversedData);

@@ -38,7 +38,7 @@ const TeacherHomeScreen = ({route}) => {
     useEffect(() =>{
       const fetchProfile = async() =>{
         try{
-          const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+          const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
           setProfile(response.data);
           setSubject(response.data.subject);
         }

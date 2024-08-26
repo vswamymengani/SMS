@@ -10,7 +10,7 @@ const ReturnBook = ({ route, navigation }) => {
 
     useEffect(() => {
         // Fetch book and student details based on bookId
-        axios.get(`http://10.0.2.2:3000/getLibraryManagementDetails?bookId=${bookId}`)
+        axios.get(`http://18.60.190.183:3000/getLibraryManagementDetails?bookId=${bookId}`)
             .then(response => {
                 setBookDetails(response.data);
             })
@@ -33,7 +33,7 @@ const ReturnBook = ({ route, navigation }) => {
             remarks,
         };
 
-        axios.post('http://10.0.2.2:3000/returnBook', data)
+        axios.post('http://18.60.190.183:3000/returnBook', data)
             .then(response => {
                 Alert.alert('Success', 'Book returned successfully');
                 navigation.goBack();
@@ -50,9 +50,6 @@ const ReturnBook = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Book Details</Text>
-            <Text>{bookDetails.bookTitle} by {bookDetails.author}</Text>
-            <Text>ISBN: {bookDetails.isbn}</Text>
 
             <Text style={styles.label}>Student Details</Text>
             <Text>Admission Number: {bookDetails.admissionid}</Text>

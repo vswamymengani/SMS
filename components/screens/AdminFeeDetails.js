@@ -33,7 +33,7 @@ const AdminFeeDetails = () => {
     };
 
     try {
-      const response = await axios.post('http://10.0.2.2:3000/feenews', feeDetails);
+      const response = await axios.post('http://18.60.190.183:3000/feenews', feeDetails);
       if (response.status === 200) {
         alert('Fee details submitted successfully');
       } else {

@@ -39,7 +39,7 @@ const StudentComplaint = ({ route }) => {
   useEffect(() => {
     const fetchLeaveProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         const profile = response.data;
         setLeaveProfile(profile);
         setFullName(profile.fullname);
@@ -59,7 +59,7 @@ const StudentComplaint = ({ route }) => {
   const handleSendComplaint = async () => {
     if (validate()) {
       try {
-        const response = await axios.post('http://10.0.2.2:3000/studentComplaint', {
+        const response = await axios.post('http://18.60.190.183:3000/studentComplaint', {
           fullname,
           className,
           section,

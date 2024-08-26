@@ -57,7 +57,7 @@ const AdminTimeTable = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://10.0.2.2:3000/timetable', { timetableEntries });
+      const response = await axios.post('http://18.60.190.183:3000/timetable', { timetableEntries });
       console.log('Timetable entries submitted successfully:', response.data);
       setTimetableEntries([
         {
@@ -81,7 +81,7 @@ const AdminTimeTable = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/teacherName');
+        const response = await axios.get('http://18.60.190.183:3000/teacherName');
         setTeachers(response.data);
       } catch (error) {
         console.error('Unable to fetch the data:', error);

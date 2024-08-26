@@ -13,7 +13,7 @@ const PrevResults = () => {
 
   const handleSearch = () => {
     setSearchPressed(true);
-    axios.get('http://10.0.2.2:3000/prevResults', { params: { className, section, examType, subject } })
+    axios.get('http://18.60.190.183:3000/prevResults', { params: { className, section, examType, subject } })
       .then(response => {
         setResultsData(response.data);
       })

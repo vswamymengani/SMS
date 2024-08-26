@@ -20,7 +20,7 @@ const StudentNotifications = ({ route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         setProfile(response.data);
         setFullName(response.data.fullname);
         setclassName(response.data.className);
@@ -38,10 +38,10 @@ const StudentNotifications = ({ route }) => {
     const fetchNotifications = async () => {
       try {
         const [homeworkResponse, announcementsResponse, leaveResponse, complaintsResponse] = await Promise.all([
-          axios.get(`http://10.0.2.2:3000/studentHomeworkNotification`, { params: { className, section } }),
-          axios.get(`http://10.0.2.2:3000/reciveAnnouncements`, { params: { reciver: 'Student' } }),
-          axios.get(`http://10.0.2.2:3000/studentLeaveNotification`, { params: { email } }),
-          axios.get(`http://10.0.2.2:3000/complaintResponse`, { params: { fullname, className, section } }),
+          axios.get(`http://18.60.190.183:3000/studentHomeworkNotification`, { params: { className, section } }),
+          axios.get(`http://18.60.190.183:3000/reciveAnnouncements`, { params: { reciver: 'Student' } }),
+          axios.get(`http://18.60.190.183:3000/studentLeaveNotification`, { params: { email } }),
+          axios.get(`http://18.60.190.183:3000/complaintResponse`, { params: { fullname, className, section } }),
         ]);
   
         const combinedData = [

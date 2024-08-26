@@ -11,7 +11,7 @@ const AdminCalendarManagement = () => {
   useEffect(() => {
     const fetchSpecialDates = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/getSpecialDates');
+        const response = await axios.get('http://18.60.190.183:3000/getSpecialDates');
         const specialDates = response.data;
         const markedDatesObj = {};
 
@@ -44,7 +44,7 @@ const AdminCalendarManagement = () => {
   const handleSave = async () => {
     if (selectedDate && description) {
       try {
-        await axios.post('http://10.0.2.2:3000/addSpecialDate', {
+        await axios.post('http://18.60.190.183:3000/addSpecialDate', {
           date: selectedDate,
           description,
         });

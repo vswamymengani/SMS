@@ -39,7 +39,7 @@ const VerificationCode = ({ route }) => {
   const handleSend = async () => {
     if (validate()) {
       axios
-        .post(`http://10.0.2.2:3000/changePassword?admissionid=${admissionid}`, {
+        .post(`http://18.60.190.183:3000/changePassword?admissionid=${admissionid}`, {
           password,
           confirmPassword,
         })

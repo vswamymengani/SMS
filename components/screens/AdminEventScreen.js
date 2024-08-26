@@ -44,7 +44,7 @@ const AdminEventScreen = () => {
             formData.append(`media[${index}][description]`, item.description);
         });
 
-        const response = await fetch('http://10.0.2.2:3000/events', {
+        const response = await fetch('http://18.60.190.183:3000/events', {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',

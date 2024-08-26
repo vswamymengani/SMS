@@ -17,7 +17,7 @@ const StudentExamResults = ({ route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/studentProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/studentProfile?email=${email}`);
         setProfile(response.data);
       } catch (err) {
         setErrors({ general: 'Failed to load profile data' });
@@ -33,7 +33,7 @@ const StudentExamResults = ({ route }) => {
     }
 
     try {
-      const response = await axios.get('http://10.0.2.2:3000/studentExamResults', {
+      const response = await axios.get('http://18.60.190.183:3000/studentExamResults', {
         params: { fullname: profile.fullname, className: profile.className, section: profile.section, examType },
       });
       setResults(response.data);

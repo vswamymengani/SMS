@@ -22,7 +22,7 @@ const TeacherTimetable = ({ route }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
         console.log('Profile Data:', response.data); // Debugging line
         setProfile(response.data);
         setEmployeeId(response.data.employeeid);
@@ -35,7 +35,7 @@ const TeacherTimetable = ({ route }) => {
 
   const fetchTimetable = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:3000/teacherTimetable?employeeid=${employeeid}`);
+      const response = await axios.get(`http://18.60.190.183:3000/teacherTimetable?employeeid=${employeeid}`);
       console.log('Timetable Data:', response.data); // Debugging line
       const transformedTimetable = response.data.reduce((acc, entry) => {
         if (!acc[entry.day]) {

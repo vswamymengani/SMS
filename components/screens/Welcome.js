@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   splashscreen: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'stretch',
   },
 });
 

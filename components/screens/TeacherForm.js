@@ -50,7 +50,7 @@ const TeacherForm = ({ navigation }) => {
   const handleRegister = async () => {
     if (validateForm()) {
       try {
-        const response = await axios.post('http://10.0.2.2:3000/AdminTeacherRegister', {
+        const response = await axios.post('http://18.60.190.183:3000/AdminTeacherRegister', {
           fullname,
           subject,
           qualification,

@@ -48,7 +48,7 @@ const TeacherHomework = ({route}) => {
 
     const TeacherHomework = async () => {
         if (validate()) {
-            axios.post("http://10.0.2.2:3000/teacherHomework", {
+            axios.post("http://18.60.190.183:3000/teacherHomework", {
                 className,
                 section,
                 subject,

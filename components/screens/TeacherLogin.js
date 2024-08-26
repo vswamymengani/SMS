@@ -28,7 +28,7 @@ const TeacherLogin = () => {
 
   const handleTeacherLogin = () => {
     if (validateForm()) {
-      axios.post('http://10.0.2.2:3000/teacherlogin', {
+      axios.post('http://18.60.190.183:3000/teacherlogin', {
         email,
         password,
       })

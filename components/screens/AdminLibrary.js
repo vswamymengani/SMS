@@ -18,7 +18,7 @@ const AdminLibrary = () => {
   const handleAddBook = () => {
     const bookDetails = { bookTitle, author, isbn, description, coverPhoto };
     
-    axios.post('http://10.0.2.2:3000/addBook', bookDetails)
+    axios.post('http://18.60.190.183:3000/addBook', bookDetails)
       .then(response => {
         console.log(response.data);
         Alert.alert('Success', 'Book added successfully');

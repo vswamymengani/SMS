@@ -42,7 +42,7 @@ const TeacherLeave = ({ route }) => {
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+        const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
         setProfile(response.data);
         setEmployeeId(response.data.employeeid); // Set employeeid here after profile is set
       } catch (error) {
@@ -58,7 +58,7 @@ const TeacherLeave = ({ route }) => {
 
   const Leave = async () => {
     if (validate()) {
-      axios.post('http://10.0.2.2:3000/teacherLeave', {
+      axios.post('http://18.60.190.183:3000/teacherLeave', {
         employeeid: profile.employeeid,
         email,
         purpose,

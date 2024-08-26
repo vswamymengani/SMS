@@ -27,7 +27,7 @@ const AdminLogin = () => {
 
   const handleLogin = () => {
     if (validateForm()) {
-      axios.post('http://10.0.2.2:3000/adminlogin', {
+      axios.post('http://18.60.190.183:3000/adminlogin', {
         email,
         password,
       })

@@ -8,7 +8,7 @@ const SchoolEvents = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://10.0.2.2:3000/events/media');
+        const response = await fetch('http://18.60.190.183:3000/events/media');
         const data = await response.json();
         
         console.log('Fetched media data:', data); // Log the data to check its structure

@@ -28,7 +28,7 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     if (validateForm()) {
-      axios.post('http://10.0.2.2:3000/loginpage', { email, password })
+      axios.post('http://18.60.190.183:3000/loginpage', { email, password })
         .then(response => {
           console.log('Server response:', response.data);  // Add logging to check the response
           if (response.data.status === 'Success') {
@@ -44,7 +44,7 @@ const LoginScreen = () => {
         });
     }
   };
-
+  
   const clearError = (field) => {
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };

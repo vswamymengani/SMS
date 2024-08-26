@@ -22,7 +22,7 @@ const TeacherExamResults = ({ route }) => {
     useEffect(() => {
         const fetchTeacherProfile = async () => {
           try {
-            const response = await axios.get(`http://10.0.2.2:3000/teacherProfile?email=${email}`);
+            const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
             setTeacherProfile(response.data);
             setEmployeeid(response.data.employeeid);
           } catch (err) {
@@ -40,7 +40,7 @@ const TeacherExamResults = ({ route }) => {
         const fetchStudentDetails = async () => {
           if (className && section) {
             try {
-              const response = await axios.get('http://10.0.2.2:3000/studentResults', {
+              const response = await axios.get('http://18.60.190.183:3000/studentResults', {
                 params: { className, section }
               });
               setStudents(response.data);
@@ -91,7 +91,7 @@ const TeacherExamResults = ({ route }) => {
             }));
     
             try {
-                const response = await axios.post('http://10.0.2.2:3000/teacherExamResults', marksData);
+                const response = await axios.post('http://18.60.190.183:3000/teacherExamResults', marksData);
                 console.log(response.data); // Log response from backend for debugging
                 setIsModalVisible(true);
             } catch (error) {

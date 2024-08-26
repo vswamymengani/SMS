@@ -12,7 +12,7 @@ const StudentCalendar = ({ route }) => {
   useEffect(() => {
     const fetchSpecialDates = async () => {
       try {
-        const response = await axios.get('http://10.0.2.2:3000/getSpecialDates');
+        const response = await axios.get('http://18.60.190.183:3000/getSpecialDates');
         console.log('API Response:', response.data); // Debugging line
         const specialDates = response.data;
         const markedDatesObj = {};

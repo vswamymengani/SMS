@@ -30,7 +30,7 @@ const ModifyInfo = ({ route }) => {
   const handleUpdate = async () => {
     if (newData === repeatData) {
       try {
-        const response = await axios.post('http://10.0.2.2:3000/updateProfile', {
+        const response = await axios.post('http://18.60.190.183:3000/updateProfile', {
           email,
           field: selectedField,
           value: newData
