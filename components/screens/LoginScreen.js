@@ -1,4 +1,3 @@
-//studentlogin.js
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +11,7 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [loggedInEmail, setLoggedInEmail] = useState(null); // State to temporarily store the logged-in email
+  const [loggedInEmail, setLoggedInEmail] = useState(null);
 
   const validateForm = () => {
     const newErrors = {};
@@ -30,10 +29,10 @@ const LoginScreen = () => {
     if (validateForm()) {
       axios.post('http://18.60.190.183:3000/loginpage', { email, password })
         .then(response => {
-          console.log('Server response:', response.data);  // Add logging to check the response
+          console.log('Server response:', response.data);
           if (response.data.status === 'Success') {
-            setLoggedInEmail(email); // Save the email to state
-            navigation.push('Homescreen', { email }); // Pass the email to Homescreen
+            setLoggedInEmail(email);
+            navigation.push('Homescreen', { email });
           } else {
             alert(response.data.message);
           }
@@ -44,7 +43,7 @@ const LoginScreen = () => {
         });
     }
   };
-  
+
   const clearError = (field) => {
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
@@ -53,53 +52,50 @@ const LoginScreen = () => {
     });
   };
 
-  // Render different content based on whether user is logged in or not
   return (
     <ScrollView contentContainerStyle={styles.container}>
-          <Image source={Image5} style={styles.image5} />
-          <Image source={Image6} style={styles.image6} />
-          <Image source={Image3} style={styles.image3} />
-          <View style={styles.header}>
-            <Text style={styles.headerText}></Text>
-          </View>
-          <View style={styles.formContainer}>
-            <View style={styles.labelContainer}>
-              <Text style={styles.label}>Username</Text>
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email id" //change is happend here
-              value={email}
-              onChangeText={(text) => { setEmail(text); clearError('email'); }}
-            />
-            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+      <Image source={Image5} style={styles.image5} />
+      <Image source={Image6} style={styles.image6} />
+      <Image source={Image3} style={styles.image3} />
+      <View style={styles.header}>
+        <Text style={styles.headerText}></Text>
+      </View>
+      <View style={styles.formContainer}>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Username</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email id"
+          value={email}
+          onChangeText={(text) => { setEmail(text); clearError('email'); }}
+        />
+        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            <View style={styles.labelContainer}>
-              <Text style={styles.label}>Password</Text>
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              secureTextEntry={true}
-              value={password}
-              onChangeText={(text) => { setPassword(text); clearError('password'); }}
-            />
-            {errors.password && <Text style={styles.error}>{errors.password}</Text>}
-          </View>
-          <View style={styles.formContainer1}>
-          <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
-            <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Password</Text>
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => { setPassword(text); clearError('password'); }}
+        />
+        {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+      </View>
+      <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
+        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('StudentVerification')}>
-            <Text style={styles.signupText}>
-              Don't have an account? <Text style={styles.signupLink}>Register Now</Text>
-            </Text>
-          </TouchableOpacity>
-          </View>
+      <TouchableOpacity onPress={() => navigation.navigate('StudentVerification')}>
+        <Text style={styles.signupText}>
+          Don't have an account? <Text style={styles.signupLink}>Register Now</Text>
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -110,13 +106,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-  },
-  logout: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
-    borderColor: 'blue',
-    margin: 'auto',
   },
   image5: {
     width: 415,
@@ -138,80 +127,76 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 150,
-    marginBottom:350,
   },
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
-    borderRadius:30,
   },
   formContainer: {
     alignItems: 'flex-start',
-    marginTop: 60,
-    top:350,
+    marginTop: 160,
     width: '80%',
-    position:'absolute',
-  },
-  formContainer1: {
-    alignItems: 'center',
-    width: '80%',
-    top:650,
-    position:'absolute',
   },
   labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
+    width: '100%',
   },
   label: {
-    fontSize: 16,
+    textAlign: 'left',
     fontWeight: 'bold',
+    marginBottom: 15,
+    fontSize: 16,
     color: 'black',
-    marginRight: 10,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 30,
     width: '100%',
-    borderRadius:8,
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
     paddingHorizontal: 10,
-  },
-  forgotPassword: {
-    position:'absolute',
-    top:-40,
-    right:10,
-    
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    color: '#1DBBFF',
+    marginBottom: 20,
+    marginTop: 0,
   },
   loginButton: {
-    backgroundColor: '#1DBBFF',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
     width: '60%',
-    marginBottom: 20,
+    height: 50,
+    backgroundColor: '#1DBBFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 0,
+    marginTop: 20,
   },
   loginButtonText: {
     fontSize: 18,
     color: 'white',
   },
+  forgotPassword: {
+    marginBottom: 20,
+    marginTop: 0,
+    left: 100,
+    color: 'blue',
+    borderBottomWidth: 1,
+    borderColor: 'blue',
+  },
+  forgotPasswordText: {
+    color: 'blue',
+  },
   signupText: {
-    fontSize: 14,
     color: 'black',
+    marginBottom: 50,
+    marginTop: 25,
+    textAlign: 'center',
   },
   signupLink: {
     color: '#1DBBFF',
-    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
   error: {
     color: 'red',
     marginBottom: 10,
+    marginTop: -20,
   },
 });
 

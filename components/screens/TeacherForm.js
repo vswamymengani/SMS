@@ -96,6 +96,7 @@ const TeacherForm = ({ navigation }) => {
             <Image source={photo ? { uri: photo } : Image3} style={styles.image3} />
           </TouchableOpacity>
         </View>
+        <Text style={styles.photo}>Insert The Photo</Text>
       </View>
       <ScrollView style={styles.formContainer}>
         <LabelWithStar label="Full Name" />
@@ -130,6 +131,7 @@ const TeacherForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your experience in years...."
           value={experience}
+          keyboardType='numeric'
           onChangeText={(text) => { setExperience(text); clearError('experience'); }}
         />
         {errors.experience && <Text style={styles.error}>{errors.experience}</Text>}
@@ -137,7 +139,8 @@ const TeacherForm = ({ navigation }) => {
         <LabelWithStar label="Date of Birth" />
         <TextInput
           style={styles.input}
-          placeholder="dd/mm/yyyy"
+          placeholder="DD-MM-YYYY"
+          keyboardType='numeric'
           value={dateofbirth}
           onChangeText={(text) => { setDateOfBirth(text); clearError('dateofbirth'); }}
         />
@@ -148,6 +151,7 @@ const TeacherForm = ({ navigation }) => {
           style={styles.input}
           placeholder="Enter your mobile number...."
           value={mobileNo}
+          keyboardType='numeric'
           onChangeText={(text) => { setMobileNo(text); clearError('mobileNo'); }}
         />
         {errors.mobileNo && <Text style={styles.error}>{errors.mobileNo}</Text>}
@@ -212,6 +216,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     top: 10,
   },
+  photo:{
+    color:'red',
+    top:190,
+  },
   image5: {
     width: '100%',
     height: 150,
@@ -237,7 +245,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 20,
     borderWidth: 1,
-    top: 40,
+    top: 50,
     padding: 20,
   },
   labelContainer: {
@@ -267,8 +275,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
-    marginTop: 20,
     alignItems: 'center',
+    marginVertical:40,
   },
   loginButtonText: {
     color: 'white',

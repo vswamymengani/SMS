@@ -35,7 +35,9 @@ const AdminStudentForm = ({ navigation }) => {
     if (!fatherNo.trim()) newErrors.fatherNo = 'Father\'s Mobile Number is required';
     if (!motherName.trim()) newErrors.motherName = 'Mother\'s Name is required';
     if (!motherNo.trim()) newErrors.motherNo = 'Mother\'s Mobile Number is required';
+    if (!admissionid.trim()) newErrors.admissionid = 'Enter the admission number';
     if (!presentAddress.trim()) newErrors.presentAddress = 'Present Address is required';
+    if (!photo) newErrors.photo = 'Photo is required'; // Corrected error message
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -98,13 +100,13 @@ const AdminStudentForm = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={Image5} style={styles.image5} />
       <View style={styles.imageContainer}>
-        
-      <View style={styles.overlayImages}>
-       <Image source={Image6} style={styles.image6} />
-       <TouchableOpacity onPress={selectPhoto}>
-        <Image source={photo ? { uri: photo } : Image3} style={styles.image3} />
-       </TouchableOpacity>
-      </View>
+        <View style={styles.overlayImages}>
+          <Image source={Image6} style={styles.image6} />
+          <TouchableOpacity onPress={selectPhoto}>
+            <Image source={photo ? { uri: photo } : Image3} style={styles.image3} />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.photo}>Insert The Photo</Text>
       </View>
       <ScrollView style={styles.formContainer}>
         <LabelWithStar label="Full Name" />
@@ -240,11 +242,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  photo:{
+    color:'red',
+    top:190,
+  },
   imageContainer: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    top:10,
+    top: 10,
   },
   image5: {
     width: '100%',
@@ -255,24 +261,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image6: {
-    top:170,
+    top: 170,
     width: 160,
     height: 160,
   },
   image3: {
     width: 150,
-    top:15,
-    borderRadius:70,
+    top: 15,
+    borderRadius: 70,
     height: 150,
   },
   formContainer: {
-    flex:1,
+    flex: 1,
     width: '100%',
     marginTop: 20,
-    borderRadius:20,
-    borderWidth:1,
-    top:40,
-    padding:20,
+    borderRadius: 20,
+    borderWidth: 1,
+    top: 50,
+    padding: 20,
   },
   labelContainer: {
     marginBottom: 5,
@@ -288,7 +294,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     padding: 7,
-    borderRadius:15,
+    borderRadius: 15,
     marginBottom: 10,
     color: 'black',
   },
@@ -297,11 +303,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButton: {
-    backgroundColor: '#D5282C',
+    backgroundColor: 'blue',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
-    marginTop: 20,
+    margin: 30,
     alignItems: 'center',
   },
   loginButtonText: {

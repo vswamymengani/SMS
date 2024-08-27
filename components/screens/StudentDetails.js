@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
 const StudentDetails = () => {
     const navigation = useNavigation();
     const [studentDetails, setStudentDetails] = useState([]);
+    const [searchText, setSearchText] = useState("");
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
@@ -20,21 +21,24 @@ const StudentDetails = () => {
         fetchStudentDetails();
     }, []);
 
+    const filteredStudentDetails = studentDetails.filter(item =>
+        item.admissionid.toString().includes(searchText)
+    );
+
     const renderStudentDetails = ({ item }) => {
         return (
-            <View style={styles.details}>
-                <Text style={styles.text1}>{item.fullname}</Text>
-                <Text style={styles.text4}>{item.dateofbirth}</Text>
-                <Text style={styles.text5}>{item.className}</Text>
-                <Text style={styles.text5}>{item.section}</Text>
-                <Text style={styles.text6}>{item.admissionid}</Text>
+            <View style={styles.row}>
+                <Text style={styles.cell}>{item.fullname}</Text>
+                <Text style={styles.cell}>{item.className}</Text>
+                <Text style={styles.cell}>{item.section}</Text>
+                <Text style={styles.cell}>{item.admissionid}</Text>
             </View>
         );
     }
 
     return (
         <View style={styles.container}>
-            <View style= {styles.head}>
+            <View style={styles.head}>
                 <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('AdminStudentForm')} >
                     <Text style={styles.headText}>Register</Text>
                 </TouchableOpacity>
@@ -42,19 +46,28 @@ const StudentDetails = () => {
                     <Text style={styles.headText}>Modify</Text>
                 </TouchableOpacity> 
             </View>
-            <View style={styles.heading}>
-                <Text style={styles.text}>Name</Text>
-                <Text style={styles.text2}>D.O.B</Text>
-                <Text style={styles.text7}>Class</Text>
-                <Text style={styles.text7}>Section</Text>
-                <Text style={styles.text3}>Admission No</Text>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Search by Admission ID"
+                    value={searchText}
+                    onChangeText={text => setSearchText(text)}
+                />
+            </View>
+            <View style={styles.table}>
+            <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>Name</Text>
+                <Text style={styles.headerText}>Class</Text>
+                <Text style={styles.headerText}>Section</Text>
+                <Text style={styles.headerText}>Admission No</Text>
             </View>
             {errors.general && <Text style={styles.error}>{errors.general}</Text>}
-                <FlatList
-                  data={studentDetails}
-                  renderItem={renderStudentDetails}
-                  keyExtractor={item => item.admissionid.toString()}
-                />
+            <FlatList
+                data={filteredStudentDetails}
+                renderItem={renderStudentDetails}
+                keyExtractor={item => item.admissionid.toString()}
+            />
+            </View>
         </View>
     );
 };
@@ -62,89 +75,70 @@ const StudentDetails = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position:'absolute',
+        padding: 10,
     },
-    head:{
-        justifyContent:'space-around',
-        flexDirection:'row',
-        alignItems:'center',
+    head: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 10,
     },
-    heading:{
-        justifyContent:'space-around',
-        flexDirection:'row',
-        alignItems:'flex-start',
-        borderColor:'black',
-        borderWidth:2,
-        width:'100%',
-    },
-    details:{
-        justifyContent:'space-around',
-        flexDirection:'row',
-        alignItems:'flex-start',
-        borderColor:'black',
-        borderWidth:2,
-        borderTopWidth:0,
-        width:'100%',
-        
-    },
-    headText:{
+    box: {
         backgroundColor: '#3F1175',
         padding: 10,
         borderRadius: 10,
         textAlign: 'center',
-        marginVertical: 20,
-        height:50,
-        width:150,
-        color:'white',
-        fontSize:18,
-        
+        height: 50,
+        width: 150,
     },
-    text:{
-        color:'red',
-        margin:10,
-        left:0,
-        fontWeight:'bold',
+    headText: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center',
     },
-    text1:{
-        color:'black',
-        margin:10,
-        left:0,
-        position:'absolute',
+    searchContainer: {
+        marginBottom: 10,
     },
-    text2:{
-        color:'red',
-        margin:10,
-        left:10,
-        fontWeight:'bold',
+    searchInput: {
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        height: 40,
+        width: '100%',
     },
-    text7:{
-        color:'red',
-        margin:10,
-        left:40,
-        fontWeight:'bold',
+    table:{
+        borderWidth:1,
     },
-    text3:{
-        color:'red',
-        margin:10,
-        left:18,
-        fontWeight:'bold',
+    tableHeader: {
+        flexDirection: 'row',
+        backgroundColor: '#f0f0f0',
+        borderBottomColor: 'black',
+        borderBottomWidth: 2,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
     },
-    text4:{
-        color:'black',
-        margin:10,
-        left:50,
-        
+    headerText: {
+        flex: 1,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: 'red',
     },
-    text5:{
-        color:'black',
-        margin:10,
+    row: {
+        flexDirection: 'row',
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
     },
-    text6:{
-        color:'black',
-        margin:10,
+    cell: {
+        flex: 1,
+        textAlign: 'center',
+        color: 'black',
     },
     error: {
         color: 'red',
+        marginVertical: 10,
+        textAlign: 'center',
     },
 });
 
