@@ -120,7 +120,7 @@ const TeacherNotifications = ({ route }) => {
         <FlatList
           data={filteredNotifications}
           renderItem={renderItem}
-          keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()}
+          keyExtractor={(item, index) => item.id ? `${item.type}-${item.id}` : `${item.type}-${index}`}
         />
       </View>
     </View>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   head: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    top: 10,
+    top: 20,
     marginBottom: 60,
   },
   image: {

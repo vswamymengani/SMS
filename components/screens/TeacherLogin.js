@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 0,
     left:100,
-    color:'blue',
+    color:'#1DBBFF',
     borderBottomWidth:1,
-    borderColor:'blue',
+    borderColor:'#1DBBFF',
   },
   forgotPasswordText: {
-    color: 'blue',
+    color: '#1DBBFF',
     
   },
   signupText: {

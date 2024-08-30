@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Alert,BackHandler ,ScrollView } from 'react-native';
 import axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
 import Image2 from '../assets/Menu.png';
 import Image6 from '../assets/Ellipse2.png';
@@ -14,12 +15,14 @@ import Image4 from '../assets/timetable1.png';
 import Image20 from '../assets/library.png';
 import Image23 from '../assets/gallary1.png';
 import Image14 from '../assets/calander.png';
+import Image24 from '../assets/classwork.png';
 
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [profileVisible, setProfileVisible] = useState(true);
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
+  const isFocused = useIsFocused();
 
   // Fetch teacher count
   useEffect(() => {
@@ -51,8 +54,42 @@ const AdminView = ({ navigation }) => {
       });
   }, []);
 
+  useEffect(() => {
+    let backAction;
+
+    if (isFocused) {
+      // Only show the alert if the screen is being exited directly via the back button
+      backAction = () => {
+        Alert.alert(
+          "Logout",
+          "Do you want to logout?",
+          [
+            {
+              text: "No",
+              onPress: () => null,
+              style: "cancel"
+            },
+            {
+              text: "Yes",
+              onPress: () => navigation.goBack()
+            }
+          ]
+        );
+        return true; // Return true to prevent default back action
+      };
+
+      BackHandler.addEventListener("hardwareBackPress", backAction);
+    }
+
+    return () => {
+      if (backAction) {
+        BackHandler.removeEventListener("hardwareBackPress", backAction);
+      }
+    };
+  }, [isFocused, navigation]);
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {profileVisible && (
         <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
           {/* Add any profile image or icon here if needed */}
@@ -101,6 +138,14 @@ const AdminView = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
+      <View style={styles.squareRow}>
+      <TouchableOpacity  onPress={() => navigation.navigate('AdminClasses')}>
+          <View style={styles.square}>
+            <Image source={Image24} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Classes</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
       
       <Modal
         animationType="slide-left"
@@ -126,14 +171,15 @@ const AdminView = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
+    justifyContent:'center',
     backgroundColor: 'white',
   },
   image5: {
@@ -179,15 +225,15 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 250,
+    marginTop: 200,
     marginBottom: 20,
   },
   squareRow: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
-    margin: 20,
-    top: 400,
+    marginTop: 10,
+    top: 140,
   },
   singleSquare: {
     justifyContent: 'center',

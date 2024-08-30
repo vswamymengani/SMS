@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import Image1 from '../assets/BackArrow.png';
 
 const WorkInProgress =({route}) =>{
-    const email = route.params;
+    const {email} = route.params;
     const navigation = useNavigation();
 
     return(

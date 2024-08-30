@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
@@ -8,6 +8,34 @@ import Image8 from '../assets/Teacher1.png';
 import Image9 from '../assets/Admin.png';
 
 const SelectUser = ({ navigation }) => {
+  useEffect(() => {
+    const handleBackPress = () => {
+      Alert.alert(
+        'Confirm Exit',
+        'Do you want to exit the app?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Yes', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: true }
+      );
+      return true;
+    };
+
+    const focusListener = navigation.addListener('focus', () => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    });
+
+    const blurListener = navigation.addListener('blur', () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    });
+
+    return () => {
+      focusListener();
+      blurListener();
+    };
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Image source={Image5} style={styles.image5} />
@@ -69,7 +97,6 @@ const styles = StyleSheet.create({
     marginBottom: 120,
     marginTop: 190,
     color: '#1DBBFF',
-
   },
   squareRow: {
     flexDirection: 'row',
@@ -86,17 +113,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  studentSquare: {
-    backgroundColor: '#1DBBFF',
-    // Example color for Student
-  },
-  teacherSquare: {
-    backgroundColor: '#1DBBFF',
-  },
-  adminSquare: {
-    backgroundColor: '#1DBBFF',
-    marginTop: 30,
-  },
   squareImage: {
     width: 100,
     height: 100,
@@ -106,11 +122,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     top: 20,
     marginBottom: 10,
-    marginTop: 0,
     color: 'black',
-    fontWeight:'bold',
-
+    fontWeight: 'bold',
   },
 });
 
-export default SelectUser;
+export default SelectUser;

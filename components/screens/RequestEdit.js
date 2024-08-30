@@ -17,7 +17,7 @@ const RequestEdit = () => {
       try {
         const response = await axios.get(`http://18.60.190.183:3000/teacherprofile?email=${email}`);
         if (response.data) {
-          const { id, created_at,employeeid,confirmPassword,qualification, ...rest } = response.data;
+          const { id, created_at,employeeid,confirmPassword,photo,qualification, ...rest } = response.data;
           setProfile(rest);
         }
       } catch (err) {

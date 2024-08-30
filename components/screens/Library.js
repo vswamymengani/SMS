@@ -52,13 +52,19 @@ const Library = ({route}) => {
         <Button title="Search" onPress={searchBook} />
       {books.map((book) => (
         <View key={book.id} style={styles.bookContainer}>
-          {book.coverPhoto && (
-            <Image source={{ uri: book.coverPhoto }} style={styles.coverPhoto} />
-          )}
-          <Text style={styles.bookTitle}>Book Name:  {book.bookTitle}</Text>
-          <Text style={styles.author}>Author: {book.author}</Text>
-          <Text style={styles.isbn}>Book Code: {book.isbn}</Text>
-          <Text style={styles.description}>Description: {book.description}</Text>
+          <View style={styles.row}>
+            <View style={styles.first}>
+              {book.coverPhoto && (
+              <Image source={{ uri: book.coverPhoto }} style={styles.coverPhoto} />
+              )}
+            </View>
+            <View style={styles.secound}>
+              <Text style={styles.bookTitle}>{book.bookTitle}</Text>
+              <Text style={styles.author}>Author: {book.author}</Text>
+              <Text style={styles.isbn}>Book Code: {book.isbn}</Text>
+              <Text numberOfLines={1} style={styles.description}>Description: {book.description}</Text>
+            </View>
+          </View>
         </View>
       ))}
       </View>
@@ -81,23 +87,37 @@ const styles = StyleSheet.create({
     width:'110%',
     position:'absolute',
   },
+  row:{
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+  },
+  first:{
+    height:100,
+    width:"40%",
+  },
+  secound:{
+    height:70,
+    width:"60%",
+  },
   head:{
     flexDirection:'row',
     justifyContent:'flex-start',
-    top:10,
+    top:20,
     marginBottom:60,
   },
   image:{
     height:23,
     width:20,
-    marginHorizontal:10
+    marginHorizontal:10,
+    top:3,
   },
   header:{
-    fontSize:20,
+    fontSize:25,
     fontWeight:'bold',
     color:'white',
   },
   bookContainer: {
+    top:10,
     marginBottom: 20,
     padding: 10,
     borderWidth: 1,
@@ -127,7 +147,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
-    color:'black',
+    color:'blue',
   },
   author: {
     fontSize: 16,
@@ -142,6 +162,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color:'black',
+    
   },
 });
 

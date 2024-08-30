@@ -65,7 +65,9 @@ const TeacherTimetable = ({ route }) => {
       text: entry.subject,
       className: entry.className,
       section: entry.section,
-      timeText: entry.period,
+      timeText: entry.periodPart,
+      start:entry.startTime,
+      end:entry.endTime,
     }));
   };
 
@@ -103,7 +105,7 @@ const TeacherTimetable = ({ route }) => {
           {boxes.map((box, index) => (
             <View key={index} style={[styles.box, { backgroundColor: box.backgroundColor }]}>
               <Text style={styles.boxText}>{box.text}</Text>
-              <Text style={styles.timeText}>{box.timeText}</Text>
+              <Text style={styles.timeText}>{box.timeText} {box.start} To {box.end}</Text>
               <Text style={styles.classSectionText}>Class: {box.className} Section: {box.section}</Text>
             </View>
           ))}

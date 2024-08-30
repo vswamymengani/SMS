@@ -18,6 +18,37 @@ const TeacherExamResults = ({ route }) => {
     const [students, setStudents] = useState([]);
     const [marks, setMarks] = useState({});
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get('http://18.60.190.183:3000/classDetails');
+        const classData = response.data;
+        setClasses(classData);
+        setClassOptions(classData.map(cls => ({ label: cls.className, value: cls.className })));
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    if (className) {
+      const filteredSections = classes
+        .filter(cls => cls.className === className)
+        .flatMap(cls => cls.sections); // Assuming `sections` is an array in the `ClassDetails` table
+      setSections(filteredSections);
+      setSectionOptions(filteredSections.map(sec => ({ label: sec, value: sec })));
+    } else {
+      setSectionOptions([]);
+    }
+  }, [className, classes]);
 
     useEffect(() => {
         const fetchTeacherProfile = async () => {
@@ -109,25 +140,8 @@ const TeacherExamResults = ({ route }) => {
         });
     };
 
-    const classNameData = [
-        { label: '1', value: "1" },
-        { label: '2', value: "2" },
-        { label: '3', value: "3" },
-        { label: '4', value: "4" },
-        { label: '5', value: "5" },
-        { label: '6', value: "6" },
-        { label: '7', value: "7" },
-        { label: '8', value: "8" },
-        { label: '9', value: "9" },
-        { label: '10', value: "10" },
-        { label: '11', value: "11" },
-        { label: '12', value: "12" }
-    ];
-    const sectionData = [
-        { label: 'A', value: 'A' },
-        { label: 'B', value: 'B' },
-        { label: 'C', value: 'C' }
-    ];
+
+
     const subjectData = [
         { label: 'English', value: 'English' },
         { label: 'Telugu', value: 'Telugu' },
@@ -157,7 +171,7 @@ const TeacherExamResults = ({ route }) => {
                     style={styles.dropdown2}
                     placeholderStyle={styles.placeholderStyle2}
                     selectedTextStyle={styles.selectedTextStyle2}
-                    data={classNameData}
+                    data={classOptions}
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
@@ -172,7 +186,7 @@ const TeacherExamResults = ({ route }) => {
                     style={styles.dropdown2}
                     placeholderStyle={styles.placeholderStyle2}
                     selectedTextStyle={styles.selectedTextStyle2}
-                    data={sectionData}
+                    data={sectionOptions}
                     maxHeight={300}
                     labelField="label"
                     valueField="value"

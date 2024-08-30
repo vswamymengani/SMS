@@ -64,7 +64,7 @@ const FeeNews = ({ navigation, route }) => {
 
       <View style={styles.body}>
       {/* Fee image */}
-      <Image source={require('../assets/feenews.png')} style={styles.feeImage} />
+      <Image source={require('../assets/Fee.png')} style={styles.feeImage} />
 
       {/* Total fees */}
       <View style={styles.totalFeesContainer}>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   feeImage: {
     width: '100%',
-    height: 250,
+    height: " 30%",
     marginTop: 20,
   },
   totalFeesContainer: {

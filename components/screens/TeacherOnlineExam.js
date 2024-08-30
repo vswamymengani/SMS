@@ -11,8 +11,40 @@ const TeacherOnlineExam = ({route}) => {
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
   const [subject, setSubject] = useState('');
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState([]);
   const [employeeid, setemployeeid] = useState('');
   const email = route.params.email;
+
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get('http://18.60.190.183:3000/classDetails');
+        const classData = response.data;
+        setClasses(classData);
+        setClassOptions(classData.map(cls => ({ label: cls.className, value: cls.className })));
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    if (className) {
+      const filteredSections = classes
+        .filter(cls => cls.className === className)
+        .flatMap(cls => cls.sections); // Assuming `sections` is an array in the `ClassDetails` table
+      setSections(filteredSections);
+      setSectionOptions(filteredSections.map(sec => ({ label: sec, value: sec })));
+    } else {
+      setSectionOptions([]);
+    }
+  }, [className, classes]);
 
   useEffect(() => {
     const fetchemployeeid = async () => {
@@ -68,32 +100,16 @@ const TeacherOnlineExam = ({route}) => {
     }));
   };
 
-  const classNameData = [
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-    { label: '3', value: '3' },
-    { label: '4', value: '4' },
-    { label: '5', value: '5' },
-    { label: '6', value: '6' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-    { label: '9', value: '9' },
-    { label: '10', value: '10' },
-    { label: '11', value: '11' },
-    { label: '12', value: '12' }
-  ];
-
-  const sectionData = [
-    { label: 'A', value: 'A' },
-    { label: 'B', value: 'B' },
-    { label: 'C', value: 'C' }
-  ];
-
   const subjectData = [
-    { label: 'Math', value: 'Math' },
-    { label: 'Science', value: 'Science' },
     { label: 'English', value: 'English' },
-    { label: 'History', value: 'History' }
+    { label: 'Telugu', value: 'Telugu' },
+    { label: 'Hindi', value: 'Hindi' },
+    { label: 'Mathematics', value: 'Mathematics' },
+    { label: 'Science', value: 'Science' },
+    { label: 'Social Studies', value: 'Social Studies' },
+    { label: 'Physics', value: 'Physics' },
+    { label: 'Chemistry', value: 'Chemistry' },
+    { label: 'Biology', value: 'Biology' },
   ];
 
   const handleSubmit = () => {
@@ -140,11 +156,11 @@ const TeacherOnlineExam = ({route}) => {
           style={styles.dropdown2}
           placeholderStyle={styles.placeholderStyle2}
           selectedTextStyle={styles.selectedTextStyle2}
-          data={classNameData}
+          data={classOptions}
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder="Class"
+          placeholder="Select Class"
           value={className}
           onChange={item => setClassName(item.value)}
           accessible={true}
@@ -154,7 +170,7 @@ const TeacherOnlineExam = ({route}) => {
           style={styles.dropdown2}
           placeholderStyle={styles.placeholderStyle2}
           selectedTextStyle={styles.selectedTextStyle2}
-          data={sectionData}
+          data={sectionOptions}
           maxHeight={300}
           labelField="label"
           valueField="value"

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity ,Modal} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity ,Modal ,Alert, BackHandler} from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
@@ -34,6 +34,7 @@ const TeacherHomeScreen = ({route}) => {
     const [profile, setProfile] = useState([]);
     const [subject, setSubject] = useState('');
     const [errors ,setErrors] = useState({});
+    const isFocused = useIsFocused();
 
     useEffect(() =>{
       const fetchProfile = async() =>{
@@ -48,6 +49,41 @@ const TeacherHomeScreen = ({route}) => {
       }
       fetchProfile();
     },[email]);
+
+    useEffect(() => {
+      let backAction;
+  
+      if (isFocused) {
+        // Only show the alert if the screen is being exited directly via the back button
+        backAction = () => {
+          Alert.alert(
+            "Logout",
+            "Do you want to logout?",
+            [
+              {
+                text: "No",
+                onPress: () => null,
+                style: "cancel"
+              },
+              {
+                text: "Yes",
+                onPress: () => navigation.goBack()
+              }
+            ]
+          );
+          return true; // Return true to prevent default back action
+        };
+  
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+      }
+  
+      return () => {
+        if (backAction) {
+          BackHandler.removeEventListener("hardwareBackPress", backAction);
+        }
+      };
+    }, [isFocused, navigation]);
+
    return (
     <ScrollView contentContainerStyle={styles.container}>
       {profileVisible && (

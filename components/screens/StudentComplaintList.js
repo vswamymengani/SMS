@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
 import Image1 from '../assets/Back_Arrow.png';
-import Image2 from '../assets/BackImage.png'
+import Image2 from '../assets/BackImage.png';
 
 const StudentComplaintList = ({ route }) => {
     const email = route.params.email;

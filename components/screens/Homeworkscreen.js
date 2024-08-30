@@ -54,7 +54,7 @@ const HomeworkScreen = ({ navigation, route }) => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${day}-${month}-${year}`;
   };
 
   const handleFilter = () => {
@@ -79,8 +79,9 @@ const HomeworkScreen = ({ navigation, route }) => {
         <View style={styles.filterContainer}>
           <TextInput
             style={styles.input}
-            placeholder="Enter date (DD/MM/YYYY)"
+            placeholder="Enter date (DD-MM-YYYY)"
             value={date}
+            keyboardType='numeric'
             onChangeText={setDate}
           />
           <Button title="Filter" onPress={handleFilter} />
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 50,
-    top: 10,
+    top: 20,
   },
   bc: {
     height: '110%',
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 23,
     marginRight: 10,
-    left: 20,
+    left: 10,
   },
   text: {
     fontSize: 14,
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    left: 30,
+    left: 10,
   },
   homeworkContainer: {
     borderBottomWidth: 1,

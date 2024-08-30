@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, Modal, Alert } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
@@ -23,6 +24,37 @@ const AdminStudentForm = ({ navigation }) => {
   const [errors, setErrors] = useState({});
   const [photo, setPhoto] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get('http://18.60.190.183:3000/classDetails');
+        const classData = response.data;
+        setClasses(classData);
+        setClassOptions(classData.map(cls => ({ label: cls.className, value: cls.className })));
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    if (className) {
+      const filteredSections = classes
+        .filter(cls => cls.className === className)
+        .flatMap(cls => cls.sections); // Assuming `sections` is an array in the `ClassDetails` table
+      setSections(filteredSections);
+      setSectionOptions(filteredSections.map(sec => ({ label: sec, value: sec })));
+    } else {
+      setSectionOptions([]);
+    }
+  }, [className, classes]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -119,20 +151,27 @@ const AdminStudentForm = ({ navigation }) => {
         {errors.fullname && <Text style={styles.error}>{errors.fullname}</Text>}
 
         <LabelWithStar label="Class" />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your class...."
+        <Dropdown
+          style={styles.dropdown}
+          data={classOptions}
+          labelField="label"
+          valueField="value"
+          placeholder="Select a class"
           value={className}
-          onChangeText={(text) => { setClassName(text); clearError('className'); }}
+          onChange={item => setClassName(item.value)}
         />
         {errors.className && <Text style={styles.error}>{errors.className}</Text>}
 
         <LabelWithStar label="Section" />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your section...."
+        <Dropdown
+          style={styles.dropdown}
+          data={sectionOptions}
+          labelField="label"
+          valueField="value"
+          placeholder="Select a section"
           value={section}
-          onChangeText={(text) => { setSection(text); clearError('section'); }}
+          onChange={item => setSection(item.value)}
+          disabled={!className} // Disable if no class is selected
         />
         {errors.section && <Text style={styles.error}>{errors.section}</Text>}
 
@@ -297,6 +336,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 10,
     color: 'black',
+  },
+  dropdown: {
+    borderWidth: 1,
+    borderColor: 'black',
+    padding: 7,
+    borderRadius: 15,
+    marginBottom: 10,
   },
   error: {
     color: 'red',

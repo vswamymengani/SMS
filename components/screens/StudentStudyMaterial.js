@@ -69,7 +69,7 @@ const StudentStudyMaterial = ({ navigation, route }) => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${day}-${month}-${year}`;
   };
 
   return (
@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: 'white',
     height: '100%',
-    borderRadius: 80,
+    borderRadius: 30,
     padding: 20,
   },
   backArrow: {
     width: 15,
     height: 25,
-    marginLeft: 20,
+    marginLeft: 10,
   },
   text: {
     fontSize: 14,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
-    marginLeft: 30,
+    marginLeft: 10,
   },
   homeworkContainer: {
     borderBottomWidth: 1,

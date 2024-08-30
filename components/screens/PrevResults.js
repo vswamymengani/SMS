@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import React, { useState ,useEffect} from 'react';
+import { View, Text, Button, StyleSheet, TextInput, FlatList } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 
@@ -10,6 +10,37 @@ const PrevResults = () => {
   const [subject, setSubject] = useState('');
   const [resultsData, setResultsData] = useState([]);
   const [searchPressed, setSearchPressed] = useState(false);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get('http://18.60.190.183:3000/classDetails');
+        const classData = response.data;
+        setClasses(classData);
+        setClassOptions(classData.map(cls => ({ label: cls.className, value: cls.className })));
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    if (className) {
+      const filteredSections = classes
+        .filter(cls => cls.className === className)
+        .flatMap(cls => cls.sections); // Assuming `sections` is an array in the `ClassDetails` table
+      setSections(filteredSections);
+      setSectionOptions(filteredSections.map(sec => ({ label: sec, value: sec })));
+    } else {
+      setSectionOptions([]);
+    }
+  }, [className, classes]);
 
   const handleSearch = () => {
     setSearchPressed(true);
@@ -18,56 +49,26 @@ const PrevResults = () => {
         setResultsData(response.data);
       })
       .catch(error => {
-        console.error("Error fetching attendance details:", error);
+        console.error("Error fetching results:", error);
       });
   };
 
-  const classNameData = [
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-    { label: '3', value: '3' },
-    { label: '4', value: '4' },
-    { label: '5', value: '5' },
-    { label: '6', value: '6' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-    { label: '9', value: '9' },
-    { label: '10', value: '10' },
-    { label: '11', value: '11' },
-    { label: '12', value: '12' }
-  ];
-
-  const sectionData = [
-    { label: 'A', value: 'A' },
-    { label: 'B', value: 'B' },
-    { label: 'C', value: 'C' }
-  ];
-  const examTypeData = [
-    { label: 'Quarterly', value: 'Quarterly' },
-    { label: 'Half Yearly', value: 'Half Yearly' },
-    { label: 'Finals', value: 'Finals' },
-  ];
-
-  const subjectData = [
-    { label: 'English', value: 'English' },
-    { label: 'Telugu', value: 'Telugu' },
-    { label: 'Hindi', value: 'Hindi' },
-    { label: 'Mathematics', value: 'Mathematics' },
-    { label: 'Science', value: 'Science' },
-    { label: 'Social Studies', value: 'Social Studies' },
-    { label: 'Physics', value: 'Physics' },
-    { label: 'Chemistry', value: 'Chemistry' },
-    { label: 'Biology', value: 'Biology' },
-  ];
+  const renderResultsRow = ({ item }) => (
+    <View style={styles.row}>
+      <Text style={styles.cell}>{item.fullname}</Text>
+      <Text style={styles.cell}>{item.rollNo}</Text>
+      <Text style={styles.cell}>{item.marks}</Text>
+    </View>
+  );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <View style={styles.dropdownRow}>
         <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
-          data={classNameData}
+          data={classOptions}
           maxHeight={300}
           labelField="label"
           valueField="value"
@@ -81,7 +82,7 @@ const PrevResults = () => {
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
-          data={sectionData}
+          data={sectionOptions}
           maxHeight={300}
           labelField="label"
           valueField="value"
@@ -93,69 +94,82 @@ const PrevResults = () => {
         />
       </View>
       <View style={styles.dropdownRow}>
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={examTypeData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Exam Type"
-        value={examType}
-        onChange={item => setExamType(item.value)}
-        accessible={true}
-        accessibilityLabel="Exam Type"
-      />
-      <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        data={subjectData}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Subject"
-        value={subject}
-        onChange={item => setSubject(item.value)}
-        accessible={true}
-        accessibilityLabel="Subject"
-      />
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={examTypeData}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Exam Type"
+          value={examType}
+          onChange={item => setExamType(item.value)}
+          accessible={true}
+          accessibilityLabel="Exam Type"
+        />
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={subjectData}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Subject"
+          value={subject}
+          onChange={item => setSubject(item.value)}
+          accessible={true}
+          accessibilityLabel="Subject"
+        />
       </View>
       <Button title="Search" onPress={handleSearch} />
       {searchPressed && (
-        <>
-          <Text style={styles.title}>Results</Text>
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerText}>Name</Text>
+            <Text style={styles.headerText}>Roll No</Text>
+            <Text style={styles.headerText}>Marks</Text>
+          </View>
           {resultsData.length > 0 ? (
-            resultsData.map((results, index) => (
-              <View key={index} style={styles.resultsRow}>
-                <Text style={styles.resultsText}>{results.fullname}</Text>
-                <Text style={styles.resultsText}>{results.rollNo}</Text>
-                <Text style={styles.resultsText}>{results.marks}</Text>
-              </View>
-            ))
+            <FlatList
+              data={resultsData}
+              renderItem={renderResultsRow}
+              keyExtractor={(item, index) => index.toString()}
+            />
           ) : (
             <Text style={styles.noDataText}>No Results data found for the selected criteria.</Text>
           )}
-        </>
+        </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
+
+const examTypeData = [
+  { label: 'Quarterly', value: 'Quarterly' },
+  { label: 'Half Yearly', value: 'Half Yearly' },
+  { label: 'Finals', value: 'Finals' },
+];
+
+const subjectData = [
+  { label: 'English', value: 'English' },
+  { label: 'Telugu', value: 'Telugu' },
+  { label: 'Hindi', value: 'Hindi' },
+  { label: 'Mathematics', value: 'Mathematics' },
+  { label: 'Science', value: 'Science' },
+  { label: 'Social Studies', value: 'Social Studies' },
+  { label: 'Physics', value: 'Physics' },
+  { label: 'Chemistry', value: 'Chemistry' },
+  { label: 'Biology', value: 'Biology' },
+];
+
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: 20,
     backgroundColor: '#fff',
-    alignItems:'center',
-  },
-  title: {
-    fontSize: 24,
-    color:'black',
-    
-    fontWeight: 'bold',
-    marginBottom: 20,
   },
   dropdownRow: {
     flexDirection: 'row',
@@ -164,48 +178,46 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: '48%',
-    borderWidth:2,
-    color:'black',
-    margin:5,
-    padding:10,
-    height:50,
-    borderRadius:10,
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    height: 50,
   },
   placeholderStyle: {
     fontSize: 16,
-    color: 'black',
+    color: 'gray',
   },
   selectedTextStyle: {
     fontSize: 16,
-    color:'black',
+    color: 'black',
   },
-  textInput: {
-    borderColor: 'black',
-    width: '48%',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
-    margin:5,
+  table: {
+    borderWidth: 1,
+    marginTop: 20,
   },
-  detailsContainer: {
-    marginBottom: 20,
-  },
-  detailsText: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  resultsRow: {
+  tableHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 10,
-    borderWidth:2,
-    padding:5,
+    backgroundColor: '#f0f0f0',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    paddingVertical: 10,
   },
-  resultsText: {
-    fontSize: 16,
-    color:'black',
-    marginHorizontal:50,
+  headerText: {
+    flex: 1,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'red',
+  },
+  row: {
+    flexDirection: 'row',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    paddingVertical: 10,
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'center',
+    color: 'black',
   },
   noDataText: {
     fontSize: 16,

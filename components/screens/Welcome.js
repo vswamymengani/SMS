@@ -1,29 +1,35 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, BackHandler } from 'react-native';
 import Splashscreen from '../assets/Splashscreen.png';
 
 const Welcome = ({ navigation }) => {
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigation.navigate('SelectUser');
-    }, 3000);
+      navigation.replace('SelectUser'); // Use replace to prevent going back to Splash screen
+    }, 1000);
 
-    return () => clearTimeout(timeout);
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      clearTimeout(timeout); // Clear timeout if back is pressed
+      BackHandler.exitApp(); // Exit app on back press
+      return true;
+    });
+
+    return () => {
+      clearTimeout(timeout);
+      backHandler.remove(); // Clean up back handler
+    };
   }, [navigation]);
+  
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={Splashscreen}
-          style={styles.splashscreen}
-        />
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Image
+        source={Splashscreen}
+        style={styles.splashscreen}
+      />
+    </View>
   );
 };
-
-const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -32,12 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
   },
-  imageContainer: {
-    width: width,
-    height: height,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   splashscreen: {
     width: '100%',
     height: '100%',
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Welcome;
+export default Welcome;

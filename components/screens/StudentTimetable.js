@@ -70,7 +70,9 @@ const StudentTimetable = ({ route }) => {
       text: entry.subject,
       person: entry.teacherName,
       employeeid: entry.employeeid,
-      timeText: entry.period,
+      timeText: entry.periodPart,
+      start:entry.startTime,
+      end:entry.endTime,
       link: entry.link,
       backgroundColor: colors[index % colors.length],
     }));
@@ -113,7 +115,7 @@ const StudentTimetable = ({ route }) => {
               </View>
               <View style={styles.timeContainer}>
                 <Image source={accessTimeImage} style={styles.timeImage} />
-                <Text style={styles.timeText}>{box.timeText}</Text>
+                <Text style={styles.timeText}>{box.timeText} {box.start} To {box.end}</Text>
               </View>
               <View style={styles.separator} />
               <View style={styles.personContainer}>

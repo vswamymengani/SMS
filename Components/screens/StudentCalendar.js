@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,Image,TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import Image1 from '../assets/Back_Arrow.png';
+import Image2 from '../assets/BackImage.png';
 
 const StudentCalendar = ({ route }) => {
+  const navigation = useNavigation();
   const { email } = route.params;
   const [markedDates, setMarkedDates] = useState({});
   const [error, setError] = useState('');
@@ -20,7 +24,7 @@ const StudentCalendar = ({ route }) => {
         specialDates.forEach(date => {
           const localDate = new Date(date.date);
           // Adjust the date to account for timezone offset
-          localDate.setDate(localDate.getDate() +1); // Adjust for timezone
+          localDate.setDate(localDate.getDate()); // Adjust for timezone
           const formattedDate = localDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
           markedDatesObj[formattedDate] = {
             marked: true,
@@ -42,19 +46,27 @@ const StudentCalendar = ({ route }) => {
 
   const handleDayPress = (day) => {
     const date = day.dateString;
-    const description = markedDates[date]?.description || 'No description available for this date.';
+    const description = markedDates[date]?.description || 'No Occasions available for this date.';
     setSelectedDescription(description);
   };
 
   // Get current date adjusted to local timezone
   const getCurrentDate = () => {
     const today = new Date();
-    today.setDate(today.getDate() + 1); // Adjust for timezone
+    today.setDate(today.getDate()); // Adjust for timezone
     return today.toISOString().split('T')[0]; // Format to YYYY-MM-DD
   };
 
   return (
     <View style={styles.container}>
+      <Image source={Image2} style={styles.bc} />
+      <View style={styles.row}>
+                <TouchableOpacity onPress={() => navigation.navigate('Homescreen', { email })}>
+                    <Image source={Image1} style={styles.image} />
+                </TouchableOpacity>
+                <Text style={styles.head}>Calendar</Text>
+      </View>
+      <View style={styles.body}>
       <Text style={styles.title}>Student Calendar</Text>
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <Calendar
@@ -70,6 +82,7 @@ const StudentCalendar = ({ route }) => {
           <Text style={styles.descriptionText}>{selectedDescription}</Text>
         </View>
       ) : null}
+      </View>
     </View>
   );
 };
@@ -77,8 +90,35 @@ const StudentCalendar = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f5f5f5',
+  },
+  body: {
+    backgroundColor: 'white',
+    borderRadius: 30,
+    height: '110%',
+    padding: 10,
+  },
+  bc: {
+    height: '110%',
+    width: '120%',
+    position: 'absolute',
+  },
+  image: {
+    height: 23,
+    width: 20,
+    marginRight: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 12,
+    marginBottom: 40,
+    top: 10,
+  },
+  head: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 24,

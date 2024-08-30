@@ -9,7 +9,9 @@ const AdminTimeTable = () => {
       className: '',
       section: '',
       day: '',
-      period: '',
+      periodPart: '',
+      startTime: '',
+      endTime: '',
       subject: '',
       employeeid: '',
       teacherName: '',
@@ -22,8 +24,22 @@ const AdminTimeTable = () => {
   const classes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
   const sections = ['A', 'B', 'C'];
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const periods = ['First Period : 09:30 to 10:30', 'Second Period : 10:30 to 11:30', 'Third Period : 11:30 to 12:30', 'Fourth Period : 01:30 to 02:30', 'Fifth Period : 02:30 to 03:30', 'Sixth Period : 03:30 to 04:30'];
-  const subjects = ['Telugu', 'English', 'Hindi', 'Mathematics', 'Science', 'Social Studies', 'History', 'Computer Science', 'Biology', 'Sports'];
+  const subjects = ['Telugu', 'English' ,'Mathematics','Sanskrit','Hindi','Physics','Biology','Chemistry','Sports','Social Studies'];
+  const periods = ['First Period', 'Second Period', 'Third Period', 'Fourth Period', 'Fifth Period', 'Sixth Period', 'Seventh Period', 'Eighth Period'];
+
+  // Generate time options with 15-minute intervals
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        times.push({ label: time, value: time });
+      }
+    }
+    return times;
+  };
+
+  const timeOptions = generateTimeOptions();
 
   const addEntry = () => {
     setTimetableEntries([
@@ -32,7 +48,9 @@ const AdminTimeTable = () => {
         className: '',
         section: '',
         day: '',
-        period: '',
+        periodPart: '',
+        startTime: '',
+        endTime: '',
         subject: '',
         employeeid: '',
         teacherName: '',
@@ -64,7 +82,9 @@ const AdminTimeTable = () => {
           className: '',
           section: '',
           day: '',
-          period: '',
+          periodPart: '',
+          startTime: '',
+          endTime: '',
           subject: '',
           employeeid: '',
           teacherName: '',
@@ -73,10 +93,11 @@ const AdminTimeTable = () => {
       ]);
       Alert.alert('Timetable added successfully');
     } catch (error) {
-      console.error('Failed to submit timetable entries:', error);
-      // Handle error state or alert the user
+      console.error('Error details:', error.response ? error.response.data : error.message);
+      Alert.alert('Error', 'Failed to submit timetable entries. ' + (error.response ? error.response.data : error.message));
     }
   };
+  
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -157,12 +178,46 @@ const AdminTimeTable = () => {
                 labelField="label"
                 valueField="value"
                 placeholder="Select Period"
-                value={entry.period}
-                onChange={(item) => handleChange(index, 'period', item.value)}
+                value={entry.periodPart}
+                onChange={(item) => handleChange(index, 'periodPart', item.value)}
               />
             </View>
           )}
-          {entry.period && (
+          {entry.periodPart && (
+            <View style={styles.inputGroup}>
+              <Text>Start Time:</Text>
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                data={timeOptions}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Start Time"
+                value={entry.startTime}
+                onChange={(item) => handleChange(index, 'startTime', item.value)}
+              />
+            </View>
+          )}
+          {entry.startTime && (
+            <View style={styles.inputGroup}>
+              <Text>End Time:</Text>
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                data={timeOptions}
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder="Select End Time"
+                value={entry.endTime}
+                onChange={(item) => handleChange(index, 'endTime', item.value)}
+              />
+            </View>
+          )}
+          {entry.endTime && (
             <View style={styles.inputGroup}>
               <Text>Subject:</Text>
               <Dropdown
@@ -209,11 +264,11 @@ const AdminTimeTable = () => {
           )}
         </View>
       ))}
-      <TouchableOpacity style={styles.addButton} onPress={addEntry}>
-        <Text style={styles.addButtonText}>Add Entry</Text>
+      <TouchableOpacity style={styles.button} onPress={addEntry}>
+        <Text style={styles.buttonText}>Add Another Entry</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -221,80 +276,55 @@ const AdminTimeTable = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 16,
   },
   entryContainer: {
-    marginBottom: 20,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    marginBottom: 16,
   },
   header: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   inputGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   dropdown: {
-    flex: 1,
-    marginLeft: 10,
+    marginTop: 8,
+    padding: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    borderRadius: 4,
   },
   placeholderStyle: {
-    fontSize: 16,
-    color: 'black',
+    color: '#888',
   },
   selectedTextStyle: {
-    fontSize: 16,
-    color: 'black',
+    color: '#000',
   },
   input: {
-    flex: 1,
-    height: 40,
+    padding: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginLeft: 10,
+    borderRadius: 4,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 12,
+    borderRadius: 4,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
   teacherName: {
-    flex: 1,
-    fontSize: 16,
-    color: 'black',
-    marginLeft: 10,
-  },
-  addButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  submitButton: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    backgroundColor: '#f9f9f9',
   },
 });
 
