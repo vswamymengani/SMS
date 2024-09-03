@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, BackHandler, Alert } from 'react-native';
+import { View, ScrollView,Text, Image, StyleSheet, TouchableOpacity, BackHandler, Alert } from 'react-native';
 import Image5 from '../assets/Component1.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
@@ -37,7 +37,7 @@ const SelectUser = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Image source={Image5} style={styles.image5} />
       <Image source={Image6} style={styles.image6} />
       <Image source={Image3} style={styles.image3} />
@@ -60,15 +60,14 @@ const SelectUser = ({ navigation }) => {
         <Image source={Image9} style={styles.squareImage} />
         <Text style={styles.squareText}>Admin</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white',
   },
   image5: {

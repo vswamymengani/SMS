@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const AdminClasses = () => {
+  const [selectedOption, setSelectedOption] = useState('addClass');
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
-  const [employeeid, setemployeeid] = useState('');
+  const [employeeid, setEmployeeid] = useState('');
   const [teacherDetails, setTeacherDetails] = useState(null);
   const [modifyClassName, setModifyClassName] = useState('');
   const [modifySection, setModifySection] = useState('');
-  const [newemployeeid, setNewemployeeid] = useState('');
+  const [newEmployeeid, setNewEmployeeid] = useState('');
+
+  const options = [
+    { label: 'Add Class', value: 'addClass' },
+    { label: 'Modify Teacher Details', value: 'modifyClass' },
+  ];
 
   const handleFetchTeacherDetails = async () => {
+    if (employeeid.trim() === '') {
+      Alert.alert('Error', 'Please enter a valid Employee ID');
+      return;
+    }
     try {
       const response = await axios.get(`http://18.60.190.183:3000/teacherInfo/${employeeid}`);
       setTeacherDetails(response.data);
@@ -21,6 +32,10 @@ const AdminClasses = () => {
   };
 
   const handleAddClass = async () => {
+    if (className.trim() === '' || section.trim() === '' || employeeid.trim() === '') {
+      Alert.alert('Error', 'Please fill out all fields');
+      return;
+    }
     try {
       const response = await axios.post('http://18.60.190.183:3000/addClass', {
         className,
@@ -31,7 +46,7 @@ const AdminClasses = () => {
         Alert.alert('Success', 'Class added successfully');
         setClassName('');
         setSection('');
-        setemployeeid('');
+        setEmployeeid('');
         setTeacherDetails(null);
       } else {
         Alert.alert('Error', response.data.message);
@@ -42,23 +57,21 @@ const AdminClasses = () => {
   };
 
   const handleModifyClass = async () => {
+    if (modifyClassName.trim() === '' || modifySection.trim() === '' || newEmployeeid.trim() === '') {
+      Alert.alert('Error', 'Please fill out all fields');
+      return;
+    }
     try {
-      console.log('Modifying class with:', {
-        className: modifyClassName,
-        section: modifySection,
-        newEmployeeid: newemployeeid,
-      });
-
       const response = await axios.post('http://18.60.190.183:3000/modifyClass', {
         className: modifyClassName,
         section: modifySection,
-        newEmployeeid: newemployeeid,
+        newEmployeeid: newEmployeeid,
       });
       if (response.data.success) {
         Alert.alert('Success', 'Class modified successfully');
         setModifyClassName('');
         setModifySection('');
-        setNewemployeeid('');
+        setNewEmployeeid('');
       } else {
         Alert.alert('Error', response.data.message);
       }
@@ -70,69 +83,80 @@ const AdminClasses = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Classes Management</Text>
+      
+      <Dropdown
+        style={styles.dropdown}
+        data={options}
+        labelField="label"
+        valueField="value"
+        placeholder="Select option"
+        value={selectedOption}
+        onChange={item => setSelectedOption(item.value)}
+      />
 
-      <View style={styles.section}>
-        <Text style={styles.title}>Add Class Teacher</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Class Name"
-          value={className}
-          onChangeText={setClassName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Section"
-          value={section}
-          onChangeText={setSection}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Class Teacher Employee ID"
-          value={employeeid}
-          onChangeText={setemployeeid}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleFetchTeacherDetails}>
-          <Text style={styles.buttonText}>Teacher Details</Text>
-        </TouchableOpacity>
-        {teacherDetails && (
-          <View style={styles.detailsContainer}>
-            <Text style={styles.detailsText}>Full Name: {teacherDetails.fullname}</Text>
-            <Text style={styles.detailsText}>Subject: {teacherDetails.subject}</Text>
-            <Text style={styles.detailsText}>Employee ID: {teacherDetails.employeeid}</Text>
-          </View>
-        )}
-        <TouchableOpacity style={styles.button} onPress={handleAddClass}>
-          <Text style={styles.buttonText}>Add Class</Text>
-        </TouchableOpacity>
-      </View>
+      {selectedOption === 'addClass' && (
+        <View style={styles.section}>
+          <Text style={styles.title}>Add Class Teacher</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Class Name"
+            value={className}
+            onChangeText={setClassName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Section"
+            value={section}
+            onChangeText={setSection}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Class Teacher Employee ID"
+            value={employeeid}
+            onChangeText={setEmployeeid}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleFetchTeacherDetails}>
+            <Text style={styles.buttonText}>Teacher Details</Text>
+          </TouchableOpacity>
+          {teacherDetails && (
+            <View style={styles.detailsContainer}>
+              <Text style={styles.detailsText}>Full Name: {teacherDetails.fullname}</Text>
+              <Text style={styles.detailsText}>Subject: {teacherDetails.subject}</Text>
+              <Text style={styles.detailsText}>Employee ID: {teacherDetails.employeeid}</Text>
+            </View>
+          )}
+          <TouchableOpacity style={styles.button} onPress={handleAddClass}>
+            <Text style={styles.buttonText}>Add Class</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-      <View style={styles.section}>
-        <Text style={styles.title}>Update Class Teacher</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Class Name"
-          value={modifyClassName}
-          onChangeText={setModifyClassName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Section"
-          value={modifySection}
-          onChangeText={setModifySection}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="New Class Teacher Employee ID"
-          value={newemployeeid}
-          onChangeText={text => {
-            console.log('New employee ID input:', text); // Debugging line
-            setNewemployeeid(text);
-          }}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleModifyClass}>
-          <Text style={styles.buttonText}>Update Class Teacher</Text>
-        </TouchableOpacity>
-      </View>
+      {selectedOption === 'modifyClass' && (
+        <View style={styles.section}>
+          <Text style={styles.title}>Update Class Teacher</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Class Name"
+            value={modifyClassName}
+            onChangeText={setModifyClassName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Section"
+            value={modifySection}
+            onChangeText={setModifySection}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="New Class Teacher Employee ID"
+            value={newEmployeeid}
+            onChangeText={setNewEmployeeid}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleModifyClass}>
+            <Text style={styles.buttonText}>Update Class Teacher</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -146,6 +170,14 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 8,
     marginBottom: 20,
   },
   section: {
@@ -167,6 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3F1175',
     padding: 15,
     borderRadius: 5,
+    margin: 5,
     alignItems: 'center',
   },
   buttonText: {

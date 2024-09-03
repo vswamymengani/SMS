@@ -17,16 +17,23 @@ const AdminCalendarManagement = () => {
 
         specialDates.forEach(date => {
           const localDate = new Date(date.date);
-          // Ensure the date is valid
-          if (!isNaN(localDate.getTime())) {
-            const formattedDate = localDate.toLocaleDateString('en-GB');
-            markedDatesObj[formattedDate] = {
-              marked: true,
-              dotColor: 'red',
-              activeOpacity: 0,
-            };
-          }
+          const formattedDate = localDate.toISOString().split('T')[0];
+          markedDatesObj[formattedDate] = {
+            marked: true,
+            selectedColor: 'red',
+            selectedTextColor: 'white',
+            description: date.description,
+          };
         });
+
+        // Mark the current date with blue background and white text
+        const currentDate = new Date().toISOString().split('T')[0];
+        markedDatesObj[currentDate] = {
+          ...markedDatesObj[currentDate],
+          selected: true,
+          selectedColor: 'blue',
+          selectedTextColor: 'white',
+        };
 
         setMarkedDates(markedDatesObj);
       } catch (err) {
@@ -38,7 +45,36 @@ const AdminCalendarManagement = () => {
   }, []);
 
   const handleDatePress = (day) => {
-    setSelectedDate(day.dateString);
+    const selected = day.dateString;
+    setSelectedDate(selected);
+
+    const isCurrentlyRed = markedDates[selected]?.selectedColor === 'red';
+    const updatedMarkedDates = {
+      ...markedDates,
+      [selected]: isCurrentlyRed
+        ? {}
+        : {
+            selected: true,
+            selectedColor: 'red',
+            selectedTextColor: 'white',
+          },
+    };
+
+    // Preserve current date highlighting
+    const currentDate = new Date().toISOString().split('T')[0];
+    if (updatedMarkedDates[currentDate]) {
+      updatedMarkedDates[currentDate] = {
+        ...updatedMarkedDates[currentDate],
+        selected: true,
+        selectedColor: 'blue',
+        selectedTextColor: 'white',
+      };
+    }
+
+    setMarkedDates(updatedMarkedDates);
+
+    const selectedDescription = markedDates[selected]?.description || '';
+    setDescription(selectedDescription);
   };
 
   const handleSave = async () => {
@@ -49,17 +85,7 @@ const AdminCalendarManagement = () => {
           description,
         });
         Alert.alert('Success', 'Special date added successfully');
-        // Update marked dates
-        const localDate = new Date(selectedDate);
-        const formattedDate = localDate.toLocaleDateString('en-GB');
-        setMarkedDates({
-          ...markedDates,
-          [formattedDate]: {
-            marked: true,
-            dotColor: 'red',
-            activeOpacity: 0,
-          },
-        });
+
         setDescription('');
         setSelectedDate('');
       } catch (err) {
@@ -76,6 +102,10 @@ const AdminCalendarManagement = () => {
       <Calendar
         onDayPress={handleDatePress}
         markedDates={markedDates}
+        theme={{
+          selectedDayBackgroundColor: '#FF0000',
+          todayTextColor: '#FFFFFF',
+        }}
       />
       <TextInput
         style={styles.input}

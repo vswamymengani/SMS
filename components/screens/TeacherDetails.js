@@ -25,15 +25,13 @@ const TeacherDetails = () => {
         item.employeeid.toString().includes(searchText)
     );
 
-    const renderTeacherDetails = ({ item }) => {
-        return (
-            <View style={styles.row}>
-                <Text style={styles.cell}>{item.employeeid}</Text>
-                <Text style={styles.cell}>{item.fullname}</Text>
-                <Text style={styles.cell}>{item.email}</Text>
-            </View>
-        );
-    };
+    const renderTeacherDetails = ({ item }) => (
+        <View style={styles.row}>
+            <Text style={styles.cell}>{item.employeeid}</Text>
+            <Text style={styles.cell}>{item.fullname}</Text>
+            <Text style={styles.cell}>{item.email}</Text>
+        </View>
+    );
 
     return (
         <View style={styles.container}>
@@ -105,6 +103,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     table: {
+        flex: 1,
         borderWidth: 1,
         borderColor: 'black',
     },

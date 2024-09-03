@@ -33,6 +33,10 @@ const TeacherHomeScreen = ({route}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [profile, setProfile] = useState([]);
     const [subject, setSubject] = useState('');
+    const [classTeacher ,setClassTeacher] = useState([]);
+    const [className, setClassName] = useState('');
+    const [section ,setSection] = useState('');
+    const [employeeid ,setEmployeeid] = useState('');
     const [errors ,setErrors] = useState({});
     const isFocused = useIsFocused();
 
@@ -42,6 +46,7 @@ const TeacherHomeScreen = ({route}) => {
           const response = await axios.get(`http://18.60.190.183:3000/teacherProfile?email=${email}`);
           setProfile(response.data);
           setSubject(response.data.subject);
+          setEmployeeid(response.data.employeeid);
         }
         catch(error){
           setErrors({general:"unable to fetch the data"});
@@ -49,6 +54,22 @@ const TeacherHomeScreen = ({route}) => {
       }
       fetchProfile();
     },[email]);
+
+    useEffect(() =>{
+      const fetchClassTeacher = async() =>{
+        try{
+          const response = await axios.get(`http://18.60.190.183:3000/classTeacher?employeeid=${employeeid}`);
+          console.log('Class Teacher Response:', response.data); // Log the response
+          setClassTeacher(response.data);
+          setClassName(response.data.className);
+          setSection(response.data.section);
+        }
+        catch(error){
+          setErrors({general:"unable to fetch the data"});
+        }
+      }
+      fetchClassTeacher();
+    },[employeeid]);
 
     useEffect(() => {
       let backAction;
@@ -148,7 +169,7 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image15} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>School Photos</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square12} onPress={() => navigation.navigate('TeacherNotifications',{ email })}>
+        <TouchableOpacity style={styles.square12} onPress={() => navigation.navigate('TeacherNotifications',{ email})}>
           <Image source={Image8} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Notification</Text>
         </TouchableOpacity>
@@ -173,6 +194,10 @@ const TeacherHomeScreen = ({route}) => {
         <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('ClassWork',{ email })}>
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('StudentLeaves', { email , className ,section})}>
+          <Image source={Image10} style={styles.squareImage} />
+          <Text style={styles.loginButtonText}>Student Leaves</Text>
         </TouchableOpacity>
         <View style={styles.squareRow}>
                 <TouchableOpacity style={styles.square14} onPress={() => {
@@ -460,6 +485,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#c4db4d',
     marginHorizontal: 12,
     borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  square18: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'lightblue',
+    marginHorizontal: 12,
+    borderRadius: 12,
+    borderWidth:1,
     justifyContent: 'center',
     alignItems: 'center',
   },

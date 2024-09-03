@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
   },
   first:{
     height:100,
-    width:"40%",
+    width:"35%",
+    borderWidth:1,
   },
   secound:{
     height:70,
@@ -139,7 +140,9 @@ const styles = StyleSheet.create({
   },
   coverPhoto: {
     width: '100%',
-    height: 200,
+    height: "100%",
+    borderWidth:2,
+    borderColor:'black',
     resizeMode: 'cover',
     marginBottom: 10,
   },

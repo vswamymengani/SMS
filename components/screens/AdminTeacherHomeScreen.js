@@ -1,23 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Modal } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Image5 from '../assets/Component1.png';
-import Image2 from '../assets/Menu.png';
 import Image6 from '../assets/Ellipse2.png';
 import Image3 from '../assets/Subtract.png';
 import Image7 from '../assets/Student1.png';
-import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/BackArrow.png';
-import Image4 from '../assets/timetable1.png';
 import Image8 from '../assets/studentcomplaint.png';
 import Image9 from '../assets/feenews.png';
 import Image11 from '../assets/Leave.png';
 
 const AdminTeacherHomeScreen = ({ navigation }) => {
-  return(
+  return (
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Image source={Image5} style={styles.image5} />
         <TouchableOpacity onPress={() => navigation.navigate('AdminView')} >
-          <Image source={Image1} style={styles.back}/>
+          <Image source={Image1} style={styles.back} />
         </TouchableOpacity>
         <Image source={Image6} style={styles.image6} />
         <Image source={Image3} style={styles.image3} />
@@ -34,8 +32,8 @@ const AdminTeacherHomeScreen = ({ navigation }) => {
               <Text>Teacher Complaints</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() =>navigation.navigate('AdminTeacherLeave')}>
-            <View style={styles.square} >
+          <TouchableOpacity onPress={() => navigation.navigate('AdminTeacherLeave')}>
+            <View style={styles.square}>
               <Image source={Image11} style={styles.squareImage} />
               <Text>Teacher Leave</Text>
             </View>
@@ -54,61 +52,55 @@ const AdminTeacherHomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      
+    </ScrollView>
   );
- 
-}
+};
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     alignItems: 'center',
     backgroundColor: 'white',
+  },
+  container: {
+    width: '100%',
+    alignItems: 'center',
   },
   image5: {
     width: '100%',
     position: 'absolute',
     top: 0,
   },
-  back:{
-    height:30,
-    width:30,
-    left:-180,
+  back: {
+    height: 35,
+    width: 35,
+    right:160,
     top:20,
+    position: 'absolute',
   },
   image3: {
     width: 170,
     height: 170,
     position: 'absolute',
-    top: 140,
+    top: 100,
   },
   image6: {
     width: 200,
     height: 200,
     position: 'absolute',
-    top: 130,
-  },
-  images:{
-    height:100,
-    width:100,
+    top: 90,
   },
   squareRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: 20,
-    top: 400,
+    marginTop: 300,
   },
   squareRow1: {
     flexDirection: 'row',
     justifyContent: 'center',
-    position:'absolute',
     width: '100%',
-    marginBottom: 20,
-    top: 600,
-  },
-  singleSquare: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    margin: 20,
   },
   square: {
     width: 100,
@@ -124,5 +116,6 @@ const styles = StyleSheet.create({
     height: 80,
     marginBottom: 10,
   },
-})
+});
+
 export default AdminTeacherHomeScreen;

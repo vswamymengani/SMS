@@ -85,6 +85,7 @@ import AdminCalendarManagement from './Components/screens/AdminCalendarManagenme
 import SubjectsScreen from './Components/screens/SubjectScreen';
 import ModifyTeacherInfo from './Components/screens/ModifyTeacherInfo';
 import AdminClasses from './Components/screens/AdminClasses';
+import StudentLeaves from './Components/screens/StudentLeaves';
 
 const Stack = createNativeStackNavigator();
 
@@ -175,6 +176,7 @@ function App() {
         <Stack.Screen name="SubjectScreen" component={SubjectsScreen} options={{title: "Online Exams"}} />
         <Stack.Screen name="ModifyTeacherInfo" component={ModifyTeacherInfo} options={{title:"Update Teacher Details"}} />
         <Stack.Screen name="AdminClasses" component={AdminClasses} options={{title:"Classes"}} />
+        <Stack.Screen name="StudentLeaves" component={StudentLeaves} options={{title: "Student Leave List"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -21,17 +21,48 @@ const AdminTimeTable = () => {
   const [teachers, setTeachers] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const classes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-  const sections = ['A', 'B', 'C'];
+  const [classes, setClasses] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState({}); // Update to store sections for each class
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get('http://18.60.190.183:3000/classDetails');
+        const classData = response.data;
+        setClasses(classData);
+      } catch (error) {
+        console.error('Failed to fetch classes:', error);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  const fetchSections = async (className) => {
+    const filteredSections = classes
+      .filter(cls => cls.className === className)
+      .flatMap(cls => cls.sections); // Assuming `sections` is an array in the `ClassDetails` table
+    return filteredSections.map(sec => ({ label: sec, value: sec }));
+  };
+
+  useEffect(() => {
+    timetableEntries.forEach(async (entry, index) => {
+      if (entry.className) {
+        const sections = await fetchSections(entry.className);
+        setSectionOptions(prev => ({ ...prev, [index]: sections }));
+      }
+    });
+  }, [timetableEntries]);
+
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  const subjects = ['Telugu', 'English' ,'Mathematics','Sanskrit','Hindi','Physics','Biology','Chemistry','Sports','Social Studies'];
+  const subjects = ['Telugu', 'English', 'Mathematics', 'Sanskrit', 'Hindi', 'Physics', 'Biology', 'Chemistry', 'Sports', 'Social Studies'];
   const periods = ['First Period', 'Second Period', 'Third Period', 'Fourth Period', 'Fifth Period', 'Sixth Period', 'Seventh Period', 'Eighth Period'];
 
   // Generate time options with 15-minute intervals
   const generateTimeOptions = () => {
     const times = [];
     for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
+      for (let minute = 0; minute < 60; minute += 5) {
         const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
         times.push({ label: time, value: time });
       }
@@ -57,6 +88,24 @@ const AdminTimeTable = () => {
         link: '',
       },
     ]);
+  };
+
+  const formatTimeInput = (input) => {
+    const cleaned = input.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    const hour = cleaned.slice(0, 2);
+    const minute = cleaned.slice(2, 4);
+    if (hour.length > 2) {
+      return `${hour.slice(0, 2)}:${minute}`;
+    }
+    if (minute.length > 2) {
+      return `${hour}:${minute.slice(0, 2)}`;
+    }
+    return `${hour}${minute ? ':' + minute : ''}`;
+  };
+
+  const handleTimeChange = (index, field, value) => {
+    const formattedValue = formatTimeInput(value);
+    handleChange(index, field, formattedValue);
   };
 
   const handleChange = (index, field, value) => {
@@ -97,7 +146,6 @@ const AdminTimeTable = () => {
       Alert.alert('Error', 'Failed to submit timetable entries. ' + (error.response ? error.response.data : error.message));
     }
   };
-  
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -123,7 +171,7 @@ const AdminTimeTable = () => {
               style={styles.dropdown}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
-              data={classes.map((className) => ({ label: className, value: className }))}
+              data={classes.map(cls => ({ label: cls.className, value: cls.className }))}
               maxHeight={300}
               labelField="label"
               valueField="value"
@@ -139,7 +187,7 @@ const AdminTimeTable = () => {
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
-                data={sections.map((section) => ({ label: section, value: section }))}
+                data={sectionOptions[index] || []}
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
@@ -186,81 +234,59 @@ const AdminTimeTable = () => {
           {entry.periodPart && (
             <View style={styles.inputGroup}>
               <Text>Start Time:</Text>
-              <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                data={timeOptions}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Start Time"
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Start Time (HH:MM)"
                 value={entry.startTime}
-                onChange={(item) => handleChange(index, 'startTime', item.value)}
+                keyboardType="numeric"
+                onChangeText={(value) => handleTimeChange(index, 'startTime', value)}
               />
             </View>
           )}
           {entry.startTime && (
             <View style={styles.inputGroup}>
               <Text>End Time:</Text>
-              <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                data={timeOptions}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder="Select End Time"
+              <TextInput
+                style={styles.input}
+                placeholder="Enter End Time (HH:MM)"
                 value={entry.endTime}
-                onChange={(item) => handleChange(index, 'endTime', item.value)}
+                keyboardType="numeric"
+                onChangeText={(value) => handleTimeChange(index, 'endTime', value)}
               />
             </View>
           )}
           {entry.endTime && (
-            <View style={styles.inputGroup}>
-              <Text>Subject:</Text>
-              <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                data={subjects.map((subject) => ({ label: subject, value: subject }))}
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Subject"
-                value={entry.subject}
-                onChange={(item) => handleChange(index, 'subject', item.value)}
-              />
-            </View>
-          )}
-          {entry.subject && (
-            <View style={styles.inputGroup}>
-              <Text>Teacher ID:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Employee ID"
-                value={entry.employeeid}
-                onChangeText={(text) => handleChange(index, 'employeeid', text)}
-              />
-            </View>
-          )}
-          {entry.employeeid && (
-            <View style={styles.inputGroup}>
-              <Text>Teacher Name:</Text>
-              <Text style={styles.teacherName}>{entry.teacherName}</Text>
-            </View>
-          )}
-          {entry.employeeid && (
-            <View style={styles.inputGroup}>
-              <Text>Link:</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Live Class Link"
-                value={entry.link}
-                onChangeText={(text) => handleChange(index, 'link', text)}
-              />
-            </View>
+            <>
+              <View style={styles.inputGroup}>
+                <Text>Employee ID:</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Employee ID"
+                  value={entry.employeeid}
+                  onChangeText={(value) => handleChange(index, 'employeeid', value)}
+                />
+              </View>
+              {entry.employeeid && (
+                <View style={styles.inputGroup}>
+                  <Text>Teacher Name:</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Teacher Name"
+                    value={entry.teacherName}
+                    editable={false}
+                  />
+                </View>
+              )}
+              <View style={styles.inputGroup}>
+                <Text>Link:</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Link"
+                  value={entry.link}
+                  onChangeText={(value) => handleChange(index, 'link', value)}
+                />
+              </View>
+            </>
           )}
         </View>
       ))}
@@ -268,7 +294,7 @@ const AdminTimeTable = () => {
         <Text style={styles.buttonText}>Add Another Entry</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>Submit Timetable</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -276,55 +302,52 @@ const AdminTimeTable = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor:'white',
   },
   entryContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    paddingBottom: 10,
   },
   header: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   inputGroup: {
-    marginBottom: 12,
+    marginBottom: 10,
   },
-  dropdown: {
-    marginTop: 8,
-    padding: 8,
+  input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
+    padding: 10,
+  },
+  dropdown: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 10,
   },
   placeholderStyle: {
-    color: '#888',
+    color: '#aaa',
   },
   selectedTextStyle: {
     color: '#000',
   },
-  input: {
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-  },
   button: {
-    backgroundColor: '#007BFF',
-    padding: 12,
+    backgroundColor: '#007bff',
+    padding: 15,
     borderRadius: 4,
-    alignItems: 'center',
-    marginBottom: 16,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
-  },
-  teacherName: {
-    padding: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    backgroundColor: '#f9f9f9',
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, FlatList } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput,ScrollView, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 
@@ -42,9 +42,9 @@ const StudentDetails = () => {
                 <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('AdminStudentForm')} >
                     <Text style={styles.headText}>Register</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() =>navigation.navigate('StudentModify')} style={styles.box} >   
+                <TouchableOpacity onPress={() => navigation.navigate('StudentModify')} style={styles.box}>
                     <Text style={styles.headText}>Modify</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
             </View>
             <View style={styles.searchContainer}>
                 <TextInput
@@ -54,28 +54,34 @@ const StudentDetails = () => {
                     onChangeText={text => setSearchText(text)}
                 />
             </View>
-            <View style={styles.table}>
-            <View style={styles.tableHeader}>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={styles.headerText}>Class</Text>
-                <Text style={styles.headerText}>Section</Text>
-                <Text style={styles.headerText}>Admission No</Text>
-            </View>
-            {errors.general && <Text style={styles.error}>{errors.general}</Text>}
             <FlatList
+                contentContainerStyle={styles.viewcontainer}
+                ListHeaderComponent={() => (
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.headerText}>Name</Text>
+                        <Text style={styles.headerText}>Class</Text>
+                        <Text style={styles.headerText}>Section</Text>
+                        <Text style={styles.headerText}>Admission No</Text>
+                    </View>
+                )}
                 data={filteredStudentDetails}
                 renderItem={renderStudentDetails}
                 keyExtractor={item => item.admissionid.toString()}
+                ListEmptyComponent={<Text style={styles.error}>{errors.general}</Text>}
             />
-            </View>
         </View>
     );
+    
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
+    },
+    viewcontainer:{
+        flexGrow:1,
+        borderWidth:1,
     },
     head: {
         flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Alert,BackHandler ,ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Alert, BackHandler, ScrollView } from 'react-native';
 import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 import Image5 from '../assets/Component1.png';
@@ -17,6 +17,8 @@ import Image23 from '../assets/gallary1.png';
 import Image14 from '../assets/calander.png';
 import Image24 from '../assets/classwork.png';
 
+
+
 const AdminView = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [profileVisible, setProfileVisible] = useState(true);
@@ -24,76 +26,40 @@ const AdminView = ({ navigation }) => {
   const [teacherCount, setTeacherCount] = useState(0);
   const isFocused = useIsFocused();
 
-  // Fetch teacher count
+  // Fetch counts
   useEffect(() => {
     axios.get('http://18.60.190.183:3000/teacherCount')
-      .then(response => {
-        if (response.status === 200) {
-          setTeacherCount(response.data.Teacher_Count);
-        } else {
-          console.error('Failed to fetch teacher count:', response.status);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching teacher count:', error);
-      });
-  }, []);
+      .then(response => setTeacherCount(response.data.Teacher_Count))
+      .catch(error => console.error('Error fetching teacher count:', error));
 
-  // Fetch student count
-  useEffect(() => {
     axios.get('http://18.60.190.183:3000/studentCount')
-      .then(response => {
-        if (response.status === 200) {
-          setStudentCount(response.data.Student_Count);
-        } else {
-          console.error('Failed to fetch student count:', response.status);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching student count:', error);
-      });
+      .then(response => setStudentCount(response.data.Student_Count))
+      .catch(error => console.error('Error fetching student count:', error));
   }, []);
 
   useEffect(() => {
-    let backAction;
-
     if (isFocused) {
-      // Only show the alert if the screen is being exited directly via the back button
-      backAction = () => {
+      const backAction = () => {
         Alert.alert(
           "Logout",
           "Do you want to logout?",
           [
-            {
-              text: "No",
-              onPress: () => null,
-              style: "cancel"
-            },
-            {
-              text: "Yes",
-              onPress: () => navigation.goBack()
-            }
+            { text: "No", style: "cancel" },
+            { text: "Yes", onPress: () => navigation.goBack() }
           ]
         );
-        return true; // Return true to prevent default back action
+        return true;
       };
-
       BackHandler.addEventListener("hardwareBackPress", backAction);
-    }
 
-    return () => {
-      if (backAction) {
-        BackHandler.removeEventListener("hardwareBackPress", backAction);
-      }
-    };
+      return () => BackHandler.removeEventListener("hardwareBackPress", backAction);
+    }
   }, [isFocused, navigation]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {profileVisible && (
-        <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)}>
-          {/* Add any profile image or icon here if needed */}
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(false)} />
       )}
       <Image source={Image5} style={styles.image5} />
       <TouchableOpacity style={styles.menuIcon} onPress={() => setModalVisible(true)}>
@@ -101,52 +67,42 @@ const AdminView = ({ navigation }) => {
       </TouchableOpacity>
       <Image source={Image6} style={styles.image6} />
       <Image source={Image3} style={styles.image3} />
-      <View style={styles.squareRow}>
-        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminStudentHomeScreen')}>
-          <Image source={Image7} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Total {studentCount} Students</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminTeacherHomeScreen')}>
-          <Image source={Image8} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Total {teacherCount} Teachers</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminCalendarManagement')}>
-          <Image source={Image14} style={styles.squareImage} />
-          <Text style={styles.loginButtonText}>Calendar</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.squareRow}>
-        <TouchableOpacity onPress={() => navigation.navigate('AdminTimeTable')}>
-            <View style={styles.square}>
-              <Image source={Image4} style={styles.squareImage} />
-              <Text>Timetable</Text>
-            </View>
-        </TouchableOpacity>
-        <TouchableOpacity  onPress={() => navigation.navigate('AdminLibrary')}>
-          <View style={styles.square}>
+      <View style={styles.box}>
+        <View style={styles.squareRow}>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminStudentHomeScreen')}>
+            <Image source={Image7} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Total {studentCount} Students</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminTeacherHomeScreen')}>
+            <Image source={Image8} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Total {teacherCount} Teachers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminCalendarManagement')}>
+            <Image source={Image14} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Calendar</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.squareRow}>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminTimeTable')}>
+            <Image source={Image4} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Timetable</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminLibrary')}>
             <Image source={Image20} style={styles.squareImage} />
             <Text style={styles.loginButtonText}>Library</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity  onPress={() => navigation.navigate('AdminEventScreen')}>
-          <View style={styles.square}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminEventScreen')}>
             <Image source={Image23} style={styles.squareImage} />
             <Text style={styles.loginButtonText}>Events</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.squareRow}>
-      <TouchableOpacity  onPress={() => navigation.navigate('AdminClasses')}>
-          <View style={styles.square}>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.squareRow}>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminClasses')}>
             <Image source={Image24} style={styles.squareImage} />
             <Text style={styles.loginButtonText}>Classes</Text>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </View>
-      
       <Modal
         animationType="slide-left"
         transparent={true}
@@ -159,7 +115,7 @@ const AdminView = ({ navigation }) => {
               <Image source={Image1} style={styles.image1} />
             </TouchableOpacity>
             <Image source={Image10} style={styles.image10} />
-            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('Homescreen'); }}>
+            <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('AdminView'); }}>
               <Text style={styles.modalText}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { setModalVisible(false); setProfileVisible(true); navigation.navigate('Settings'); }}>
@@ -179,14 +135,13 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
-    justifyContent:'center',
     backgroundColor: 'white',
+    paddingBottom: 20, // Ensures scrolling works to the bottom
   },
   image5: {
     width: '100%',
     height: 200,
-    position: 'absolute',
-    top: 0,
+    marginBottom:60,
   },
   menuIcon: {
     position: 'absolute',
@@ -203,41 +158,29 @@ const styles = StyleSheet.create({
   image2: {
     width: 30,
     height: 20,
+
   },
   image1: {
     width: 30,
     height: 30,
-    marginBottom: 20,
-    marginTop: 30,
   },
   image3: {
     width: 170,
     height: 170,
-    position: 'absolute',
-    top: 100,
+    position:'absolute',
+    top:60,
   },
   image6: {
     width: 200,
     height: 200,
-    position: 'absolute',
-    top: 90,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 200,
-    marginBottom: 20,
+    position:'absolute',
+    top:60,
   },
   squareRow: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%',
     marginTop: 10,
-    top: 140,
-  },
-  singleSquare: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   square: {
     width: 100,

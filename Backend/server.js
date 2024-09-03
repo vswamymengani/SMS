@@ -1995,6 +1995,44 @@ app.get('/studentTeacherComplaint', (req, res) => {
   });
 });
 
+// Api for getting notification complaints from Students
+// Endpoint to get student complaints
+// Get notifications for a teacher
+app.get('/studentNotificationComplaints', async (req, res) => {
+  const { className, section } = req.query;
+  
+  try {
+    const query = `
+      SELECT * FROM StudentComplaint 
+      WHERE className = ? 
+      AND section = ? 
+      AND recipient = 'teacher' 
+      AND is_resolved = 0
+    `;
+    const [rows] = await db.execute(query, [className, section]);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching student notifications:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/studentTeacherLeaveList', (req, res) => {
+  const { className, section } = req.query;
+
+  const sql = 'SELECT fullname, startDate, endDate, leavePurpose, approval FROM StudentLeave WHERE className = ? AND section = ?';
+  const values = [className, section];
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Error fetching student leave data:', err);
+      res.status(500).json({ error: 'Error fetching student leave data' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
