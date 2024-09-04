@@ -9,6 +9,7 @@ import Image3 from '../assets/Subtract.png';
 import Image7 from '../assets/Student1.png';
 import Image8 from '../assets/Teacher1.png';
 import Image9 from '../assets/Admin.png';
+import Image12 from '../assets/studentattendence.png';
 import Image10 from '../assets/profilepic.png';
 import Image1 from '../assets/Menuicon.png';
 import Image4 from '../assets/timetable1.png';
@@ -100,6 +101,10 @@ const AdminView = ({ navigation }) => {
           <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminClasses')}>
             <Image source={Image24} style={styles.squareImage} />
             <Text style={styles.loginButtonText}>Classes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.square} onPress={() => navigation.navigate('AdminAttendance')}>
+            <Image source={Image12} style={styles.squareImage} />
+            <Text style={styles.loginButtonText}>Teacher Attendance</Text>
           </TouchableOpacity>
         </View>
       </View>

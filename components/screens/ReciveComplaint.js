@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const ComplaintItem = ({ item, onResolve }) => {
   const [comments, setComments] = useState(item.comments || '');
@@ -39,6 +40,10 @@ const ReciveComplaint = ({ route }) => {
   const navigation = useNavigation();
   const [complaints, setComplaints] = useState([]);
   const [filteredComplaints, setFilteredComplaints] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [sectionOptions, setSectionOptions] = useState([]);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(null);
   const [errors, setErrors] = useState({});
   const email = route.params.email;
 
@@ -52,7 +57,18 @@ const ReciveComplaint = ({ route }) => {
         setErrors({ general: 'Failed to load complaints' });
       }
     };
+
+    const fetchClassAndSection = async () => {
+      try {
+        const classResponse = await axios.get('http://18.60.190.183:3000/classDetails');
+        setClassOptions(classResponse.data);
+      } catch (err) {
+        setErrors({ general: 'Failed to load classes and sections' });
+      }
+    };
+
     fetchComplaints();
+    fetchClassAndSection();
   }, []);
 
   const resolveComplaint = async (id, isResolved, comments) => {
@@ -73,6 +89,27 @@ const ReciveComplaint = ({ route }) => {
     }
   };
 
+  const handleClassChange = (item) => {
+    setSelectedClass(item.value);
+    const sections = item.sections.map(section => ({ label: section, value: section }));
+    setSectionOptions(sections);
+    filterComplaints(item.value, selectedSection);
+  };
+
+  const handleSectionChange = (item) => {
+    setSelectedSection(item.value);
+    filterComplaints(selectedClass, item.value);
+  };
+
+  const filterComplaints = (className, section) => {
+    const filtered = complaints.filter(item => 
+      (!className || item.className === className) &&
+      (!section || item.section === section) &&
+      item.is_resolved !== 1
+    );
+    setFilteredComplaints(filtered);
+  };
+
   const renderComplaint = ({ item }) => (
     <ComplaintItem item={item} onResolve={resolveComplaint} />
   );
@@ -80,6 +117,27 @@ const ReciveComplaint = ({ route }) => {
   return (
     <View style={styles.container}>
       {errors.general && <Text style={styles.error}>{errors.general}</Text>}
+      <View style={styles.box}>
+      <Dropdown
+        style={styles.dropdown}
+        data={classOptions.map(item => ({ label: item.className, value: item.className, sections: item.sections }))}
+        labelField="label"
+        valueField="value"
+        placeholder="Select Class"
+        value={selectedClass}
+        onChange={handleClassChange}
+      />
+      <Dropdown
+        style={styles.dropdown}
+        data={sectionOptions}
+        labelField="label"
+        valueField="value"
+        placeholder="Select Section"
+        value={selectedSection}
+        onChange={handleSectionChange}
+      />
+      </View>
+      
       <FlatList
         data={filteredComplaints}
         renderItem={renderComplaint}
@@ -92,10 +150,16 @@ const ReciveComplaint = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding:10,
     backgroundColor: '#fff',
     borderColor: 'black',
     borderWidth: 3,
+  },
+  box:{
+    flexDirection:'row',
+    width:"45%",
+    height:60,
+    justifyContent:'space-between',
   },
   complaintItem: {
     padding: 15,
@@ -124,6 +188,14 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 8,
     paddingHorizontal: 10,
+  },
+  dropdown: {
+    margin: 10,
+    borderWidth:1,
+    color:'black',
+    width:"100%",
+    borderRadius:10,
+    borderColor:'black',
   },
 });
 

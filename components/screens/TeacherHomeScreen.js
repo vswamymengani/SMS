@@ -55,21 +55,6 @@ const TeacherHomeScreen = ({route}) => {
       fetchProfile();
     },[email]);
 
-    useEffect(() =>{
-      const fetchClassTeacher = async() =>{
-        try{
-          const response = await axios.get(`http://18.60.190.183:3000/classTeacher?employeeid=${employeeid}`);
-          console.log('Class Teacher Response:', response.data); // Log the response
-          setClassTeacher(response.data);
-          setClassName(response.data.className);
-          setSection(response.data.section);
-        }
-        catch(error){
-          setErrors({general:"unable to fetch the data"});
-        }
-      }
-      fetchClassTeacher();
-    },[employeeid]);
 
     useEffect(() => {
       let backAction;
@@ -144,7 +129,7 @@ const TeacherHomeScreen = ({route}) => {
        </View>
       
       <View style={styles.squareRow}>
-      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('ClassWork',{ email })}>
+      <TouchableOpacity style={styles.square4} onPress={() => navigation.navigate('TeacherAttendanceScreen',{ email })}>
           <Image source={Image12} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>My Attendence</Text>
         </TouchableOpacity>
@@ -195,7 +180,7 @@ const TeacherHomeScreen = ({route}) => {
           <Image source={Image21} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Birthdays</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('StudentLeaves', { email , className ,section})}>
+        <TouchableOpacity style={styles.square14} onPress={() => navigation.navigate('StudentLeaves', { email})}>
           <Image source={Image10} style={styles.squareImage} />
           <Text style={styles.loginButtonText}>Student Leaves</Text>
         </TouchableOpacity>

@@ -2017,21 +2017,41 @@ app.get('/studentNotificationComplaints', async (req, res) => {
   }
 });
 
-app.get('/studentTeacherLeaveList', (req, res) => {
-  const { className, section } = req.query;
+app.post('/teacherAttendance', (req, res) => {
+  const attendanceData = req.body;
 
-  const sql = 'SELECT fullname, startDate, endDate, leavePurpose, approval FROM StudentLeave WHERE className = ? AND section = ?';
-  const values = [className, section];
+  if (!Array.isArray(attendanceData) || attendanceData.length === 0) {
+    return res.status(400).json({ message: "Invalid data" });
+  }
 
-  db.query(sql, values, (err, results) => {
+  const values = attendanceData.map(({ employeeid, date, status }) => [employeeid, date, status]);
+  const sql = 'INSERT INTO TeacherAttendance (employeeid, date, status) VALUES ?';
+
+  db.query(sql, [values], (err, results) => {
     if (err) {
-      console.error('Error fetching student leave data:', err);
-      res.status(500).json({ error: 'Error fetching student leave data' });
-      return;
+      console.error("Error inserting teacher attendance:", err);
+      return res.status(500).json({ message: "Server error" });
     }
-    res.json(results);
+    res.status(200).json({ message: "Attendance submitted successfully" });
   });
 });
+
+app.get('/teacherAttendance', (req, res) => {
+  const { employeeid } = req.query;
+  const sql = 'SELECT status, COUNT(*) as count FROM TeacherAttendance WHERE employeeid = ? GROUP BY status';
+  db.query(sql, [employeeid], (err, data) => {
+    if (err) {
+      console.error("Error querying database:", err);
+      return res.json({ Error: "Attendance fetch error" });
+    }
+    const attendanceSummary = data.reduce((acc, curr) => {
+      acc[curr.status.toLowerCase()] = curr.count;
+      return acc;
+    }, { present: 0, absent: 0, leave: 0, holiday: 0 });
+    return res.json(attendanceSummary);
+  });
+});
+
 
 
 app.listen(port, () => {

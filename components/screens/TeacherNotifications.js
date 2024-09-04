@@ -17,14 +17,12 @@ const TeacherNotifications = ({ route }) => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const [complaintsResponse, announcementsResponse, leaveResponse] = await Promise.all([
-          axios.get('http://18.60.190.183:3000/notificationComplaints?recipient=teacher'),
+        const [announcementsResponse, leaveResponse] = await Promise.all([
           axios.get('http://18.60.190.183:3000/reciveAnnouncements?reciver=Teacher'),
           axios.get(`http://18.60.190.183:3000/leaveNotification?email=${email}`)
         ]);
 
         const combinedData = [
-          ...complaintsResponse.data.map(item => ({ ...item, type: 'complaint' })),
           ...announcementsResponse.data.map(item => ({ ...item, type: 'announcement' })),
           ...leaveResponse.data.map(item => ({ ...item, type: 'leave' }))
         ];
@@ -53,28 +51,14 @@ const TeacherNotifications = ({ route }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => {
-      if (item.type === 'complaint') {
-        navigation.navigate('SingleStudentComplaint', {
-          email,
-          fullname: item.fullname,
-          className: item.className,
-          section: item.section
-        });
-      } else if (item.type === 'announcement') {
+      if (item.type === 'announcement') {
         // Handle announcement navigation if necessary
       } else if (item.type === 'leave') {
         navigation.navigate('TeacherLeaveApproval', { email });
       }
     }}>
       <View style={styles.notificationItem}>
-        {item.type === 'complaint' ? (
-          <>
-            <Text style={styles.text1}>Student Complaint</Text>
-            <Text style={styles.text}>Full Name: {item.fullname}</Text>
-            <Text style={styles.text}>Class: {item.className} Section: {item.section}</Text>
-            <Text style={styles.text}>Reason: {item.reason}</Text>
-          </>
-        ) : item.type === 'announcement' ? (
+        {item.type === 'announcement' ? (
           <>
             <Text style={styles.text1}>School Announcement</Text>
             <Text style={styles.text}>Subject: {item.subject}</Text>
@@ -108,7 +92,6 @@ const TeacherNotifications = ({ route }) => {
           data={[
             { label: 'All', value: 'all' },
             { label: 'Announcements', value: 'announcement' },
-            { label: 'Complaints', value: 'complaint' },
             { label: 'Leaves', value: 'leave' }
           ]}
           labelField="label"
